@@ -1,0 +1,167 @@
+"use client";
+
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from "motion/react";
+import dynamic from "next/dynamic";
+import { useEffect } from "react";
+import { EXPO } from "@/components/ui/Reveal";
+import { MagneticButton } from "@/components/ui/MagneticButton";
+import { useIntroDone } from "@/components/IntroProvider";
+
+const MarketConstellation = dynamic(
+  () => import("@/components/three/MarketConstellation"),
+  { ssr: false },
+);
+
+function HeroLine({
+  words,
+  ready,
+  baseDelay,
+  className = "",
+}: {
+  words: string;
+  ready: boolean;
+  baseDelay: number;
+  className?: string;
+}) {
+  const reduce = useReducedMotion();
+  return (
+    <span className="block">
+      {words.split(" ").map((word, i) => (
+        <span key={i}>
+          <span className="inline-block overflow-hidden pb-[0.14em] -mb-[0.14em] align-bottom">
+          <motion.span
+            className={`inline-block will-change-transform ${className}`}
+            initial={reduce ? false : { y: "112%" }}
+            animate={ready ? { y: "0%" } : {}}
+            transition={{
+              duration: 1.25,
+              ease: EXPO,
+              delay: baseDelay + i * 0.07,
+            }}
+          >
+            {word}
+          </motion.span>
+          </span>{" "}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function GrowthStat({ ready }: { ready: boolean }) {
+  const reduce = useReducedMotion();
+  const mv = useMotionValue(0);
+  const label = useTransform(mv, (v) => `+${v.toFixed(1)}%`);
+
+  useEffect(() => {
+    if (!ready) return;
+    if (reduce) {
+      mv.set(24.8);
+      return;
+    }
+    const controls = animate(mv, 24.8, {
+      duration: 1.8,
+      delay: 0.9,
+      ease: EXPO,
+    });
+    return () => controls.stop();
+  }, [ready, reduce, mv]);
+
+  return (
+    <motion.span className="font-display text-2xl text-brass tabular-nums md:text-3xl">
+      {label}
+    </motion.span>
+  );
+}
+
+export default function Hero() {
+  const ready = useIntroDone();
+  const reduce = useReducedMotion();
+
+  const fadeIn = (delay: number) => ({
+    initial: reduce ? false : { opacity: 0, y: 24 },
+    animate: ready ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 1, ease: EXPO, delay },
+  });
+
+  return (
+    <section
+      id="top"
+      className="relative flex min-h-[100svh] flex-col overflow-hidden bg-midnight text-lavender"
+    >
+      <MarketConstellation className="opacity-90" />
+      {/* legibility scrim — canvas fades into the drenched base */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,oklch(0.16_0.045_288/0.72),transparent_38%,transparent_62%,oklch(0.16_0.045_288/0.92))]" />
+
+      <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-end px-6 pb-14 pt-32 md:px-10 md:pb-16 lg:px-16">
+        <p className="sr-only">
+          Platizio — licensed distributor of Mutual Funds and Specialised
+          Investment Funds.
+        </p>
+
+        <h1 className="max-w-[13ch] font-display text-[clamp(2.9rem,8vw,6rem)] font-medium leading-[1.02] tracking-tight text-porcelain">
+          <HeroLine words="Navigate every" ready={ready} baseDelay={0.25} />
+          <HeroLine words="market with" ready={ready} baseDelay={0.42} />
+          <HeroLine
+            words="confidence."
+            ready={ready}
+            baseDelay={0.56}
+            className="italic text-brass"
+          />
+        </h1>
+
+        <div className="mt-8 flex flex-col gap-10 md:mt-10 md:flex-row md:items-end md:justify-between">
+          <motion.p
+            {...fadeIn(0.75)}
+            className="max-w-[46ch] text-base leading-relaxed text-lavender-dim md:text-lg"
+          >
+            A disciplined approach to investing that focuses on superior
+            returns and capital preservation — through regulated, transparent
+            frameworks.
+          </motion.p>
+
+          <motion.div {...fadeIn(0.9)} className="flex flex-wrap gap-4">
+            <MagneticButton href="#contact" variant="brass">
+              Book a Consultation
+            </MagneticButton>
+            <MagneticButton href="#products" variant="outline-light">
+              Learn More
+            </MagneticButton>
+          </motion.div>
+        </div>
+
+        <motion.div
+          {...fadeIn(1.05)}
+          className="mt-14 grid grid-cols-1 gap-6 border-t border-lavender/15 pt-8 sm:grid-cols-3 md:mt-16"
+        >
+          <div className="flex flex-col gap-1">
+            <GrowthStat ready={ready} />
+            <span className="text-sm text-lavender-dim">YTD growth</span>
+          </div>
+          <div className="flex flex-col gap-1 sm:border-l sm:border-lavender/15 sm:pl-6">
+            <span className="font-display text-2xl text-porcelain md:text-3xl">
+              SEBI
+            </span>
+            <span className="text-sm text-lavender-dim">
+              Compliant frameworks
+            </span>
+          </div>
+          <div className="flex flex-col gap-1 sm:border-l sm:border-lavender/15 sm:pl-6">
+            <span className="font-display text-2xl text-porcelain md:text-3xl">
+              AMFI
+            </span>
+            <span className="text-sm text-lavender-dim">
+              Registered distributor
+            </span>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}

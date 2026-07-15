@@ -1,0 +1,227 @@
+{
+  "eslint.config.mjs": {
+    "mtime": 1783932951.3622808,
+    "ast_hash": "dfa1f5f6a7037bf39dc510f30b180002",
+    "semantic_hash": "dfa1f5f6a7037bf39dc510f30b180002"
+  },
+  "next.config.ts": {
+    "mtime": 1783932951.3702865,
+    "ast_hash": "9b77af189a21a7a64e4bd7a426f64176",
+    "semantic_hash": "9b77af189a21a7a64e4bd7a426f64176"
+  },
+  "package.json": {
+    "mtime": 1783932951.3477757,
+    "ast_hash": "dd90f6e326940e9c3d4315e154482a9a",
+    "semantic_hash": "dd90f6e326940e9c3d4315e154482a9a"
+  },
+  "postcss.config.mjs": {
+    "mtime": 1783932951.318765,
+    "ast_hash": "239f3ebf717465dc636818a1a619398d",
+    "semantic_hash": "239f3ebf717465dc636818a1a619398d"
+  },
+  "src/app/about/page.tsx": {
+    "mtime": 1783938456.9007554,
+    "ast_hash": "322d8e1795ec86a8a5332dfa641d3309",
+    "semantic_hash": "322d8e1795ec86a8a5332dfa641d3309"
+  },
+  "src/app/layout.tsx": {
+    "mtime": 1783933076.6938303,
+    "ast_hash": "7c5717e42a37d8290bf9318c6ab134c4",
+    "semantic_hash": "7c5717e42a37d8290bf9318c6ab134c4"
+  },
+  "src/app/page.tsx": {
+    "mtime": 1783933076.6973531,
+    "ast_hash": "cacbb4d44305ae424ef58764eb1474cc",
+    "semantic_hash": "cacbb4d44305ae424ef58764eb1474cc"
+  },
+  "src/components/IntroProvider.tsx": {
+    "mtime": 1783933076.720376,
+    "ast_hash": "d3e64c1f7abb3d743717eb972a770843",
+    "semantic_hash": "d3e64c1f7abb3d743717eb972a770843"
+  },
+  "src/components/Nav.tsx": {
+    "mtime": 1783938490.4942448,
+    "ast_hash": "2a3dc1f04de6fa6768f4124cd2d4a754",
+    "semantic_hash": "2a3dc1f04de6fa6768f4124cd2d4a754"
+  },
+  "src/components/Preloader.tsx": {
+    "mtime": 1783933076.7128744,
+    "ast_hash": "559f135b431b25d200b40a39dab567f9",
+    "semantic_hash": "559f135b431b25d200b40a39dab567f9"
+  },
+  "src/components/SmoothScroll.tsx": {
+    "mtime": 1783933076.7163737,
+    "ast_hash": "4f4d5ba7d08e94a58ae5409b709375c7",
+    "semantic_hash": "4f4d5ba7d08e94a58ae5409b709375c7"
+  },
+  "src/components/pages/AboutPage.tsx": {
+    "mtime": 1784020057.797389,
+    "ast_hash": "570622be5653f943e5c9364a064102ac",
+    "semantic_hash": "570622be5653f943e5c9364a064102ac"
+  },
+  "src/components/sections/CTA.tsx": {
+    "mtime": 1783933076.765416,
+    "ast_hash": "d46a26c77390d8a25f1959736f41a6a6",
+    "semantic_hash": "d46a26c77390d8a25f1959736f41a6a6"
+  },
+  "src/components/sections/Footer.tsx": {
+    "mtime": 1783938490.495244,
+    "ast_hash": "efc1f034a204d855d42d0a1921cdf2d3",
+    "semantic_hash": "efc1f034a204d855d42d0a1921cdf2d3"
+  },
+  "src/components/sections/Hero.tsx": {
+    "mtime": 1783933076.737398,
+    "ast_hash": "cc38d81cda022a23c98295d1de8642db",
+    "semantic_hash": "cc38d81cda022a23c98295d1de8642db"
+  },
+  "src/components/sections/Journey.tsx": {
+    "mtime": 1783933076.740899,
+    "ast_hash": "9bef1c256a56cc3d09c772baf6630209",
+    "semantic_hash": "9bef1c256a56cc3d09c772baf6630209"
+  },
+  "src/components/sections/Manifesto.tsx": {
+    "mtime": 1783933076.7448964,
+    "ast_hash": "732a68b7a33278ef52aa32c4d3c44ecb",
+    "semantic_hash": "732a68b7a33278ef52aa32c4d3c44ecb"
+  },
+  "src/components/sections/Products.tsx": {
+    "mtime": 1783933076.768933,
+    "ast_hash": "1a1c606d09c3702493d51a7bbc6b239f",
+    "semantic_hash": "1a1c606d09c3702493d51a7bbc6b239f"
+  },
+  "src/components/sections/Testimonials.tsx": {
+    "mtime": 1783933076.7579174,
+    "ast_hash": "9108faf754b19569963427afaa411644",
+    "semantic_hash": "9108faf754b19569963427afaa411644"
+  },
+  "src/components/sections/Ticker.tsx": {
+    "mtime": 1783933076.748895,
+    "ast_hash": "1a228c37931fdfe3967ce898def55999",
+    "semantic_hash": "1a228c37931fdfe3967ce898def55999"
+  },
+  "src/components/sections/Trust.tsx": {
+    "mtime": 1783933076.761415,
+    "ast_hash": "e5664b717f47f36e53505bb1052e382c",
+    "semantic_hash": "e5664b717f47f36e53505bb1052e382c"
+  },
+  "src/components/three/MarketConstellation.tsx": {
+    "mtime": 1783933076.7769635,
+    "ast_hash": "4fbbfe7513e7817c15815fe5ccc1acce",
+    "semantic_hash": "4fbbfe7513e7817c15815fe5ccc1acce"
+  },
+  "src/components/ui/MagneticButton.tsx": {
+    "mtime": 1783933076.7263925,
+    "ast_hash": "32a1780de3a0370437c43489d80894a2",
+    "semantic_hash": "32a1780de3a0370437c43489d80894a2"
+  },
+  "src/components/ui/Reveal.tsx": {
+    "mtime": 1783933076.7303953,
+    "ast_hash": "6ae5c6e687955364868962023d161825",
+    "semantic_hash": "6ae5c6e687955364868962023d161825"
+  },
+  "tsconfig.json": {
+    "mtime": 1783932951.3517754,
+    "ast_hash": "ee17fd1c97c735e9f3564e3f5251f125",
+    "semantic_hash": "ee17fd1c97c735e9f3564e3f5251f125"
+  },
+  "AGENTS.md": {
+    "mtime": 1783932951.3587792,
+    "ast_hash": "9e09241799026ac05be315a2f0b50055",
+    "semantic_hash": "9e09241799026ac05be315a2f0b50055"
+  },
+  "CLAUDE.md": {
+    "mtime": 1783932951.365779,
+    "ast_hash": "5c27369b226fcf2be8a6cfe52224e767",
+    "semantic_hash": "5c27369b226fcf2be8a6cfe52224e767"
+  },
+  "DESIGN.md": {
+    "mtime": 1783932951.355277,
+    "ast_hash": "4d78b6e1fc7e478f2c0584274621eba4",
+    "semantic_hash": "4d78b6e1fc7e478f2c0584274621eba4"
+  },
+  "LEGACY_SITE_CONTENT.md": {
+    "mtime": 1783936093.9431562,
+    "ast_hash": "1835ca068a7de16fddcd281cc40a3ce2",
+    "semantic_hash": "1835ca068a7de16fddcd281cc40a3ce2"
+  },
+  "PRODUCT.md": {
+    "mtime": 1783932951.315266,
+    "ast_hash": "629d493ba6a02b0ad33613f37442f983",
+    "semantic_hash": "629d493ba6a02b0ad33613f37442f983"
+  },
+  "README.md": {
+    "mtime": 1783932951.3342767,
+    "ast_hash": "f15aaa42d5d299d091b1171097ea56ad",
+    "semantic_hash": "f15aaa42d5d299d091b1171097ea56ad"
+  },
+  "public/about/aanyaa-bhardwaj.jpg": {
+    "mtime": 1783326802.8891792,
+    "ast_hash": "18c8093b93dd0324ac182c63d6df1320",
+    "semantic_hash": "18c8093b93dd0324ac182c63d6df1320"
+  },
+  "public/about/anuj-pal.jpeg": {
+    "mtime": 1783326802.8931751,
+    "ast_hash": "47de029729bb38cb771b1a079a115977",
+    "semantic_hash": "47de029729bb38cb771b1a079a115977"
+  },
+  "public/about/deepika-agarwal.png": {
+    "mtime": 1783326802.8951726,
+    "ast_hash": "d3361cf5f516ad526c7b5f745621ddb5",
+    "semantic_hash": "d3361cf5f516ad526c7b5f745621ddb5"
+  },
+  "public/about/founder.jpg": {
+    "mtime": 1767003340.0602252,
+    "ast_hash": "afe26958f031c0a61a94e45693e95222",
+    "semantic_hash": "afe26958f031c0a61a94e45693e95222"
+  },
+  "public/about/kartik-vishnani.jpg": {
+    "mtime": 1783326802.9081647,
+    "ast_hash": "58f13e828e09b469d6f195cf8c218ace",
+    "semantic_hash": "58f13e828e09b469d6f195cf8c218ace"
+  },
+  "public/about/kavya-khatri.png": {
+    "mtime": 1783326803.0330932,
+    "ast_hash": "856df1ebef5dc18223de513355610e49",
+    "semantic_hash": "856df1ebef5dc18223de513355610e49"
+  },
+  "public/about/sumit-katyal.jpg": {
+    "mtime": 1783326802.9171596,
+    "ast_hash": "d5f1e3c94cf4ec7b5269e13c10be168e",
+    "semantic_hash": "d5f1e3c94cf4ec7b5269e13c10be168e"
+  },
+  "public/about/vinayak-tyagi.jpeg": {
+    "mtime": 1783326802.9511473,
+    "ast_hash": "979632d28dd81e1a0e6617b3e504ab35",
+    "semantic_hash": "979632d28dd81e1a0e6617b3e504ab35"
+  },
+  "public/file.svg": {
+    "mtime": 1783933076.3994558,
+    "ast_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71",
+    "semantic_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71"
+  },
+  "public/globe.svg": {
+    "mtime": 1783933076.4144745,
+    "ast_hash": "2aaafa6a49b6563925fe440891e32717",
+    "semantic_hash": "2aaafa6a49b6563925fe440891e32717"
+  },
+  "public/next.svg": {
+    "mtime": 1783933076.4104722,
+    "ast_hash": "8e061864f388b47f33a1c3780831193e",
+    "semantic_hash": "8e061864f388b47f33a1c3780831193e"
+  },
+  "public/platizio-logo.png": {
+    "mtime": 1783933076.424499,
+    "ast_hash": "70dbd301e498d2101a7ca27715479f12",
+    "semantic_hash": "70dbd301e498d2101a7ca27715479f12"
+  },
+  "public/vercel.svg": {
+    "mtime": 1783933076.4059753,
+    "ast_hash": "c0af2f507b369b085b35ef4bbe3bcf1e",
+    "semantic_hash": "c0af2f507b369b085b35ef4bbe3bcf1e"
+  },
+  "public/window.svg": {
+    "mtime": 1783933076.4194932,
+    "ast_hash": "a2760511c65806022ad20adf74370ff3",
+    "semantic_hash": "a2760511c65806022ad20adf74370ff3"
+  }
+}

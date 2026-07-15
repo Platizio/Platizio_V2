@@ -1,0 +1,54 @@
+[2026-07-14T10:06:00.715Z] RESULT
+============================================================
+{
+  "success": true,
+  "output": "## Security Audit Complete ✓\n\nThe comprehensive security audit of your Platizio codebase has finished. Here's the report:\n\n```json\n{\n  \"vulnerabilities\": [\n    {\n      \"severity\": \"high\",\n      \"file\": \"src/components/sections/Footer.tsx\",\n      \"line\": 113,\n      \"description\": \"Import statement placed at end of file instead of beginning. The line 'import Link from \\\"next/link\\\";' should be at the top with other imports. This violates module loading conventions and can cause reference errors.\",\n      \"cwe\": \"CWE-829: Inclusion of Functionality from Untrusted Control Sphere\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"src/components/ui/MagneticButton.tsx\",\n      \"line\": 58,\n      \"description\": \"Using motion.a (raw HTML anchor tag) instead of Next.js Link component. This bypasses SPA routing, causing full page reloads instead of client-side navigation.\",\n      \"cwe\": \"CWE-693: Protection Mechanism Failure\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"next.config.ts\",\n      \"line\": 1,\n      \"description\": \"No security headers configured (CSP, X-Frame-Options, X-Content-Type-Options, HSTS, etc.). Configuration is empty with only placeholder comment.\",\n      \"cwe\": \"CWE-693: Protection Mechanism Failure\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"src/components/three/MarketConstellation.tsx\",\n      \"line\": 137,\n      \"description\": \"Direct access to window.innerWidth/innerHeight for pointer normalization. Not a security issue but could be optimized with ResizeObserver.\",\n      \"cwe\": \"CWE-345: Insufficient Verification of Data Authenticity\"\n    }\n  ],\n  \"riskScore\": 28,\n  \"recommendations\": [\n    \"Fix Footer.tsx by moving 'import Link' to the top of the file\",\n    \"Update MagneticButton.tsx to use Next.js Link component instead of motion.a for href navigation\",\n    \"Configure security headers in next.config.ts: X-Content-Type-Options, X-Frame-Options, HSTS, CSP\",\n    \"Add middleware.ts at src/middleware.ts to enforce security headers globally\",\n    \"Verify Next.js 16.2.10 and React 19.2.4 patches (no known CVEs currently)\",\n    \"Add .env.example file for future environment variables\",\n    \"Implement stricter CSP rules to prevent XSS attacks\"\n  ]\n}\n```\n\n### Key Findings\n\n**Risk Score: 28/100 (Low-to-Moderate)** ✓\n\n**What's Secure:**\n- No hardcoded secrets or API keys\n- No SQL/NoSQL injection risks\n- No XSS vulnerabilities\n- No dangerouslySetInnerHTML usage\n- TypeScript strict mode enabled\n- Clean, current dependencies with no known CVEs\n- Proper external link security attributes\n\n**Issues to Fix:**\n1. **High Priority:** Fix import ordering in Footer.tsx (will cause runtime errors)\n2. **Medium Priority:** Add security headers to next.config.ts\n3. **Medium Priority:** Update navigation pattern in MagneticButton.tsx to use Next.js Link\n\nWould you like me to fix these issues?\n",
+  "parsedOutput": {
+    "vulnerabilities": [
+      {
+        "severity": "high",
+        "file": "src/components/sections/Footer.tsx",
+        "line": 113,
+        "description": "Import statement placed at end of file instead of beginning. The line 'import Link from \"next/link\";' should be at the top with other imports. This violates module loading conventions and can cause reference errors.",
+        "cwe": "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      },
+      {
+        "severity": "medium",
+        "file": "src/components/ui/MagneticButton.tsx",
+        "line": 58,
+        "description": "Using motion.a (raw HTML anchor tag) instead of Next.js Link component. This bypasses SPA routing, causing full page reloads instead of client-side navigation.",
+        "cwe": "CWE-693: Protection Mechanism Failure"
+      },
+      {
+        "severity": "medium",
+        "file": "next.config.ts",
+        "line": 1,
+        "description": "No security headers configured (CSP, X-Frame-Options, X-Content-Type-Options, HSTS, etc.). Configuration is empty with only placeholder comment.",
+        "cwe": "CWE-693: Protection Mechanism Failure"
+      },
+      {
+        "severity": "low",
+        "file": "src/components/three/MarketConstellation.tsx",
+        "line": 137,
+        "description": "Direct access to window.innerWidth/innerHeight for pointer normalization. Not a security issue but could be optimized with ResizeObserver.",
+        "cwe": "CWE-345: Insufficient Verification of Data Authenticity"
+      }
+    ],
+    "riskScore": 28,
+    "recommendations": [
+      "Fix Footer.tsx by moving 'import Link' to the top of the file",
+      "Update MagneticButton.tsx to use Next.js Link component instead of motion.a for href navigation",
+      "Configure security headers in next.config.ts: X-Content-Type-Options, X-Frame-Options, HSTS, CSP",
+      "Add middleware.ts at src/middleware.ts to enforce security headers globally",
+      "Verify Next.js 16.2.10 and React 19.2.4 patches (no known CVEs currently)",
+      "Add .env.example file for future environment variables",
+      "Implement stricter CSP rules to prevent XSS attacks"
+    ]
+  },
+  "durationMs": 188462,
+  "model": "haiku",
+  "sandboxMode": "strict",
+  "workerType": "audit",
+  "timestamp": "2026-07-14T10:06:00.715Z",
+  "executionId": "audit_1784023372253_ury7gf"
+}

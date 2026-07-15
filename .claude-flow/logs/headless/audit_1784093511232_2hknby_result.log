@@ -1,0 +1,66 @@
+[2026-07-15T05:32:27.987Z] RESULT
+============================================================
+{
+  "success": true,
+  "output": "Based on my analysis of the provided codebase, here is the security assessment:\n\n```json\n{\n  \"vulnerabilities\": [\n    {\n      \"severity\": \"high\",\n      \"file\": \"src/content/legal/global-privacy-policy.ts & src/content/legal/global-terms-and-condition.ts\",\n      \"line\": \"N/A (content files)\",\n      \"description\": \"Sensitive personal data handling policies documented (PAN, Aadhaar, bank details, FATCA/CRS info) but NO visible encryption, validation, or secure storage code. Privacy policies indicate ViewTrade integration for processing sensitive financial data, but no encryption or data protection mechanisms shown in codebase.\"\n    },\n    {\n      \"severity\": \"high\",\n      \"file\": \"package.json\",\n      \"line\": 18,\n      \"description\": \"Dependency 'motion@12.42.2' requires verification. Typosquatting risk - verify this is the official Framer Motion package and not a malicious lookalike. Consider using 'framer-motion' from official source instead.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"src/lib/content-types.ts\",\n      \"line\": 6,\n      \"description\": \"RichBlock type includes 'text' field that may be rendered client-side. If any user-controlled input is passed to this without sanitization, could result in DOM XSS. No visible content sanitization library (DOMPurify, xss) found in dependencies.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"src/lib/articles.ts & src/lib/legal.ts\",\n      \"line\": \"N/A\",\n      \"description\": \"Article metadata and legal documents reference sensitive regulatory information (KYC, AML, tax thresholds). No visible access control restricts who can view/edit this metadata. If deployed with admin API, must implement proper authentication.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"next.config.ts\",\n      \"line\": \"N/A\",\n      \"description\": \"No security headers configured (CSP, X-Frame-Options, X-Content-Type-Options, HSTS). Recommend adding security headers via Next.js config.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"package.json\",\n      \"line\": \"N/A\",\n      \"description\": \"No 'npm audit' baseline or lockfile validation shown. Package-lock.json exists but integrity checks should be enforced in CI/CD.\"\n    }\n  ],\n  \"riskScore\": 42,\n  \"recommendations\": [\n    \"CRITICAL: Implement proper API endpoint authentication/authorization for any ViewTrade integration points - ensure all endpoints handling PAN, Aadhaar, bank details are protected with OAuth 2.0 or similar\",\n    \"CRITICAL: Add data encryption (TLS in transit, AES-256 at rest) for sensitive PII mentioned in privacy policies (PAN, Aadhaar, bank accounts, FATCA declarations)\",\n    \"HIGH: Verify all npm dependencies via 'npm audit' and implement dependabot for continuous vulnerability scanning - particularly validate 'motion' package authenticity\",\n    \"HIGH: Add content sanitization library (DOMPurify or similar) and use it when rendering RichBlock content to prevent XSS attacks\",\n    \"HIGH: Implement environment-based secrets management (.env files not committed, use GitHub Secrets or similar for API keys/tokens)\",\n    \"MEDIUM: Add Next.js security headers middleware (CSP, HSTS, X-Frame-Options, X-Content-Type-Options) to next.config.ts\",\n    \"MEDIUM: Implement rate limiting on any public API endpoints to prevent abuse\",\n    \"MEDIUM: Add input validation and CORS configuration for all API routes handling financial data\",\n    \"MEDIUM: Implement request signing/verification when communicating with ViewTrade APIs\",\n    \"LOW: Add pre-commit hooks to prevent accidental commit of .env files or sensitive data\",\n    \"LOW: Document all third-party integrations (ViewTrade, KYC vendors, payment gateways) and their security certifications\"\n  ]\n}\n```\n\n## Summary\n\n**Risk Score: 42/100** (Medium-High Risk)\n\nThe codebase itself is relatively secure as a static content site, but **critical gaps exist in the backend/integration layer**:\n\n- **No visible authentication/authorization code** for user accounts and financial data\n- **Sensitive PII handling policies documented** but no code showing encryption or validation\n- **Third-party dependency risks** (verify `motion` package origin)\n- **Missing security headers** and content sanitization\n\n**Next Steps:**\n1. Review the backend API code (not provided) for ViewTrade integration security\n2. Implement data encryption for sensitive PII\n3. Add API authentication/authorization middleware\n4. Run `npm audit` and configure automated dependency scanning\n",
+  "parsedOutput": {
+    "vulnerabilities": [
+      {
+        "severity": "high",
+        "file": "src/content/legal/global-privacy-policy.ts & src/content/legal/global-terms-and-condition.ts",
+        "line": "N/A (content files)",
+        "description": "Sensitive personal data handling policies documented (PAN, Aadhaar, bank details, FATCA/CRS info) but NO visible encryption, validation, or secure storage code. Privacy policies indicate ViewTrade integration for processing sensitive financial data, but no encryption or data protection mechanisms shown in codebase."
+      },
+      {
+        "severity": "high",
+        "file": "package.json",
+        "line": 18,
+        "description": "Dependency 'motion@12.42.2' requires verification. Typosquatting risk - verify this is the official Framer Motion package and not a malicious lookalike. Consider using 'framer-motion' from official source instead."
+      },
+      {
+        "severity": "medium",
+        "file": "src/lib/content-types.ts",
+        "line": 6,
+        "description": "RichBlock type includes 'text' field that may be rendered client-side. If any user-controlled input is passed to this without sanitization, could result in DOM XSS. No visible content sanitization library (DOMPurify, xss) found in dependencies."
+      },
+      {
+        "severity": "medium",
+        "file": "src/lib/articles.ts & src/lib/legal.ts",
+        "line": "N/A",
+        "description": "Article metadata and legal documents reference sensitive regulatory information (KYC, AML, tax thresholds). No visible access control restricts who can view/edit this metadata. If deployed with admin API, must implement proper authentication."
+      },
+      {
+        "severity": "low",
+        "file": "next.config.ts",
+        "line": "N/A",
+        "description": "No security headers configured (CSP, X-Frame-Options, X-Content-Type-Options, HSTS). Recommend adding security headers via Next.js config."
+      },
+      {
+        "severity": "low",
+        "file": "package.json",
+        "line": "N/A",
+        "description": "No 'npm audit' baseline or lockfile validation shown. Package-lock.json exists but integrity checks should be enforced in CI/CD."
+      }
+    ],
+    "riskScore": 42,
+    "recommendations": [
+      "CRITICAL: Implement proper API endpoint authentication/authorization for any ViewTrade integration points - ensure all endpoints handling PAN, Aadhaar, bank details are protected with OAuth 2.0 or similar",
+      "CRITICAL: Add data encryption (TLS in transit, AES-256 at rest) for sensitive PII mentioned in privacy policies (PAN, Aadhaar, bank accounts, FATCA declarations)",
+      "HIGH: Verify all npm dependencies via 'npm audit' and implement dependabot for continuous vulnerability scanning - particularly validate 'motion' package authenticity",
+      "HIGH: Add content sanitization library (DOMPurify or similar) and use it when rendering RichBlock content to prevent XSS attacks",
+      "HIGH: Implement environment-based secrets management (.env files not committed, use GitHub Secrets or similar for API keys/tokens)",
+      "MEDIUM: Add Next.js security headers middleware (CSP, HSTS, X-Frame-Options, X-Content-Type-Options) to next.config.ts",
+      "MEDIUM: Implement rate limiting on any public API endpoints to prevent abuse",
+      "MEDIUM: Add input validation and CORS configuration for all API routes handling financial data",
+      "MEDIUM: Implement request signing/verification when communicating with ViewTrade APIs",
+      "LOW: Add pre-commit hooks to prevent accidental commit of .env files or sensitive data",
+      "LOW: Document all third-party integrations (ViewTrade, KYC vendors, payment gateways) and their security certifications"
+    ]
+  },
+  "durationMs": 36755,
+  "model": "haiku",
+  "sandboxMode": "strict",
+  "workerType": "audit",
+  "timestamp": "2026-07-15T05:32:27.987Z",
+  "executionId": "audit_1784093511232_2hknby"
+}

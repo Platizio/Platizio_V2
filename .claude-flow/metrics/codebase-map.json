@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-07-15T08:35:00.530Z",
+  "projectRoot": "C:\\Users\\pc\\Downloads\\Platizio NextGen\\Platizio NextGen\\platizio",
+  "structure": {
+    "hasPackageJson": true,
+    "hasTsConfig": true,
+    "hasClaudeConfig": true,
+    "hasClaudeFlow": true
+  },
+  "scannedAt": 1784104500530
+}

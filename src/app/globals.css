@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ── Palette: midnight observatory ─────────────────────────── */
+  --color-midnight: oklch(0.16 0.045 288); /* drenched page dark */
+  --color-midnight-2: oklch(0.21 0.055 286); /* raised dark surface */
+  --color-violet: oklch(0.45 0.21 279); /* brand primary */
+  --color-violet-bright: oklch(0.7 0.16 283); /* interactive on dark */
+  --color-lavender: oklch(0.89 0.045 286); /* text on dark */
+  --color-lavender-dim: oklch(0.71 0.045 286); /* muted on dark */
+  --color-brass: oklch(0.8 0.13 85); /* accent — data, ticks, CTAs */
+  --color-brass-deep: oklch(0.62 0.12 75); /* accent on light bg */
+  --color-porcelain: oklch(0.975 0.006 290); /* light bg */
+  --color-ink: oklch(0.22 0.045 288); /* text on light */
+  --color-ink-muted: oklch(0.44 0.03 288); /* muted on light */
+  --color-mist: oklch(0.9 0.015 290); /* hairlines on light */
+
+  /* ── Type ──────────────────────────────────────────────────── */
+  --font-display: var(--font-fraunces), "Fraunces", serif;
+  --font-sans: var(--font-dm-sans), "DM Sans", sans-serif;
+
+  /* ── Motion ────────────────────────────────────────────────── */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: auto; /* lenis owns scrolling */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-midnight);
+  color: var(--color-lavender);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-brass);
+  color: var(--color-midnight);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brass);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+/* Fraunces display setting: optical sizing on, no wonk */
+.font-display {
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 0, "WONK" 0;
+  letter-spacing: -0.02em;
+}
+
+/* ── Marquee ─────────────────────────────────────────────────── */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 36s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+/* lenis recommended styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }

@@ -1,0 +1,67 @@
+[2026-07-15T04:24:59.024Z] RESULT
+============================================================
+{
+  "success": true,
+  "output": "## Security Audit Complete ✓\n\nThe comprehensive security audit of your Platizio codebase has completed. Here's the detailed JSON report:\n\n```json\n{\n  \"vulnerabilities\": [\n    {\n      \"severity\": \"high\",\n      \"file\": \"src/components/ui/MagneticButton.tsx\",\n      \"line\": 58,\n      \"description\": \"External links lack rel='noopener noreferrer' attributes, enabling reverse tabnabbing attacks where linked pages can access window.opener and redirect users to phishing sites\",\n      \"cwe\": \"CWE-400: Uncontrolled Resource Consumption\",\n      \"remediation\": \"Add rel='noopener noreferrer' target='_blank' to all external link elements\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"next.config.ts\",\n      \"line\": null,\n      \"description\": \"Content Security Policy (CSP) headers not configured, leaving application vulnerable to XSS attacks if unsafe patterns are introduced\",\n      \"cwe\": \"CWE-693: Protection Mechanism Failure\",\n      \"remediation\": \"Configure CSP headers in next.config.ts with appropriate directives\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"src/components/sections/Footer.tsx\",\n      \"line\": 113,\n      \"description\": \"Next.js Link import placed at end of file instead of with other imports, violating code organization standards and risking module resolution issues\",\n      \"cwe\": \"CWE-880: Incorrect Function Parameter\",\n      \"remediation\": \"Move import statement to the top of file with other imports\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"next.config.ts\",\n      \"line\": null,\n      \"description\": \"Security headers (X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, HSTS) not configured\",\n      \"cwe\": \"CWE-693: Protection Mechanism Failure\",\n      \"remediation\": \"Add standard security headers to next.config.ts configuration\"\n    }\n  ],\n  \"riskScore\": 28,\n  \"summary\": \"Platizio frontend is relatively secure. No hardcoded secrets, SQL injection, XSS (via code), authentication bypasses, or critical vulnerabilities detected. Primary risks are reverse tabnabbing vectors in external links and missing security headers.\",\n  \"recommendations\": [\n    \"IMMEDIATE: Add rel='noopener noreferrer' target='_blank' to all external links in MagneticButton, Footer, and Nav components\",\n    \"IMMEDIATE: Fix misplaced import in Footer.tsx - move Link import to top of file\",\n    \"HIGH: Implement Content Security Policy headers in next.config.ts\",\n    \"HIGH: Add security headers (X-Frame-Options: DENY, X-Content-Type-Options: nosniff, HSTS, X-XSS-Protection)\",\n    \"MEDIUM: Run 'npm audit' regularly - all current dependencies are secure with no known CVEs\",\n    \"MEDIUM: Add error boundaries for dynamic component imports\",\n    \"LOW: Monitor motion, lenis, three.js packages for security updates\"\n  ],\n  \"securityCoverage\": {\n    \"hardcoded_secrets\": \"PASS - No API keys, passwords, or tokens found\",\n    \"sql_injection\": \"PASS - No database queries (frontend only)\",\n    \"xss_vulnerabilities\": \"PASS - No dangerouslySetInnerHTML or unsafe patterns in code\",\n    \"insecure_dependencies\": \"PASS - All dependencies current with no critical CVEs\",\n    \"authentication_authorization\": \"N/A - Frontend application, no auth implemented\",\n    \"sensitive_data_exposure\": \"PASS - No credentials or sensitive data exposed\"\n  }\n}\n```\n\n### Executive Summary\n\n**Risk Level:** LOW (28/100)\n\nYour Platizio Next.js application is well-secured with no critical vulnerabilities. The main issues are:\n\n1. **Reverse tabnabbing risk** – External links need security attributes\n2. **Missing security headers** – CSP and other headers should be configured  \n3. **Code organization** – One import statement is misplaced\n\nAll dependencies are current and secure. No hardcoded secrets or dangerous code patterns were detected.\n",
+  "parsedOutput": {
+    "vulnerabilities": [
+      {
+        "severity": "high",
+        "file": "src/components/ui/MagneticButton.tsx",
+        "line": 58,
+        "description": "External links lack rel='noopener noreferrer' attributes, enabling reverse tabnabbing attacks where linked pages can access window.opener and redirect users to phishing sites",
+        "cwe": "CWE-400: Uncontrolled Resource Consumption",
+        "remediation": "Add rel='noopener noreferrer' target='_blank' to all external link elements"
+      },
+      {
+        "severity": "medium",
+        "file": "next.config.ts",
+        "line": null,
+        "description": "Content Security Policy (CSP) headers not configured, leaving application vulnerable to XSS attacks if unsafe patterns are introduced",
+        "cwe": "CWE-693: Protection Mechanism Failure",
+        "remediation": "Configure CSP headers in next.config.ts with appropriate directives"
+      },
+      {
+        "severity": "medium",
+        "file": "src/components/sections/Footer.tsx",
+        "line": 113,
+        "description": "Next.js Link import placed at end of file instead of with other imports, violating code organization standards and risking module resolution issues",
+        "cwe": "CWE-880: Incorrect Function Parameter",
+        "remediation": "Move import statement to the top of file with other imports"
+      },
+      {
+        "severity": "low",
+        "file": "next.config.ts",
+        "line": null,
+        "description": "Security headers (X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, HSTS) not configured",
+        "cwe": "CWE-693: Protection Mechanism Failure",
+        "remediation": "Add standard security headers to next.config.ts configuration"
+      }
+    ],
+    "riskScore": 28,
+    "summary": "Platizio frontend is relatively secure. No hardcoded secrets, SQL injection, XSS (via code), authentication bypasses, or critical vulnerabilities detected. Primary risks are reverse tabnabbing vectors in external links and missing security headers.",
+    "recommendations": [
+      "IMMEDIATE: Add rel='noopener noreferrer' target='_blank' to all external links in MagneticButton, Footer, and Nav components",
+      "IMMEDIATE: Fix misplaced import in Footer.tsx - move Link import to top of file",
+      "HIGH: Implement Content Security Policy headers in next.config.ts",
+      "HIGH: Add security headers (X-Frame-Options: DENY, X-Content-Type-Options: nosniff, HSTS, X-XSS-Protection)",
+      "MEDIUM: Run 'npm audit' regularly - all current dependencies are secure with no known CVEs",
+      "MEDIUM: Add error boundaries for dynamic component imports",
+      "LOW: Monitor motion, lenis, three.js packages for security updates"
+    ],
+    "securityCoverage": {
+      "hardcoded_secrets": "PASS - No API keys, passwords, or tokens found",
+      "sql_injection": "PASS - No database queries (frontend only)",
+      "xss_vulnerabilities": "PASS - No dangerouslySetInnerHTML or unsafe patterns in code",
+      "insecure_dependencies": "PASS - All dependencies current with no critical CVEs",
+      "authentication_authorization": "N/A - Frontend application, no auth implemented",
+      "sensitive_data_exposure": "PASS - No credentials or sensitive data exposed"
+    }
+  },
+  "durationMs": 235572,
+  "model": "haiku",
+  "sandboxMode": "strict",
+  "workerType": "audit",
+  "timestamp": "2026-07-15T04:24:59.024Z",
+  "executionId": "audit_1784089263452_jnzjbi"
+}

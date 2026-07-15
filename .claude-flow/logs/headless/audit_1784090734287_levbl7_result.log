@@ -1,0 +1,57 @@
+[2026-07-15T04:49:32.289Z] RESULT
+============================================================
+{
+  "success": true,
+  "output": "Here's the comprehensive security audit report for your Platizio NextGen codebase:\n\n```json\n{\n  \"vulnerabilities\": [\n    {\n      \"severity\": \"low\",\n      \"file\": \"src/components/pages/ContactPage.tsx\",\n      \"line\": 8,\n      \"category\": \"secrets\",\n      \"description\": \"Hardcoded phone number (+919205523100) and email (vc@platizio.com) in source code. While this is contact information intended to be public, hardcoding in source makes it visible in version control history. Should be moved to environment variables or configuration file.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"src/components/pages/ContactPage.tsx\",\n      \"line\": 23,\n      \"category\": \"other\",\n      \"description\": \"Office addresses hardcoded in component. Consider moving to configuration file or CMS for easier management and to avoid unnecessary rebuilds.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"next.config.ts\",\n      \"line\": 1,\n      \"category\": \"other\",\n      \"description\": \"Missing security headers configuration. Add Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, and other security headers to strengthen client-side security posture.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"src/components/pages/ContactPage.tsx\",\n      \"line\": 86,\n      \"category\": \"other\",\n      \"description\": \"Form data encoded and passed directly in URLs. While encodeURIComponent is properly used, consider validating form inputs (email format, phone format) before encoding to prevent unexpected behavior.\"\n    }\n  ],\n  \"riskScore\": 15,\n  \"recommendations\": [\n    \"Move hardcoded contact information (phone, email, office addresses) to environment variables or configuration file\",\n    \"Add security headers to next.config.ts: Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Strict-Transport-Security\",\n    \"Add form input validation for email and phone fields in ContactPage component\",\n    \"Add rate limiting at application level if contact forms are processed server-side in future versions\",\n    \"Enable HTTP Strict Transport Security (HSTS) in production\",\n    \"Configure proper CORS headers if this application will integrate with third-party APIs\",\n    \"Implement logging/monitoring strategy for any future backend integrations\",\n    \"Keep dependencies updated regularly — currently using modern versions (React 19.2.4, Next.js 16.2.10)\",\n    \"Add .env.example file documenting required environment variables\",\n    \"Verify all external links to financial information point to official, verified sources before publication\"\n  ]\n}\n```\n\n## Key Findings\n\n**Overall Risk: LOW (15/100)** — Your frontend-only Next.js application has minimal security vulnerabilities.\n\n**Strengths:**\n- ✅ No backend APIs or database interactions\n- ✅ No SQL injection risks\n- ✅ No XSS vulnerabilities (safe React rendering patterns)\n- ✅ No authentication/session management to bypass\n- ✅ Strong TypeScript typing prevents injection attacks\n- ✅ Modern, up-to-date dependencies\n- ✅ Proper use of `rel=\"noopener noreferrer\"` on external links\n- ✅ Type-safe slug handling (prevents path traversal)\n\n**Areas for Improvement:**\n1. Move contact details from hardcoded values to environment configuration\n2. Add Next.js security headers configuration\n3. Add form validation (email/phone format checks)\n4. Add `.env.example` for documentation\n\nThe application is **production-ready** with these minor hardening measures.\n",
+  "parsedOutput": {
+    "vulnerabilities": [
+      {
+        "severity": "low",
+        "file": "src/components/pages/ContactPage.tsx",
+        "line": 8,
+        "category": "secrets",
+        "description": "Hardcoded phone number (+919205523100) and email (vc@platizio.com) in source code. While this is contact information intended to be public, hardcoding in source makes it visible in version control history. Should be moved to environment variables or configuration file."
+      },
+      {
+        "severity": "low",
+        "file": "src/components/pages/ContactPage.tsx",
+        "line": 23,
+        "category": "other",
+        "description": "Office addresses hardcoded in component. Consider moving to configuration file or CMS for easier management and to avoid unnecessary rebuilds."
+      },
+      {
+        "severity": "low",
+        "file": "next.config.ts",
+        "line": 1,
+        "category": "other",
+        "description": "Missing security headers configuration. Add Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, and other security headers to strengthen client-side security posture."
+      },
+      {
+        "severity": "low",
+        "file": "src/components/pages/ContactPage.tsx",
+        "line": 86,
+        "category": "other",
+        "description": "Form data encoded and passed directly in URLs. While encodeURIComponent is properly used, consider validating form inputs (email format, phone format) before encoding to prevent unexpected behavior."
+      }
+    ],
+    "riskScore": 15,
+    "recommendations": [
+      "Move hardcoded contact information (phone, email, office addresses) to environment variables or configuration file",
+      "Add security headers to next.config.ts: Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Strict-Transport-Security",
+      "Add form input validation for email and phone fields in ContactPage component",
+      "Add rate limiting at application level if contact forms are processed server-side in future versions",
+      "Enable HTTP Strict Transport Security (HSTS) in production",
+      "Configure proper CORS headers if this application will integrate with third-party APIs",
+      "Implement logging/monitoring strategy for any future backend integrations",
+      "Keep dependencies updated regularly — currently using modern versions (React 19.2.4, Next.js 16.2.10)",
+      "Add .env.example file documenting required environment variables",
+      "Verify all external links to financial information point to official, verified sources before publication"
+    ]
+  },
+  "durationMs": 238002,
+  "model": "haiku",
+  "sandboxMode": "strict",
+  "workerType": "audit",
+  "timestamp": "2026-07-15T04:49:32.289Z",
+  "executionId": "audit_1784090734287_levbl7"
+}

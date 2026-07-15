@@ -1,0 +1,51 @@
+[2026-07-15T04:35:34.277Z] RESULT
+============================================================
+{
+  "success": true,
+  "output": "```json\n{\n  \"vulnerabilities\": [\n    {\n      \"severity\": \"medium\",\n      \"file\": \"src/lib/content-types.ts\",\n      \"line\": 20,\n      \"description\": \"The anchorId() function uses insufficient sanitization with regex `.replace(/[^\\\\w\\\\s-]/g, \\\"\\\")`. This only removes non-word characters but doesn't prevent DOM-based XSS if the resulting ID is used with dangerouslySetInnerHTML or user-controlled HTML. Proper HTML entity encoding is needed.\"\n    },\n    {\n      \"severity\": \"medium\",\n      \"file\": \"next.config.ts\",\n      \"line\": 1,\n      \"description\": \"Missing security headers configuration (Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, etc.). Next.js does not set these by default. Recommend adding headers in next.config.ts to prevent XSS, clickjacking, and MIME-sniffing attacks.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"package.json\",\n      \"line\": 1,\n      \"description\": \"No lockfile (package-lock.json) shown in git status despite being listed as modified. Ensure package-lock.json is committed to prevent supply chain attacks via transitive dependency version drift.\"\n    },\n    {\n      \"severity\": \"low\",\n      \"file\": \"src/lib/content-types.ts\",\n      \"line\": 15,\n      \"description\": \"RichBlock type accepts arbitrary strings for text fields with no validation. If rendered via dangerouslySetInnerHTML or injected into HTML attributes without escaping, this could enable XSS. React JSX auto-escapes by default, but verify rendering implementation.\"\n    }\n  ],\n  \"riskScore\": 28,\n  \"recommendations\": [\n    \"Add security headers to next.config.ts: enable CSP with strict policy, set X-Frame-Options: DENY, X-Content-Type-Options: nosniff, and Referrer-Policy\",\n    \"Verify that RichBlock content is rendered safely — ensure all text fields go through React JSX (auto-escaped) and never use dangerouslySetInnerHTML without explicit sanitization (e.g., DOMPurify)\",\n    \"Run `npm audit` to identify vulnerable transitive dependencies. Update minor/patch versions if vulnerabilities exist\",\n    \"Strengthen input validation: if RichBlock content is user-generated, validate structure and sanitize text fields with a library like sanitize-html or DOMPurify\",\n    \"Add CSRF protection headers if there are any POST/PUT/DELETE endpoints (Next.js handles this via SameSite cookies by default, but verify configuration)\",\n    \"Implement Content Security Policy (CSP) to mitigate inline script injection risks, especially if external scripts are loaded (e.g., analytics)\",\n    \"Ensure .env files and secrets are never committed — configure .gitignore and use environment variables for any API keys or credentials\",\n    \"If this app exposes an API, add rate limiting and input validation at all endpoints to prevent abuse\"\n  ]\n}\n```\n\n## Summary\n\n**Risk Level: Low-Medium (28/100)**\n\nThe codebase is relatively secure for a content-driven Next.js site, but has gaps:\n\n1. **No hardcoded secrets detected** ✓\n2. **No SQL injection risks** (no database queries shown) ✓\n3. **XSS risk is mitigated by React's default escaping** (medium concern if rendering bypasses React safety) ⚠️\n4. **Dependencies are reasonably current** — run `npm audit` to confirm no transitive CVEs\n5. **Missing security headers** — the biggest gap (no CSP, X-Frame-Options, etc.) ⚠️\n\n**Most Critical Action:** Add security headers to `next.config.ts` to enable CSP and clickjacking protection. Verify all content rendering uses React's safe JSX rendering, never `dangerouslySetInnerHTML`.\n",
+  "parsedOutput": {
+    "vulnerabilities": [
+      {
+        "severity": "medium",
+        "file": "src/lib/content-types.ts",
+        "line": 20,
+        "description": "The anchorId() function uses insufficient sanitization with regex `.replace(/[^\\w\\s-]/g, \"\")`. This only removes non-word characters but doesn't prevent DOM-based XSS if the resulting ID is used with dangerouslySetInnerHTML or user-controlled HTML. Proper HTML entity encoding is needed."
+      },
+      {
+        "severity": "medium",
+        "file": "next.config.ts",
+        "line": 1,
+        "description": "Missing security headers configuration (Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, etc.). Next.js does not set these by default. Recommend adding headers in next.config.ts to prevent XSS, clickjacking, and MIME-sniffing attacks."
+      },
+      {
+        "severity": "low",
+        "file": "package.json",
+        "line": 1,
+        "description": "No lockfile (package-lock.json) shown in git status despite being listed as modified. Ensure package-lock.json is committed to prevent supply chain attacks via transitive dependency version drift."
+      },
+      {
+        "severity": "low",
+        "file": "src/lib/content-types.ts",
+        "line": 15,
+        "description": "RichBlock type accepts arbitrary strings for text fields with no validation. If rendered via dangerouslySetInnerHTML or injected into HTML attributes without escaping, this could enable XSS. React JSX auto-escapes by default, but verify rendering implementation."
+      }
+    ],
+    "riskScore": 28,
+    "recommendations": [
+      "Add security headers to next.config.ts: enable CSP with strict policy, set X-Frame-Options: DENY, X-Content-Type-Options: nosniff, and Referrer-Policy",
+      "Verify that RichBlock content is rendered safely — ensure all text fields go through React JSX (auto-escaped) and never use dangerouslySetInnerHTML without explicit sanitization (e.g., DOMPurify)",
+      "Run `npm audit` to identify vulnerable transitive dependencies. Update minor/patch versions if vulnerabilities exist",
+      "Strengthen input validation: if RichBlock content is user-generated, validate structure and sanitize text fields with a library like sanitize-html or DOMPurify",
+      "Add CSRF protection headers if there are any POST/PUT/DELETE endpoints (Next.js handles this via SameSite cookies by default, but verify configuration)",
+      "Implement Content Security Policy (CSP) to mitigate inline script injection risks, especially if external scripts are loaded (e.g., analytics)",
+      "Ensure .env files and secrets are never committed — configure .gitignore and use environment variables for any API keys or credentials",
+      "If this app exposes an API, add rate limiting and input validation at all endpoints to prevent abuse"
+    ]
+  },
+  "durationMs": 35248,
+  "model": "haiku",
+  "sandboxMode": "strict",
+  "workerType": "audit",
+  "timestamp": "2026-07-15T04:35:34.277Z",
+  "executionId": "audit_1784090099029_ipvb6z"
+}
