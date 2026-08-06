@@ -7,7 +7,8 @@ import Nav from "@/components/Nav";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import Footer from "@/components/sections/Footer";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { EXPO, FadeUp, RevealWords } from "@/components/ui/Reveal";
+import { FadeUp, RevealWords } from "@/components/ui/Reveal";
+import { SPRING_ENTER } from "@/lib/motion";
 
 const STARS = [
   [7, 23, 2],
@@ -131,7 +132,7 @@ function AboutHero() {
   const rise = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 28 },
     animate: ready ? { opacity: 1, y: 0 } : {},
-    transition: { duration: 1, ease: EXPO, delay },
+    transition: { ...SPRING_ENTER, delay },
   });
 
   return (
@@ -389,7 +390,7 @@ function AboutContent() {
             </FadeUp>
             <FadeUp delay={0.35} className="mt-9">
               <MagneticButton href="/contact" variant="brass" className="px-9 py-4 text-base">
-                Book a Consultation
+                Book a consultation
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
                   <path d="M2 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

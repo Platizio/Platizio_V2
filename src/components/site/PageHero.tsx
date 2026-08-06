@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { EXPO } from "@/components/ui/Reveal";
+import { SPRING_ENTER } from "@/lib/motion";
 
 const STARS = [
   [7, 23, 2],
@@ -51,7 +51,7 @@ export default function PageHero({
   const rise = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 26 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 1, ease: EXPO, delay },
+    transition: { ...SPRING_ENTER, delay },
   });
 
   return (

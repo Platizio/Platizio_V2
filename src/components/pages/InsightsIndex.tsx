@@ -13,7 +13,8 @@ import { PRODUCT_GLYPHS } from "@/lib/productGlyphs";
 import { SiteShell } from "@/components/site/SiteShell";
 import PageHero from "@/components/site/PageHero";
 import ContactCTA from "@/components/site/ContactCTA";
-import { EXPO, FadeUp } from "@/components/ui/Reveal";
+import { FadeUp } from "@/components/ui/Reveal";
+import { SPRING_ENTER } from "@/lib/motion";
 
 const YT = "https://www.youtube.com/@sifinsights";
 
@@ -112,7 +113,7 @@ export default function InsightsIndex() {
                 layout={!reduce}
                 initial={reduce ? false : { opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: EXPO, delay: (i % 3) * 0.06 }}
+                transition={{ ...SPRING_ENTER, delay: (i % 3) * 0.06 }}
               >
                 <ArticleCard {...a} />
               </motion.div>

@@ -1,15 +1,8 @@
 "use client";
 
-import {
-  animate,
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useTransform,
-} from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
-import { EXPO } from "@/components/ui/Reveal";
+import { SPRING_ENTER } from "@/lib/motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useIntroDone } from "@/components/IntroProvider";
 
@@ -39,11 +32,7 @@ function HeroLine({
             className={`inline-block will-change-transform ${className}`}
             initial={reduce ? false : { y: "112%" }}
             animate={ready ? { y: "0%" } : {}}
-            transition={{
-              duration: 1.25,
-              ease: EXPO,
-              delay: baseDelay + i * 0.07,
-            }}
+            transition={{ ...SPRING_ENTER, delay: baseDelay + i * 0.07 }}
           >
             {word}
           </motion.span>
@@ -54,32 +43,6 @@ function HeroLine({
   );
 }
 
-function GrowthStat({ ready }: { ready: boolean }) {
-  const reduce = useReducedMotion();
-  const mv = useMotionValue(0);
-  const label = useTransform(mv, (v) => `+${v.toFixed(1)}%`);
-
-  useEffect(() => {
-    if (!ready) return;
-    if (reduce) {
-      mv.set(24.8);
-      return;
-    }
-    const controls = animate(mv, 24.8, {
-      duration: 1.8,
-      delay: 0.9,
-      ease: EXPO,
-    });
-    return () => controls.stop();
-  }, [ready, reduce, mv]);
-
-  return (
-    <motion.span className="font-display text-2xl text-brass tabular-nums md:text-3xl">
-      {label}
-    </motion.span>
-  );
-}
-
 export default function Hero() {
   const ready = useIntroDone();
   const reduce = useReducedMotion();
@@ -87,7 +50,7 @@ export default function Hero() {
   const fadeIn = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 24 },
     animate: ready ? { opacity: 1, y: 0 } : {},
-    transition: { duration: 1, ease: EXPO, delay },
+    transition: { ...SPRING_ENTER, delay },
   });
 
   return (
@@ -99,7 +62,11 @@ export default function Hero() {
       {/* legibility scrim — canvas fades into the drenched base */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,oklch(0.16_0.045_288/0.72),transparent_38%,transparent_62%,oklch(0.16_0.045_288/0.92))]" />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-end px-6 pb-14 pt-32 md:px-10 md:pb-16 lg:px-16">
+      {/* Gutter outside the 1400 container, matching every content section.
+          With the padding inside the container the hero's left rail landed
+          64px right of every section below it above 1528px wide. */}
+      <div className="relative z-10 flex w-full flex-1 flex-col justify-end px-6 pb-14 pt-32 md:px-10 md:pb-16 lg:px-16">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-end">
         <p className="sr-only">
           Platizio — licensed distributor of Mutual Funds and Specialised
           Investment Funds.
@@ -121,46 +88,47 @@ export default function Hero() {
             {...fadeIn(0.75)}
             className="max-w-[46ch] text-base leading-relaxed text-lavender-dim md:text-lg"
           >
-            A disciplined approach to investing that focuses on superior
-            returns and capital preservation — through regulated, transparent
-            frameworks.
+            Regulated products, matched to your goals, your horizon and your
+            appetite for risk — and explained before you commit.
           </motion.p>
 
           <motion.div {...fadeIn(0.9)} className="flex flex-wrap gap-4">
-            <MagneticButton href="#contact" variant="brass">
-              Book a Consultation
+            <MagneticButton href="/contact" variant="brass">
+              Book a consultation
             </MagneticButton>
             <MagneticButton href="#products" variant="outline-light">
-              Learn More
+              See the five products
             </MagneticButton>
           </motion.div>
         </div>
 
+        {/* Two verifiable registrations, not three peer "facts". The YTD figure
+            that used to lead this row was unattributed — a distributor has no
+            performance of its own to report, and any return shown without a
+            scheme, benchmark, period and the prescribed disclaimer is exactly
+            what AMFI's code exists to prevent. */}
         <motion.div
           {...fadeIn(1.05)}
-          className="mt-14 grid grid-cols-1 gap-6 border-t border-lavender/15 pt-8 sm:grid-cols-3 md:mt-16"
+          className="mt-14 grid grid-cols-1 gap-6 border-t border-lavender/15 pt-8 sm:grid-cols-2 md:mt-16"
         >
           <div className="flex flex-col gap-1">
-            <GrowthStat ready={ready} />
-            <span className="text-sm text-lavender-dim">YTD growth</span>
-          </div>
-          <div className="flex flex-col gap-1 sm:border-l sm:border-lavender/15 sm:pl-6">
-            <span className="font-display text-2xl text-porcelain md:text-3xl">
-              SEBI
-            </span>
-            <span className="text-sm text-lavender-dim">
-              Compliant frameworks
-            </span>
-          </div>
-          <div className="flex flex-col gap-1 sm:border-l sm:border-lavender/15 sm:pl-6">
-            <span className="font-display text-2xl text-porcelain md:text-3xl">
+            <span className="font-display track-caption text-2xl text-porcelain md:text-3xl">
               AMFI
             </span>
             <span className="text-sm text-lavender-dim">
-              Registered distributor
+              Registered distributor · ARN 341407
             </span>
           </div>
-        </motion.div>
+          <div className="flex flex-col gap-1 sm:border-l sm:border-lavender/15 sm:pl-6">
+            <span className="font-display track-caption text-2xl text-porcelain md:text-3xl">
+              SEBI
+            </span>
+            <span className="text-sm text-lavender-dim">
+              Regulated product frameworks
+            </span>
+          </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { RevealWords, FadeUp, EXPO } from "@/components/ui/Reveal";
+import { RevealWords, FadeUp } from "@/components/ui/Reveal";
+import { CROSSFADE, SPRING, SPRING_SNAP } from "@/lib/motion";
 import { PRODUCT_GLYPHS } from "@/lib/productGlyphs";
 
 type Product = {
@@ -14,6 +15,13 @@ type Product = {
 };
 
 const PRODUCTS: Product[] = [
+  {
+    slug: "international",
+    name: "International Investing",
+    tag: "INTL",
+    description:
+      "Global diversification through exposure to international markets and economies.",
+  },
   {
     slug: "sif",
     name: "Specialised Investment Funds",
@@ -41,24 +49,15 @@ const PRODUCTS: Product[] = [
     description:
       "Alternative investment funds for non-traditional asset classes and strategies.",
   },
-  {
-    slug: "international",
-    name: "International Investing",
-    tag: "INTL",
-    description:
-      "Global diversification through exposure to international markets and economies.",
-  },
 ];
 
 function ProductRow({
   product,
-  index,
   active,
   onActivate,
   onDeactivate,
 }: {
   product: Product;
-  index: number;
   active: boolean;
   onActivate: () => void;
   onDeactivate: () => void;
@@ -74,7 +73,9 @@ function ProductRow({
       onFocus={onActivate}
       onBlur={onDeactivate}
     >
-      {/* Midnight sweep — grows from the bottom on enter, exits to the top */}
+      {/* Midnight sweep — grows from the bottom, and retreats the same way.
+          The origin is fixed: flipping it between enter and exit meant an
+          interrupted sweep snapped to the opposite edge mid-flight. */}
       <motion.div
         aria-hidden
         className="absolute inset-0 bg-midnight will-change-transform"
@@ -84,19 +85,21 @@ function ProductRow({
             ? { opacity: active ? 1 : 0, scaleY: 1 }
             : { opacity: 1, scaleY: active ? 1 : 0 }
         }
-        style={{ originY: active ? 1 : 0 }}
-        transition={{ duration: reduce ? 0.2 : 0.4, ease: EXPO }}
+        style={{ originY: 1 }}
+        transition={reduce ? CROSSFADE : SPRING}
       />
 
       <div className="relative z-10 flex flex-col gap-3 px-1 py-8 md:py-10 lg:grid lg:grid-cols-[7rem_1fr_minmax(0,20rem)_3.5rem] lg:items-center lg:gap-8">
-        {/* Index + tag */}
+        {/* Tag only. The ordinal that used to lead this cell was literally the
+            array index, so reordering the list silently renumbered everything
+            — it asserted a sequence these five parallel categories do not
+            have. Numbering stays exclusive to Journey, where the order is
+            real. The tag survives any reordering because it is true. */}
         <span
-          className={`text-sm tabular-nums transition-colors duration-300 ${
+          className={`text-sm tracking-[0.08em] transition-colors duration-300 ${
             active ? "text-brass" : "text-brass-deep"
           }`}
         >
-          {String(index + 1).padStart(2, "0")}
-          <span className="mx-2 opacity-40">/</span>
           {product.tag}
         </span>
 
@@ -187,7 +190,6 @@ export default function Products() {
               <FadeUp key={product.tag} delay={0.08 + i * 0.07}>
                 <ProductRow
                   product={product}
-                  index={i}
                   active={activeIndex === i}
                   onActivate={() => activate(i)}
                   onDeactivate={() => setActiveIndex(null)}
@@ -198,20 +200,24 @@ export default function Products() {
 
           {/* Fixed preview panel — crossfades a glyph per product (lg+) */}
           <FadeUp delay={0.3} className="hidden lg:block lg:sticky lg:top-24">
-            <div className="relative aspect-[4/5] w-full overflow-hidden bg-midnight">
-              <AnimatePresence mode="wait" initial={false}>
+            {/* Solid, not glass: nothing sits behind this panel worth showing
+                through. It earns depth from elevation instead — a light
+                shadow, because the ground here is plain rather than busy. */}
+            <div className="relative aspect-[4/5] w-full overflow-hidden bg-midnight shadow-[0_18px_50px_-24px_oklch(0.22_0.045_288/0.45)]">
+              {/* Not mode="wait": making the incoming panel queue behind the
+                  outgoing one adds latency to every hover. Both are absolutely
+                  positioned, so they cross-fade concurrently instead. */}
+              <AnimatePresence initial={false}>
                 <motion.div
                   key={preview.tag}
                   className="absolute inset-0 flex flex-col justify-between p-8"
                   initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={reduce ? { opacity: 0 } : { opacity: 0, y: -14 }}
-                  transition={{ duration: 0.3, ease: EXPO }}
+                  transition={reduce ? CROSSFADE : SPRING_SNAP}
                 >
-                  <span className="text-sm tabular-nums text-brass">
-                    {String(previewIndex + 1).padStart(2, "0")}
-                    <span className="mx-2 opacity-40">/</span>
-                    05
+                  <span className="text-sm tracking-[0.08em] text-brass">
+                    {preview.tag}
                   </span>
                   <svg
                     viewBox="0 0 120 120"
@@ -220,7 +226,7 @@ export default function Products() {
                   >
                     {PRODUCT_GLYPHS[preview.tag]}
                   </svg>
-                  <span className="font-display text-lg text-lavender">
+                  <span className="font-display track-caption text-lg text-lavender">
                     {preview.name}
                   </span>
                 </motion.div>

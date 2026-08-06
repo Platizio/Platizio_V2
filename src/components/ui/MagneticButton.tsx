@@ -7,6 +7,7 @@ import {
   useSpring,
 } from "motion/react";
 import { useRef, type ReactNode } from "react";
+import { SPRING_CONFIG, SPRING_SNAP } from "@/lib/motion";
 
 const variants = {
   brass:
@@ -17,8 +18,16 @@ const variants = {
   violet: "bg-violet text-porcelain hover:bg-violet/90 border border-transparent",
 } as const;
 
+/** How far the button is allowed to lean toward the pointer, as a fraction. */
+const PULL = 0.28;
+
 /**
- * Magnetic CTA — eases toward the cursor within its bounds, scales on press.
+ * Magnetic CTA — leans toward the pointer within its bounds, and reacts on
+ * press-down rather than on release.
+ *
+ * X and Y run as two independent springs. A single spring driving 2D distance
+ * desyncs the moment the pointer's horizontal and vertical speeds differ, which
+ * shows up as the button drifting off the cursor's line.
  */
 export function MagneticButton({
   children,
@@ -37,14 +46,16 @@ export function MagneticButton({
   const reduce = useReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 180, damping: 16, mass: 0.4 });
-  const sy = useSpring(y, { stiffness: 180, damping: 16, mass: 0.4 });
+  // Springs re-target from wherever they currently are, so flicking the pointer
+  // across the button reverses the lean mid-flight instead of restarting it.
+  const sx = useSpring(x, SPRING_CONFIG);
+  const sy = useSpring(y, SPRING_CONFIG);
 
   function onMove(e: React.PointerEvent) {
     if (reduce || !ref.current || e.pointerType !== "mouse") return;
     const r = ref.current.getBoundingClientRect();
-    x.set((e.clientX - (r.left + r.width / 2)) * 0.28);
-    y.set((e.clientY - (r.top + r.height / 2)) * 0.28);
+    x.set((e.clientX - (r.left + r.width / 2)) * PULL);
+    y.set((e.clientY - (r.top + r.height / 2)) * PULL);
   }
 
   function onLeave() {
@@ -54,12 +65,26 @@ export function MagneticButton({
 
   const cls = `inline-flex cursor-pointer items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[0.95rem] font-medium tracking-wide transition-colors duration-300 ${variants[variant]} ${className}`;
 
+  // whileTap fires on pointer-down, so the press reads immediately rather than
+  // waiting for the release to confirm it.
+  const press = reduce ? undefined : { scale: 0.96 };
+
   const inner = href ? (
-    <motion.a href={href} className={cls} whileTap={reduce ? undefined : { scale: 0.96 }}>
+    <motion.a
+      href={href}
+      className={cls}
+      whileTap={press}
+      transition={SPRING_SNAP}
+    >
       {children}
     </motion.a>
   ) : (
-    <motion.button onClick={onClick} className={cls} whileTap={reduce ? undefined : { scale: 0.96 }}>
+    <motion.button
+      onClick={onClick}
+      className={cls}
+      whileTap={press}
+      transition={SPRING_SNAP}
+    >
       {children}
     </motion.button>
   );
@@ -70,8 +95,11 @@ export function MagneticButton({
       className="inline-block"
       onPointerMove={onMove}
       onPointerLeave={onLeave}
+      onPointerCancel={onLeave}
     >
-      <motion.div style={reduce ? undefined : { x: sx, y: sy }}>{inner}</motion.div>
+      <motion.div style={reduce ? undefined : { x: sx, y: sy }}>
+        {inner}
+      </motion.div>
     </div>
   );
 }

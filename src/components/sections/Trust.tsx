@@ -80,7 +80,7 @@ function CredentialPanel({
   return (
     <div className="group bg-midnight-2 border border-lavender/10 hover:border-brass/40 rounded-2xl p-8 md:p-12 transition-colors duration-500">
       {seal}
-      <h3 className="mt-8 font-display text-2xl md:text-3xl tracking-tight">
+      <h3 className="mt-8 font-display track-caption text-2xl md:text-3xl">
         {title}
       </h3>
       <p className="mt-4 text-lavender-dim leading-relaxed">{body}</p>
@@ -113,7 +113,7 @@ export default function Trust() {
           </div>
 
           <FadeUp delay={0.3} className="lg:col-span-4 lg:col-start-9">
-            <p className="border-t border-lavender/15 pt-6 font-display text-xl md:text-2xl leading-snug">
+            <p className="border-t border-lavender/15 pt-6 font-display track-caption text-xl md:text-2xl leading-snug">
               Platizio Services LLP is a licensed and certified distributor of
               Mutual Funds and Specialised Investment Funds.
             </p>

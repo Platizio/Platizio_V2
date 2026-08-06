@@ -9,7 +9,10 @@
   --color-lavender: oklch(0.89 0.045 286); /* text on dark */
   --color-lavender-dim: oklch(0.71 0.045 286); /* muted on dark */
   --color-brass: oklch(0.8 0.13 85); /* accent — data, ticks, CTAs */
-  --color-brass-deep: oklch(0.62 0.12 75); /* accent on light bg */
+  /* Darkened from 0.62: at that lightness the product-row eyebrows measured
+     3.45:1 on porcelain, so the token authored for light grounds did not pass
+     AA on the only ground it is used on. */
+  --color-brass-deep: oklch(0.54 0.115 72); /* accent on light bg */
   --color-porcelain: oklch(0.975 0.006 290); /* light bg */
   --color-ink: oklch(0.22 0.045 288); /* text on light */
   --color-ink-muted: oklch(0.44 0.03 288); /* muted on light */
@@ -52,11 +55,37 @@ h3 {
   text-wrap: balance;
 }
 
-/* Fraunces display setting: optical sizing on, no wonk */
-.font-display {
-  font-optical-sizing: auto;
-  font-variation-settings: "SOFT" 0, "WONK" 0;
-  letter-spacing: -0.02em;
+/* Fraunces display setting: optical sizing on, no wonk.
+   In @layer base so Tailwind's utilities (which live in @layer utilities, and
+   therefore win) can override it per element. Written unlayered, this rule
+   outranked every `tracking-*` utility on the page and silently made 46 of
+   them inert — which is why tracking measured a flat -0.02em at every size. */
+@layer base {
+  .font-display {
+    font-optical-sizing: auto;
+    font-variation-settings: "SOFT" 0, "WONK" 0;
+  }
+}
+
+/* Tracking is size-specific: display type needs to close up as it grows,
+   small type needs to open up to stay legible. One value across a 15x range
+   is wrong at both ends — the blanket -0.02em that used to live on
+   .font-display was too loose on the 272px wordmark and too tight on 18px.
+   These sit in @layer utilities so they are peers of Tailwind's `tracking-*`
+   rather than losing to them. */
+@layer utilities {
+  .track-display {
+    letter-spacing: -0.038em;
+  }
+  .track-headline {
+    letter-spacing: -0.028em;
+  }
+  .track-title {
+    letter-spacing: -0.018em;
+  }
+  .track-caption {
+    letter-spacing: 0.004em;
+  }
 }
 
 /* ── Marquee ─────────────────────────────────────────────────── */
@@ -76,6 +105,112 @@ h3 {
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee {
     animation: none;
+  }
+
+  /* Scroll-revealed content is parked off-position until an IntersectionObserver
+     fires. For reduced-motion users there is no reveal worth waiting for, so
+     force the resting state and drop the dependency on JS entirely — if the
+     observer never fires, the text is still readable. */
+  [data-reveal] {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ── Materials ───────────────────────────────────────────────────
+   Translucent layers that let content pass underneath rather than
+   opaque bars that consume a strip of the page. Weight encodes
+   hierarchy: chrome is the light, incidental layer; a sheet is a
+   heavier structural one, so it blurs harder and casts a deeper
+   shadow. Defined here, once, so the three accessibility fallbacks
+   at the bottom of this block cannot be forgotten at a call site. */
+
+/* Only the standard property here — Lightning CSS adds the -webkit- prefix
+   from browserslist. Writing both by hand made it dedupe them and keep just
+   the prefixed one, which Chrome ignores, so nothing blurred at all. */
+/* 86%, not 62%. The chrome floats over both the midnight hero and the
+   porcelain sections, but its own text colours are authored for dark ground
+   only. At 62% it composited to ~#666373 over porcelain and dropped the nav
+   links to ~3.1:1 — the bar's own controls failing AA. 86% keeps it reading
+   as glass while holding lavender near 9:1 on either ground. */
+.material-chrome {
+  background: color-mix(in oklch, var(--color-midnight) 86%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* A bigger surface reads as thicker glass: more blur, deeper shadow. */
+.material-sheet {
+  /* A blocking modal has to stay legible over anything behind it, so this
+     sits heavier than the chrome — the blur does the dimming that a modal
+     needs, which is why there is no separate scrim on top of it. */
+  background: color-mix(in oklch, var(--color-violet) 82%, transparent);
+  backdrop-filter: blur(32px) saturate(160%);
+  box-shadow: 0 24px 70px -20px oklch(0.08 0.04 288 / 0.7);
+}
+
+/* Scroll edge, not a hard divider: content dissolves into the floating
+   chrome instead of meeting a 1px rule. Sits just below its parent. */
+.material-edge::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  height: 1.25rem;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--color-midnight) 34%, transparent),
+    transparent
+  );
+}
+
+/* Vibrancy: flat grey text loses legibility once a blurred, moving
+   backdrop shows through. Adds weight and opens the tracking a touch.
+   Colour is deliberately left to the call site — setting it here would
+   be unlayered and would beat Tailwind's `hover:` utilities. */
+.text-vibrant {
+  font-weight: 500;
+  letter-spacing: 0.012em;
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .material-chrome {
+    background: var(--color-midnight);
+  }
+  .material-sheet {
+    background: var(--color-violet);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .material-chrome,
+  .material-sheet {
+    backdrop-filter: none;
+  }
+  .material-chrome {
+    background: var(--color-midnight);
+  }
+  .material-sheet {
+    background: var(--color-violet);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .material-chrome,
+  .material-sheet {
+    backdrop-filter: none;
+  }
+  /* A defined, contrasting border replaces the soft edge. */
+  .material-chrome {
+    background: var(--color-midnight);
+    border-bottom: 1px solid var(--color-lavender);
+  }
+  .material-edge::after {
+    display: none;
+  }
+  .material-sheet {
+    background: var(--color-violet);
+    border: 1px solid var(--color-lavender);
   }
 }
 

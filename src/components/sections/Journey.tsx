@@ -7,7 +7,8 @@ import {
   useReducedMotion,
   useScroll,
 } from "motion/react";
-import { EXPO, FadeUp, RevealWords } from "@/components/ui/Reveal";
+import { FadeUp, RevealWords } from "@/components/ui/Reveal";
+import { SPRING } from "@/lib/motion";
 
 type Step = {
   num: string;
@@ -96,7 +97,7 @@ export default function Journey() {
         >
           {STEPS.map((step, i) => (
             <FadeUp key={step.num} delay={i * 0.12} className="py-10">
-              <span className="block font-display text-3xl leading-none text-brass">
+              <span className="block font-display track-caption text-3xl leading-none text-brass">
                 {step.num}
               </span>
               <h3 className="mt-4 font-display text-[clamp(2rem,4vw,3.25rem)] leading-[1.05] tracking-tight">
@@ -126,7 +127,7 @@ export default function Journey() {
                   </div>
                   {/* Counter-rolling step number */}
                   <div>
-                    <div className="relative h-[1em] min-w-[1.35em] font-display leading-none tracking-tight text-[clamp(6rem,14vw,11rem)]">
+                    <div className="relative h-[1em] min-w-[1.35em] font-display leading-none track-display text-[clamp(6rem,14vw,11rem)]">
                       {STEPS.map((step, i) => (
                         <motion.span
                           key={step.num}
@@ -141,7 +142,10 @@ export default function Journey() {
                                   ? "-24%"
                                   : "24%",
                           }}
-                          transition={{ duration: 0.8, ease: EXPO }}
+                          // Scroll drives this, and scroll reverses — a spring
+                          // re-targets from the current offset instead of
+                          // restarting the slide from the far edge.
+                          transition={SPRING}
                         >
                           {step.num}
                         </motion.span>

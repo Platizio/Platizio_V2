@@ -8,7 +8,8 @@ import { buildToc, readingMinutes, type RichBlock } from "@/lib/content-types";
 import { SiteShell } from "@/components/site/SiteShell";
 import RichText from "@/components/site/RichText";
 import ContactCTA from "@/components/site/ContactCTA";
-import { EXPO, FadeUp } from "@/components/ui/Reveal";
+import { FadeUp } from "@/components/ui/Reveal";
+import { SPRING_ENTER } from "@/lib/motion";
 
 const END_NOTE =
   "Mutual Fund investments are subject to market risks. Please read all scheme related documents carefully before investing. Market, tax and regulatory figures cited above are for information only and should be independently verified before you act on them.";
@@ -32,7 +33,7 @@ export default function ArticlePage({
   const rise = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 24 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 1, ease: EXPO, delay },
+    transition: { ...SPRING_ENTER, delay },
   });
 
   return (

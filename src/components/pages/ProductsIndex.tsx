@@ -7,7 +7,8 @@ import { PRODUCTS } from "@/lib/products";
 import { SiteShell } from "@/components/site/SiteShell";
 import PageHero from "@/components/site/PageHero";
 import ContactCTA from "@/components/site/ContactCTA";
-import { EXPO, FadeUp } from "@/components/ui/Reveal";
+import { FadeUp } from "@/components/ui/Reveal";
+import { CROSSFADE, SPRING, SPRING_SNAP } from "@/lib/motion";
 
 function ProductRow({
   index,
@@ -48,8 +49,8 @@ function ProductRow({
             ? { opacity: active ? 1 : 0, scaleY: 1 }
             : { opacity: 1, scaleY: active ? 1 : 0 }
         }
-        style={{ originY: active ? 1 : 0 }}
-        transition={{ duration: reduce ? 0.2 : 0.4, ease: EXPO }}
+        style={{ originY: 1 }}
+        transition={reduce ? CROSSFADE : SPRING}
       />
 
       <div className="relative z-10 flex flex-col gap-3 px-1 py-8 md:py-10 lg:grid lg:grid-cols-[7rem_1fr_minmax(0,20rem)_3.5rem] lg:items-center lg:gap-8">
@@ -143,15 +144,20 @@ export default function ProductsIndex() {
             </div>
 
             <FadeUp delay={0.3} className="hidden lg:sticky lg:top-24 lg:block">
-              <div className="relative aspect-[4/5] w-full overflow-hidden bg-midnight">
-                <AnimatePresence mode="wait" initial={false}>
+              {/* Solid, not glass: nothing behind it is worth showing through.
+                  Depth comes from elevation, kept light for a plain ground. */}
+              <div className="relative aspect-[4/5] w-full overflow-hidden bg-midnight shadow-[0_18px_50px_-24px_oklch(0.22_0.045_288/0.45)]">
+                {/* Not mode="wait": queueing the incoming panel behind the
+                    outgoing one adds latency to every hover. Both are
+                    absolutely positioned, so they cross-fade concurrently. */}
+                <AnimatePresence initial={false}>
                   <motion.div
                     key={preview.tag}
                     className="absolute inset-0 flex flex-col justify-between p-8"
                     initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={reduce ? { opacity: 0 } : { opacity: 0, y: -14 }}
-                    transition={{ duration: 0.3, ease: EXPO }}
+                    transition={reduce ? CROSSFADE : SPRING_SNAP}
                   >
                     <span className="text-sm tabular-nums text-brass">
                       {String(previewIndex + 1).padStart(2, "0")}

@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import * as THREE from "three";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Line } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Billboard, Line } from "@react-three/drei";
 
 /**
  * MarketConstellation — WebGL hero background for Platizio.
@@ -82,46 +82,283 @@ function Terrain({ reduced }: { reduced: boolean }) {
   );
 }
 
-function IndexLine({ reduced }: { reduced: boolean }) {
-  const starsRef = useRef<THREE.Group>(null);
+/**
+ * Shape of the index line as [u, h] stops: u runs left -> right, h rises from
+ * 0 at the opening level to 1 at the closing high. An early rally into a top,
+ * a correction back to the opening level, then a sustained climb to new highs.
+ * Plotted as straight segments between stops — a market chart joins ticks with
+ * lines, it never curves through them.
+ *
+ * The first and last stops sit past the viewport so the line bleeds off both
+ * edges rather than terminating in frame; each is collinear with the segment
+ * it extends, so the bleed reads as a continuation rather than a kink.
+ */
+const PROFILE: [number, number][] = [
+  [-0.07, -0.31111], // lead-in, collinear with the opening segment
+  [0.0, 0.0],
+  [0.045, 0.2],
+  [0.08, 0.28],
+  [0.12, 0.46],
+  [0.165, 0.565],
+  [0.2, 0.612],
+  [0.235, 0.68],
+  [0.285, 0.715],
+  [0.34, 0.7],
+  [0.38, 0.655],
+  [0.42, 0.575],
+  [0.45, 0.475],
+  [0.485, 0.3],
+  [0.52, 0.2],
+  [0.56, 0.02],
+  [0.595, 0.045],
+  [0.63, 0.0],
+  [0.67, 0.055],
+  [0.71, 0.175],
+  [0.735, 0.222],
+  [0.755, 0.275],
+  [0.8, 0.385],
+  [0.85, 0.575],
+  [0.89, 0.7],
+  [0.93, 0.865],
+  [0.965, 0.955],
+  [1.0, 1.0],
+  [1.07, 1.09], // lead-out, collinear with the closing segment
+];
 
-  const { linePoints, starPoints } = useMemo(() => {
-    const pts: [number, number, number][] = [];
-    const n = 40;
-    for (let i = 0; i < n; i++) {
-      const u = i / (n - 1);
-      pts.push([
-        -9.5 + u * 19, // left -> right across the terrain
-        1.05 + u * 1.15 + 0.24 * Math.sin(u * 9.2) + 0.12 * Math.sin(u * 21.5 + 1.7),
-        0.8 - u * 1.9, // slight diagonal into depth
-      ]);
-    }
-    const starIndices = [5, 12, 19, 26, 32, 37];
-    const starPoints = starIndices.map((i) => pts[i]);
-    return { linePoints: pts, starPoints };
+/**
+ * Indices of the PROFILE stops that carry a marker — the four turning points
+ * plus the leading print. Deliberately none in the headline's column: a marker
+ * there reads as a grabbable control sitting on the type.
+ */
+const STAR_STOPS = [9, 13, 17, 21, 25];
+
+// Span chosen so u 0->1 crosses the hero edge to edge and h 0->1 covers the
+// full drop from the headline down to the stat row.
+const X_AT_U0 = -6.92;
+const X_AT_U1 = 7.4;
+const Y_BASE = 1.25;
+const Y_SPAN = 3.38;
+const Z_AT_U0 = 0.8;
+const Z_AT_U1 = -1.1;
+
+/**
+ * Marker geometry, in world units. Sized to read as quiet chart ticks behind
+ * the headline, not as controls in front of it — roughly a third of the area
+ * they had before.
+ */
+const NODE_R = 0.052;
+const NODE_STROKE = 0.014;
+const GOAL_R = 0.072;
+const GLOW_SIZE = 0.34;
+
+/** The aspect the chart's framing was art-directed against. */
+const REF_ASPECT = 1906 / 947;
+
+/** Below this aspect the whole profile cannot fit; start panning instead. */
+const PAN_FROM_ASPECT = 1.2;
+/** Aspect by which the pan is complete (roughly a phone held upright). */
+const PAN_TO_ASPECT = 0.6;
+/** The stop to centre once panning is complete — the middle of the recovery. */
+const PAN_TO_U = 0.72;
+
+type ChartFit = { fit: number; shift: number };
+
+/**
+ * Horizontal framing. The camera's vertical FOV is fixed, so its horizontal FOV
+ * — and with it how much of the chart sits in frame — narrows as the viewport
+ * gets less wide. Scaling the span by that ratio holds every marker at a
+ * constant fraction of the frame width instead of letting the right-hand end
+ * slide off on smaller laptops.
+ *
+ * The scale alone is not enough on a phone. Clamping it (so the trace does not
+ * become a near-vertical spike) leaves the chart wider than the frame, and what
+ * a centred window then shows is the middle of the profile — which is the
+ * drawdown. A phone was rendering the crash and nothing else, on an investment
+ * firm's landing page. So once the clamp starts to bite we also pan, until the
+ * visible window is the trough, the recovery and the leading print: the part
+ * that argues the same thing the headline does.
+ */
+function useChartFit(): ChartFit {
+  const aspect = useThree(({ size }) =>
+    // A container measured at zero (hidden tab, first paint) would give NaN and
+    // poison every vertex — fall back to the reference framing until it settles.
+    size.width > 0 && size.height > 0 ? size.width / size.height : REF_ASPECT,
+  );
+
+  const fit = THREE.MathUtils.clamp(aspect / REF_ASPECT, 0.58, 1.3);
+  const pan = THREE.MathUtils.clamp(
+    (PAN_FROM_ASPECT - aspect) / (PAN_FROM_ASPECT - PAN_TO_ASPECT),
+    0,
+    1,
+  );
+  // Translate so PAN_TO_U sits at frame centre when the pan is complete.
+  const shift = -pan * (X_AT_U0 + PAN_TO_U * (X_AT_U1 - X_AT_U0)) * fit;
+  return { fit, shift };
+}
+
+/** Lift a [u, h] profile stop into the terrain's world space. */
+function profilePoint(
+  [u, h]: [number, number],
+  { fit, shift }: ChartFit,
+): THREE.Vector3 {
+  return new THREE.Vector3(
+    (X_AT_U0 + u * (X_AT_U1 - X_AT_U0)) * fit + shift,
+    Y_BASE + h * Y_SPAN,
+    Z_AT_U0 + u * (Z_AT_U1 - Z_AT_U0), // slight diagonal into depth
+  );
+}
+
+/**
+ * Brightness of the trace along its length, 0..1. The line has to cross the
+ * headline's column, so instead of fighting the type it recedes there and only
+ * resolves into full brass out in the open space toward the leading print.
+ * Depth through material weight, rather than one flat foreground stroke.
+ */
+function traceBrightness(u: number): number {
+  const t = THREE.MathUtils.clamp(u / 0.93, 0, 1);
+  const eased = t * t * (3 - 2 * t); // smoothstep
+  const b = 0.15 + 0.85 * eased;
+  // Fall away sharply past the leading print, so the eye lands there and stops
+  // rather than being led off the top corner.
+  return u > 0.93 ? b * (1 - 0.72 * Math.min((u - 0.93) / 0.14, 1)) : b;
+}
+
+/** Radial-gradient bloom for the leading marker — generated, no asset fetch. */
+function useGlowTexture(): THREE.CanvasTexture | null {
+  const texture = useMemo(() => {
+    const S = 128;
+    const canvas = document.createElement("canvas");
+    canvas.width = S;
+    canvas.height = S;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+    const g = ctx.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+    g.addColorStop(0, "rgba(216,169,78,0.90)");
+    g.addColorStop(0.25, "rgba(216,169,78,0.30)");
+    g.addColorStop(0.55, "rgba(216,169,78,0.08)");
+    g.addColorStop(1, "rgba(216,169,78,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, S, S);
+    return new THREE.CanvasTexture(canvas);
   }, []);
+
+  useEffect(() => () => texture?.dispose(), [texture]);
+  return texture;
+}
+
+function IndexLine({ reduced }: { reduced: boolean }) {
+  const fit = useChartFit();
+  const nodesRef = useRef<THREE.Group>(null);
+  const glowRef = useRef<THREE.Sprite>(null);
+  const glow = useGlowTexture();
+
+  const { linePoints, lineColors, nodePoints, goalPoint } = useMemo(() => {
+    const stops = STAR_STOPS.map((i) => profilePoint(PROFILE[i], fit));
+    return {
+      linePoints: PROFILE.map((stop) => profilePoint(stop, fit)),
+      // Greyscale ramp; the material's brass multiplies through it.
+      lineColors: PROFILE.map(([u]) => {
+        const b = traceBrightness(u);
+        return new THREE.Color(b, b, b);
+      }),
+      // Markers ride the same ramp, so none of them out-weigh the headline.
+      nodePoints: stops.slice(0, -1).map((point, i) => ({
+        point,
+        opacity: 0.28 + 0.5 * traceBrightness(PROFILE[STAR_STOPS[i]][0]),
+      })),
+      goalPoint: stops[stops.length - 1],
+    };
+  }, [fit]);
 
   useFrame((state) => {
     if (reduced) return;
-    const stars = starsRef.current;
-    if (!stars) return;
     const t = state.clock.getElapsedTime();
-    for (let i = 0; i < stars.children.length; i++) {
-      const s = 1 + 0.22 * Math.sin(t * 1.3 + i * 1.7);
-      stars.children[i].scale.setScalar(s);
+
+    const nodes = nodesRef.current;
+    if (nodes) {
+      for (let i = 0; i < nodes.children.length; i++) {
+        nodes.children[i].scale.setScalar(1 + 0.09 * Math.sin(t * 1.3 + i * 1.7));
+      }
+    }
+
+    const sprite = glowRef.current;
+    if (sprite) {
+      const s = GLOW_SIZE * (1 + 0.1 * Math.sin(t * 0.85));
+      sprite.scale.set(s, s, 1);
+      (sprite.material as THREE.SpriteMaterial).opacity =
+        0.72 + 0.28 * Math.sin(t * 0.85);
     }
   });
 
   return (
     <group>
-      <Line points={linePoints} color={BRASS} lineWidth={1.5} transparent opacity={0.9} />
-      <group ref={starsRef}>
-        {starPoints.map((p, i) => (
-          <mesh key={i} position={p}>
-            <sphereGeometry args={[0.055, 10, 10]} />
-            <meshBasicMaterial color={BRASS} transparent opacity={0.95} />
-          </mesh>
+      <Line
+        points={linePoints}
+        vertexColors={lineColors}
+        color={BRASS}
+        lineWidth={1.4}
+        transparent
+        opacity={0.85}
+        renderOrder={1}
+      />
+
+      {/* Prior prints — hollow rings, filled with the page dark so the line
+          reads as terminating at each marker rather than passing through. */}
+      <group ref={nodesRef}>
+        {nodePoints.map(({ point, opacity }, i) => (
+          <group key={i} position={point}>
+            <Billboard>
+              <mesh renderOrder={2}>
+                <circleGeometry args={[NODE_R - NODE_STROKE + 0.003, 24]} />
+                <meshBasicMaterial
+                  color={SPACE}
+                  transparent
+                  opacity={opacity * 0.9}
+                  depthWrite={false}
+                />
+              </mesh>
+              <mesh renderOrder={3}>
+                <ringGeometry args={[NODE_R - NODE_STROKE, NODE_R, 32]} />
+                <meshBasicMaterial
+                  color={BRASS}
+                  transparent
+                  opacity={opacity}
+                  depthWrite={false}
+                />
+              </mesh>
+            </Billboard>
+          </group>
         ))}
+      </group>
+
+      {/* Leading print — the one solid marker, haloed and blooming. */}
+      <group position={goalPoint}>
+        {glow && (
+          <sprite ref={glowRef} scale={[GLOW_SIZE, GLOW_SIZE, 1]} renderOrder={4}>
+            <spriteMaterial
+              map={glow}
+              transparent
+              opacity={0.85}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+            />
+          </sprite>
+        )}
+        <Billboard>
+          <mesh renderOrder={5}>
+            <ringGeometry args={[GOAL_R * 1.9, GOAL_R * 2.05, 48]} />
+            <meshBasicMaterial
+              color={BRASS}
+              transparent
+              opacity={0.32}
+              depthWrite={false}
+            />
+          </mesh>
+          <mesh renderOrder={6}>
+            <circleGeometry args={[GOAL_R, 32]} />
+            <meshBasicMaterial color={BRASS} depthWrite={false} />
+          </mesh>
+        </Billboard>
       </group>
     </group>
   );

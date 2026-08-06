@@ -69,7 +69,7 @@ export default function CTA() {
             variant="brass"
             className="px-9 py-4 text-base"
           >
-            Book a Consultation
+            Book a consultation
             <svg
               width="16"
               height="16"

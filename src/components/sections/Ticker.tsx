@@ -1,11 +1,11 @@
 "use client";
 
 const ITEMS = [
+  "International Investing",
   "Specialised Investment Funds",
   "Mutual Funds",
   "Portfolio Management Services",
   "Alternative Investment Funds",
-  "International Investing",
   "AMFI Registered",
   "SEBI Compliant",
 ];
@@ -15,7 +15,7 @@ function Row() {
     <div className="flex shrink-0 items-center">
       {ITEMS.map((item, i) => (
         <span key={i} className="flex items-center">
-          <span className="whitespace-nowrap px-7 font-display text-lg italic text-lavender-dim md:px-10 md:text-xl">
+          <span className="whitespace-nowrap px-7 font-display track-caption text-lg italic text-lavender-dim md:px-10 md:text-xl">
             {item}
           </span>
           <span className="block size-1.5 rotate-45 bg-brass" aria-hidden />
