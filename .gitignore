@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude-flow local state: daemon pid/state, metrics and headless run logs.
+# Uses /* rather than a trailing slash so git still descends into the folder
+# and the negation below can take effect — a directory exclude is never
+# descended into, and the un-ignore would be silently dead.
+.claude-flow/*
+!.claude-flow/harness-active-policy.json
