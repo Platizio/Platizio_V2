@@ -8,11 +8,11 @@ import { PRODUCT_GLYPHS } from "@/lib/productGlyphs";
  */
 
 export type ProductSlug =
+  | "international"
   | "sif"
   | "mutual-funds"
   | "pms"
-  | "aif"
-  | "international";
+  | "aif";
 
 /** A content block. The renderer alternates midnight/porcelain tones. */
 export type ProductBlock =
@@ -82,6 +82,101 @@ const RISK_NOTE =
   "Investments are subject to market risks. Suitability depends on your goals, horizon and risk appetite. Nothing here guarantees returns or outcomes; please read all scheme-related documents carefully before investing.";
 
 export const PRODUCTS: Product[] = [
+  {
+    slug: "international",
+    tag: "INTL",
+    name: "International Investing",
+    navName: "International Investing",
+    metaTitle: "International Investing | Platizio",
+    metaDescription:
+      "Diversify globally through international equities, funds and market-linked instruments across developed and emerging economies — with a clear view of currency risk.",
+    hero: {
+      label: "International Investing",
+      headline: "Diversify beyond one border.",
+      accent: ["border."],
+      intro:
+        "Diversify globally and access opportunities beyond domestic markets.",
+    },
+    glyph: PRODUCT_GLYPHS.INTL,
+    blocks: [
+      {
+        kind: "prose",
+        label: "What is international investing?",
+        heading: "Part of the portfolio, beyond India.",
+        accent: ["India."],
+        body: [
+          "International investing means allocating part of a portfolio outside India — through global equities, funds or market-linked instruments across developed and emerging economies.",
+          "The rationale is exposure to global businesses, innovation-led sectors and growth trends that are underrepresented domestically.",
+        ],
+      },
+      {
+        kind: "highlights",
+        label: "Opportunity areas",
+        heading: "Where global exposure comes from.",
+        accent: ["from."],
+        items: [
+          { title: "US and European markets", body: "Established, deep and innovation-rich markets." },
+          { title: "Emerging markets", body: "Higher-growth economies at earlier stages." },
+          { title: "Technology and innovation leaders", body: "Global companies shaping their sectors." },
+          { title: "Global sector themes", body: "Trends that span borders and industries." },
+        ],
+      },
+      {
+        kind: "reasons",
+        label: "The benefits",
+        heading: "Three reasons to look outward.",
+        accent: ["outward."],
+        items: [
+          {
+            title: "Reduce single-country dependence",
+            body: "Less reliance on the fortunes of one country or economy.",
+          },
+          {
+            title: "Smooth volatility across cycles",
+            body: "Different regions lead in different market cycles, which can steady a portfolio.",
+          },
+          {
+            title: "Access global leaders",
+            body: "Exposure to international technology, healthcare, consumer and other leaders.",
+          },
+        ],
+      },
+      {
+        kind: "steps",
+        label: "The process",
+        heading: "How we integrate global exposure.",
+        accent: ["exposure."],
+        items: [
+          { title: "Market selection", body: "Identify the markets and instruments that fit your goals." },
+          { title: "Risk and allocation assessment", body: "Size the exposure against your overall risk profile." },
+          { title: "Portfolio integration", body: "Fold global holdings into your existing portfolio." },
+          { title: "Periodic review", body: "Revisit and rebalance as conditions change." },
+        ],
+      },
+      {
+        kind: "callout",
+        label: "Currency risk",
+        title: "Returns move with exchange rates",
+        body: [
+          "Exchange rates affect returns in addition to underlying asset performance. Currency can add short-term volatility and possible longer-horizon diversification benefits.",
+          "Evaluate currency within overall portfolio risk, not in isolation.",
+        ],
+      },
+      {
+        kind: "cards",
+        label: "Markets we watch",
+        heading: "Four regions, distinct strengths.",
+        accent: ["strengths."],
+        items: [
+          { label: "United States", title: "Technology and innovation", body: "A deep market led by technology and innovation." },
+          { label: "Europe", title: "Industrials and luxury", body: "Strength in industrials and global luxury brands." },
+          { label: "China", title: "Growth markets", body: "Large, evolving growth markets." },
+          { label: "Emerging markets", title: "High-growth potential", body: "Earlier-stage economies with high-growth potential." },
+        ],
+      },
+    ],
+  },
+
   {
     slug: "sif",
     tag: "SIF",
@@ -413,101 +508,6 @@ export const PRODUCTS: Product[] = [
         accent: ["risk."],
         body: [
           "AIFs suit HNIs able to invest ₹1 crore or more, patient over a long horizon, capable of understanding complex and illiquid strategies, and seeking alternatives to traditional assets.",
-        ],
-      },
-    ],
-  },
-
-  {
-    slug: "international",
-    tag: "INTL",
-    name: "International Investing",
-    navName: "International Investing",
-    metaTitle: "International Investing | Platizio",
-    metaDescription:
-      "Diversify globally through international equities, funds and market-linked instruments across developed and emerging economies — with a clear view of currency risk.",
-    hero: {
-      label: "International Investing",
-      headline: "Diversify beyond one border.",
-      accent: ["border."],
-      intro:
-        "Diversify globally and access opportunities beyond domestic markets.",
-    },
-    glyph: PRODUCT_GLYPHS.INTL,
-    blocks: [
-      {
-        kind: "prose",
-        label: "What is international investing?",
-        heading: "Part of the portfolio, beyond India.",
-        accent: ["India."],
-        body: [
-          "International investing means allocating part of a portfolio outside India — through global equities, funds or market-linked instruments across developed and emerging economies.",
-          "The rationale is exposure to global businesses, innovation-led sectors and growth trends that are underrepresented domestically.",
-        ],
-      },
-      {
-        kind: "highlights",
-        label: "Opportunity areas",
-        heading: "Where global exposure comes from.",
-        accent: ["from."],
-        items: [
-          { title: "US and European markets", body: "Established, deep and innovation-rich markets." },
-          { title: "Emerging markets", body: "Higher-growth economies at earlier stages." },
-          { title: "Technology and innovation leaders", body: "Global companies shaping their sectors." },
-          { title: "Global sector themes", body: "Trends that span borders and industries." },
-        ],
-      },
-      {
-        kind: "reasons",
-        label: "The benefits",
-        heading: "Three reasons to look outward.",
-        accent: ["outward."],
-        items: [
-          {
-            title: "Reduce single-country dependence",
-            body: "Less reliance on the fortunes of one country or economy.",
-          },
-          {
-            title: "Smooth volatility across cycles",
-            body: "Different regions lead in different market cycles, which can steady a portfolio.",
-          },
-          {
-            title: "Access global leaders",
-            body: "Exposure to international technology, healthcare, consumer and other leaders.",
-          },
-        ],
-      },
-      {
-        kind: "steps",
-        label: "The process",
-        heading: "How we integrate global exposure.",
-        accent: ["exposure."],
-        items: [
-          { title: "Market selection", body: "Identify the markets and instruments that fit your goals." },
-          { title: "Risk and allocation assessment", body: "Size the exposure against your overall risk profile." },
-          { title: "Portfolio integration", body: "Fold global holdings into your existing portfolio." },
-          { title: "Periodic review", body: "Revisit and rebalance as conditions change." },
-        ],
-      },
-      {
-        kind: "callout",
-        label: "Currency risk",
-        title: "Returns move with exchange rates",
-        body: [
-          "Exchange rates affect returns in addition to underlying asset performance. Currency can add short-term volatility and possible longer-horizon diversification benefits.",
-          "Evaluate currency within overall portfolio risk, not in isolation.",
-        ],
-      },
-      {
-        kind: "cards",
-        label: "Markets we watch",
-        heading: "Four regions, distinct strengths.",
-        accent: ["strengths."],
-        items: [
-          { label: "United States", title: "Technology and innovation", body: "A deep market led by technology and innovation." },
-          { label: "Europe", title: "Industrials and luxury", body: "Strength in industrials and global luxury brands." },
-          { label: "China", title: "Growth markets", body: "Large, evolving growth markets." },
-          { label: "Emerging markets", title: "High-growth potential", body: "Earlier-stage economies with high-growth potential." },
         ],
       },
     ],

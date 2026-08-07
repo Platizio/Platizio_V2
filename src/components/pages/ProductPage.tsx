@@ -32,7 +32,7 @@ export default function ProductPage({ product }: { product: Product }) {
         heading="See if this fits your plan."
         accent={["plan."]}
         body={`Book a consultation and we'll help you decide whether ${product.name} fits your goals, horizon and appetite for risk.`}
-        buttonLabel="Book a Consultation"
+        buttonLabel="Book a consultation"
         href="/contact"
         secondary={isSif ? { label: "Visit SIF Insights", href: SIF_INSIGHTS } : undefined}
       />

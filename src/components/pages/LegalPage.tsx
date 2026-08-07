@@ -6,7 +6,8 @@ import type { LegalDoc } from "@/lib/legal";
 import { buildToc } from "@/lib/content-types";
 import { SiteShell } from "@/components/site/SiteShell";
 import RichText from "@/components/site/RichText";
-import { EXPO, FadeUp } from "@/components/ui/Reveal";
+import { FadeUp } from "@/components/ui/Reveal";
+import { SPRING_ENTER } from "@/lib/motion";
 
 export default function LegalPage({ doc }: { doc: LegalDoc }) {
   const reduce = useReducedMotion();
@@ -16,7 +17,7 @@ export default function LegalPage({ doc }: { doc: LegalDoc }) {
   const rise = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 22 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 1, ease: EXPO, delay },
+    transition: { ...SPRING_ENTER, delay },
   });
 
   return (

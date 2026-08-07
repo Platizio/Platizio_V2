@@ -1,27 +1,30 @@
 import Link from "next/link";
+import { RISK_DISCLAIMER } from "@/lib/products";
 
+// Labels match the nav for the three shared destinations — a link should not
+// change its name between the header and the footer.
 const QUICK_LINKS = [
-  { label: "About Us", href: "/about" },
-  { label: "Media Insights", href: "/insights" },
-  { label: "Contact Us", href: "/contact" },
-  { label: "Terms & Condition", href: "/terms-and-condition" },
+  { label: "About", href: "/about" },
+  { label: "Insights", href: "/insights" },
+  { label: "Contact", href: "/contact" },
+  { label: "Terms & Conditions", href: "/terms-and-condition" },
   { label: "Privacy Policy", href: "/privacy-policy" },
   {
     label: "Privacy Policy – Global Investing",
     href: "/global-investing/privacy-policy",
   },
   {
-    label: "Terms & Condition – Global Investing",
+    label: "Terms & Conditions – Global Investing",
     href: "/global-investing/terms-and-condition",
   },
 ];
 
 const PRODUCT_LINKS = [
+  { label: "International Investing", href: "/products/international" },
   { label: "Specialised Investment Funds", href: "/products/sif" },
   { label: "Mutual Funds", href: "/products/mutual-funds" },
   { label: "Portfolio Management Services", href: "/products/pms" },
   { label: "Alternative Investment Funds", href: "/products/aif" },
-  { label: "International Investing", href: "/products/international" },
 ];
 
 export default function Footer() {
@@ -30,7 +33,7 @@ export default function Footer() {
       <div className="mx-auto max-w-[1400px] px-6 pb-10 pt-20 md:px-10 md:pt-28 lg:px-16">
         <div className="grid gap-14 border-b border-lavender/10 pb-16 md:grid-cols-[1.4fr_1fr_1fr]">
           <div className="flex flex-col gap-5">
-            <span className="font-display text-3xl tracking-tight text-porcelain">
+            <span className="font-display track-caption text-3xl text-porcelain">
               Platizio
             </span>
             <p className="max-w-[36ch] text-[0.95rem] leading-relaxed text-lavender-dim">
@@ -60,14 +63,17 @@ export default function Footer() {
           </div>
 
           <nav aria-label="Quick links" className="flex flex-col gap-3">
-            <span className="mb-1 font-display text-lg text-porcelain">
+            <span className="mb-1 font-display track-caption text-lg text-porcelain">
               Quick links
             </span>
             {QUICK_LINKS.map((l) => (
               <Link
                 key={l.label}
                 href={l.href}
-                className="w-fit text-[0.92rem] text-lavender-dim transition-colors duration-300 hover:text-porcelain"
+                // py/-my is exactly half the 12px column gap, so the hit box
+                // grows from 22px to 34px and adjacent targets abut without
+                // overlapping. No visual pixel moves.
+                className="-my-1.5 w-fit py-1.5 text-[0.92rem] text-lavender-dim transition-colors duration-300 hover:text-porcelain"
               >
                 {l.label}
               </Link>
@@ -75,14 +81,17 @@ export default function Footer() {
           </nav>
 
           <nav aria-label="Products" className="flex flex-col gap-3">
-            <span className="mb-1 font-display text-lg text-porcelain">
+            <span className="mb-1 font-display track-caption text-lg text-porcelain">
               Products
             </span>
             {PRODUCT_LINKS.map((l) => (
               <Link
                 key={l.label}
                 href={l.href}
-                className="w-fit text-[0.92rem] text-lavender-dim transition-colors duration-300 hover:text-porcelain"
+                // py/-my is exactly half the 12px column gap, so the hit box
+                // grows from 22px to 34px and adjacent targets abut without
+                // overlapping. No visual pixel moves.
+                className="-my-1.5 w-fit py-1.5 text-[0.92rem] text-lavender-dim transition-colors duration-300 hover:text-porcelain"
               >
                 {l.label}
               </Link>
@@ -91,12 +100,14 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-4 py-8 text-[0.85rem] leading-relaxed text-lavender-dim md:flex-row md:items-start md:justify-between">
-          <p className="max-w-[58ch]">
-            Mutual Fund investments are subject to market risks. Please read
-            all scheme related documents carefully before investing.
-          </p>
+          {/* The page markets five categories, so the disclaimer has to cover
+              five. This is the reviewed string from lib/products.tsx, reused
+              rather than re-worded. */}
+          <p className="max-w-[58ch] text-vibrant">{RISK_DISCLAIMER}</p>
           <div className="flex flex-col gap-1 md:items-end">
-            <span className="text-brass">AMFI Registered · SEBI Compliant</span>
+            <span className="text-brass">
+              AMFI-registered mutual fund distributor · ARN 341407
+            </span>
             <span>© 2026 Platizio Services LLP. All rights reserved.</span>
           </div>
         </div>
@@ -105,7 +116,7 @@ export default function Footer() {
       {/* watermark */}
       <div
         aria-hidden
-        className="pointer-events-none select-none px-4 text-center font-display text-[clamp(5rem,18vw,17rem)] leading-[0.78] tracking-tight text-lavender/[0.045]"
+        className="pointer-events-none select-none px-4 text-center font-display track-display text-[clamp(5rem,18vw,17rem)] leading-[0.9] text-lavender/[0.045]"
       >
         Platizio
       </div>

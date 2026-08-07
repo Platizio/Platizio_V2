@@ -10,8 +10,12 @@ import {
 import { useRef } from "react";
 import { FadeUp } from "@/components/ui/Reveal";
 
+// Says the thing the hero has no room for, rather than repeating the hero.
+// Previously this was the hero subhead almost verbatim, so scrolling past the
+// fold delivered the same sentence twice — and it led with an outcome claim a
+// distributor cannot stand behind.
 const STATEMENT =
-  "A disciplined approach to investing — focused on superior returns and capital preservation, through regulated, transparent frameworks.";
+  "We do not pick winners. We match regulated products to a stated goal, a stated horizon and a stated tolerance for loss — then we show you the trade-off before you commit.";
 
 function Word({
   children,

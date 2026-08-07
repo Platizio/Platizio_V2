@@ -94,7 +94,7 @@ export default function Testimonials() {
                 as="p"
                 className="mt-6 block font-display text-[clamp(1.4rem,2.4vw,2.1rem)] leading-snug"
                 stagger={0.014}
-                duration={0.8}
+                response={0.55}
               />
               <FadeUp delay={0.2}>
                 <Attribution name={QUOTES[0].name} role={QUOTES[0].role} />

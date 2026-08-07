@@ -25,7 +25,7 @@ export default function ContactCTA({
   heading = "Begin with a conversation.",
   accent = ["conversation."],
   body = "Book a consultation and see how a disciplined, regulated framework can work for your wealth.",
-  buttonLabel = "Book a Consultation",
+  buttonLabel = "Book a consultation",
   href = "/contact",
   secondary,
 }: {

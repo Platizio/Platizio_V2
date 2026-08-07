@@ -1,9 +1,8 @@
 "use client";
 
 import { motion, useReducedMotion, type Variants } from "motion/react";
-import type { ElementType, ReactNode } from "react";
-
-const EXPO: [number, number, number, number] = [0.19, 1, 0.22, 1];
+import type { ReactNode } from "react";
+import { SPRING_ENTER } from "@/lib/motion";
 
 // Pre-created so every tag's motion component has a stable identity.
 const MOTION_TAGS = {
@@ -32,7 +31,8 @@ export function RevealWords({
   accentClassName = "italic",
   delay = 0,
   stagger = 0.055,
-  duration = 1.1,
+  /** Spring response — seconds for a word to visually arrive, not a duration. */
+  response = 0.72,
   once = true,
 }: {
   text: string;
@@ -43,39 +43,29 @@ export function RevealWords({
   accentClassName?: string;
   delay?: number;
   stagger?: number;
-  duration?: number;
+  response?: number;
   once?: boolean;
 }) {
-  const Tag = as as ElementType<{
-    className?: string;
-    children?: ReactNode;
-    "aria-label"?: string;
-  }>;
   const MTag = MOTION_TAGS[as];
   const reduce = useReducedMotion();
   const words = text.split(" ");
 
-  if (reduce) {
-    return (
-      <Tag className={className}>
-        {words.map((w, i) => (
-          <span
-            key={i}
-            className={accent.includes(w) ? accentClassName : undefined}
-          >
-            {w}{" "}
-          </span>
-        ))}
-      </Tag>
-    );
-  }
-
-  // The observer must watch the (visible) parent: a word clipped by its own
-  // overflow-hidden mask never intersects the viewport, so per-word
-  // whileInView would never fire. Variants propagate the trigger down.
+  // One DOM shape for everyone. Returning different markup when `reduce` is
+  // true desynchronises server and client — useReducedMotion() is false during
+  // SSR — and hydration fails for precisely the users who asked for less
+  // motion. `initial` must stay identical too, since Motion writes it into the
+  // SSR output; only `transition` may vary, because transitions are not
+  // rendered. The reduced path snaps (duration 0) rather than animating, and
+  // the CSS net in globals.css guarantees the final state even if the
+  // observer never fires at all.
   const wordVariants: Variants = {
     hidden: { y: "115%" },
-    show: { y: "0%", transition: { duration, ease: EXPO } },
+    show: {
+      y: "0%",
+      transition: reduce
+        ? { duration: 0 }
+        : { ...SPRING_ENTER, visualDuration: response },
+    },
   };
 
   return (
@@ -91,6 +81,7 @@ export function RevealWords({
         <span key={i} aria-hidden>
           <span className="inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-bottom">
             <motion.span
+              data-reveal
               variants={wordVariants}
               className={`inline-block will-change-transform ${wordClassName} ${
                 accent.includes(word) ? accentClassName : ""
@@ -106,14 +97,16 @@ export function RevealWords({
   );
 }
 
-const fadeUp: Variants = {
+const fadeUp = (reduce: boolean | null): Variants => ({
   hidden: { opacity: 0, y: 28 },
   show: (custom: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.9, delay: custom, ease: EXPO },
+    // Reduced motion snaps instead of springing. Only the transition may
+    // differ between server and client — see RevealWords above.
+    transition: reduce ? { duration: 0 } : { ...SPRING_ENTER, delay: custom },
   }),
-};
+});
 
 /** Content already visible by default for non-JS; fades and rises in view. */
 export function FadeUp({
@@ -128,11 +121,11 @@ export function FadeUp({
   once?: boolean;
 }) {
   const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
   return (
     <motion.div
+      data-reveal
       className={className}
-      variants={fadeUp}
+      variants={fadeUp(reduce)}
       initial="hidden"
       whileInView="show"
       viewport={{ once, margin: "-10% 0px" }}
@@ -142,5 +135,3 @@ export function FadeUp({
     </motion.div>
   );
 }
-
-export { EXPO };

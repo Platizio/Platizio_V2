@@ -12,11 +12,11 @@ const PHONE_TEL = "+919205523100";
 const YT = "https://www.youtube.com/@sifinsights";
 
 const PRODUCTS = [
+  "International Investing",
   "Specialised Investment Funds (SIF)",
   "Mutual Funds",
   "Portfolio Management Services (PMS)",
   "Alternative Investment Funds (AIF)",
-  "International Investing",
   "Not sure / Need guidance",
 ];
 
@@ -104,7 +104,7 @@ export default function ContactPage() {
   return (
     <SiteShell>
       <PageHero
-        label="Book a Consultation"
+        label="Book a consultation"
         headline="Let's find the right strategy."
         accent={["strategy."]}
         intro="Tell us about your investment goals and we'll help you find the strategy that fits."
@@ -119,8 +119,8 @@ export default function ContactPage() {
               Get in touch
             </h2>
             <p className="mt-4 max-w-[42ch] leading-relaxed text-ink-muted">
-              Complete the form and we'll open a prefilled message so you can
-              reach our team on WhatsApp or by email.
+              Complete the form and we&rsquo;ll open a prefilled message so you
+              can reach our team on WhatsApp or by email.
             </p>
 
             <form onSubmit={onSubmit} className="mt-10 flex flex-col gap-7">
