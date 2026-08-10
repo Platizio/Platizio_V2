@@ -58,7 +58,7 @@ export default function Footer() {
             </span>
             <p className="max-w-[36ch] text-base leading-relaxed text-lavender-dim">
               Navigate every market with confidence — regulated, transparent,
-              disciplined.
+              explained.
             </p>
             {/* Three channels, so each one is named. A bare "YouTube" link
                 told the reader nothing about whose channel it was or what was

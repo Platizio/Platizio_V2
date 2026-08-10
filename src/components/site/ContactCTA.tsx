@@ -24,7 +24,7 @@ const TICKS = Array.from({ length: 36 }, (_, i) => {
 export default function ContactCTA({
   heading = "Begin with a conversation.",
   accent = ["conversation."],
-  body = "Book a consultation and see how a disciplined, regulated framework can work for your wealth.",
+  body = "Book a consultation and see which regulated products fit your goals, your horizon and your tolerance for loss.",
   buttonLabel = "Book a consultation",
   href = "/contact",
   secondary,

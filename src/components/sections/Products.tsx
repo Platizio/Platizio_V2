@@ -33,7 +33,7 @@ const PRODUCTS: Product[] = [
     name: "Mutual Funds",
     tag: "MF",
     description:
-      "Professionally managed diversified portfolios for disciplined investing.",
+      "Professionally managed, diversified portfolios for long-term investing.",
   },
   {
     slug: "pms",

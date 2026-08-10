@@ -131,6 +131,17 @@ h3 {
   }
 }
 
+/* The same net for everyone else, when there is no JS to run the observer at
+   all — a blocked or failed bundle, a text-mode browser, a scraper. Without
+   this the reveal never fires and the copy stays parked off-screen, which is
+   the one failure mode where the page renders but reads as empty. */
+@media (scripting: none) {
+  [data-reveal] {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
 /* ── Materials ───────────────────────────────────────────────────
    Translucent layers that let content pass underneath rather than
    opaque bars that consume a strip of the page. Weight encodes
@@ -171,11 +182,22 @@ h3 {
   top: 100%;
   height: 1.25rem;
   pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    color-mix(in oklch, var(--color-midnight) 34%, transparent),
-    transparent
-  );
+  /* A fading blur, not a colour wash. The previous midnight gradient was
+     ground-blind: correct over the dark sections, but over porcelain it read
+     as a grey smear laid on top of light content. Blurring the backdrop and
+     masking that blur to nothing works on either ground, because it borrows
+     whatever is behind it instead of imposing a colour. */
+  backdrop-filter: blur(7px);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+
+/* Without backdrop-filter there is nothing to fade, so fall back to the
+   hairline the edge replaced rather than leaving no boundary at all. */
+@supports not (backdrop-filter: blur(1px)) {
+  .material-edge::after {
+    height: 1px;
+    background: color-mix(in oklch, var(--color-lavender) 14%, transparent);
+  }
 }
 
 /* Vibrancy: flat grey text loses legibility once a blurred, moving
