@@ -78,26 +78,32 @@ function CredentialPanel({
   seal: ReactNode;
 }) {
   return (
-    <div className="group bg-midnight-2 border border-lavender/10 hover:border-brass/40 rounded-2xl p-8 md:p-12 transition-colors duration-500">
+    // Dark panel on the light ground, matching the Products preview card —
+    // the seals were drawn for brass-on-dark and the inversion gives the
+    // section its own figure/ground rather than repeating the page's.
+    <div className="group rounded-2xl border border-lavender/10 bg-midnight p-8 transition-colors duration-ui hover:border-brass/40 md:p-12">
       {seal}
-      <h3 className="mt-8 font-display track-caption text-2xl md:text-3xl">
+      <h3 className="mt-8 font-display track-caption text-2xl text-porcelain md:text-3xl">
         {title}
       </h3>
-      <p className="mt-4 text-lavender-dim leading-relaxed">{body}</p>
+      <p className="mt-4 leading-relaxed text-lavender-dim">{body}</p>
     </div>
   );
 }
 
 export default function Trust() {
   return (
+    // Porcelain, not midnight. Journey and Trust together were 4,370px of one
+    // unbroken dark field — 43% of the page with no seam. Alternating here
+    // restores the five-act tonal rhythm the rest of the page already uses.
     <section
       id="trust"
-      className="bg-midnight text-lavender px-6 md:px-10 lg:px-16 py-24 md:py-36"
+      className="bg-porcelain px-6 py-24 text-ink md:px-10 md:py-36 lg:px-16"
     >
-      <div className="max-w-[1400px] mx-auto">
-        {/* Asymmetric header: heading left, licence statement offset right */}
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8 lg:items-end">
-          <div className="lg:col-span-7">
+      <div className="mx-auto max-w-[1400px]">
+        {/* Asymmetric header: heading left, the actual credential offset right */}
+        <div className="grid grid-cols-12 gap-x-8 gap-y-12 lg:items-end">
+          <div className="col-span-12 lg:col-span-7">
             <RevealWords
               text="Built on trust, run with discipline"
               as="h2"
@@ -105,35 +111,41 @@ export default function Trust() {
               className="font-display text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.02] tracking-tight"
             />
             <FadeUp delay={0.15} className="mt-6">
-              <p className="text-lavender-dim text-lg md:text-xl leading-relaxed max-w-[48ch]">
-                Trust, transparency, and a disciplined approach to wealth
-                creation.
+              {/* Was "Trust, transparency, and a disciplined approach to wealth
+                  creation" — which repeated both nouns from the heading above
+                  it and added nothing. This tells the reader what the section
+                  is for instead. */}
+              <p className="max-w-[48ch] text-lg leading-relaxed text-ink-muted md:text-xl">
+                Every claim below is checkable. Here is what we are registered
+                to do — and, just as importantly, what we are not.
               </p>
             </FadeUp>
           </div>
 
-          <FadeUp delay={0.3} className="lg:col-span-4 lg:col-start-9">
-            <p className="border-t border-lavender/15 pt-6 font-display track-caption text-xl md:text-2xl leading-snug">
-              Platizio Services LLP is a licensed and certified distributor of
-              Mutual Funds and Specialised Investment Funds.
+          <FadeUp delay={0.3} className="col-span-12 lg:col-span-4 lg:col-start-9">
+            {/* "Licensed and certified distributor" is not a credential anyone
+                issues. The registration number is, and it is public. */}
+            <p className="border-t border-mist pt-6 font-display track-caption text-xl leading-snug md:text-2xl">
+              AMFI-registered mutual fund distributor, ARN 341407. Platizio
+              Services LLP, LLPIN AAQ-9558.
             </p>
           </FadeUp>
         </div>
 
         {/* Credential panels — offset vertically, never a perfect pair */}
-        <div className="mt-16 md:mt-24 grid gap-6 md:grid-cols-2 lg:gap-10 items-start">
-          <FadeUp delay={0.1}>
+        <div className="mt-16 grid grid-cols-12 items-start gap-x-8 gap-y-6 md:mt-24">
+          <FadeUp delay={0.1} className="col-span-12 md:col-span-6">
             <CredentialPanel
-              title="AMFI Registration"
-              body="Platizio Services LLP is registered with the Association of Mutual Funds in India (AMFI), ensuring adherence to the highest standards of ethical mutual fund distribution."
+              title="What we are registered as"
+              body="A mutual fund distributor registered with the Association of Mutual Funds in India under ARN 341407. The number is public — check it against AMFI's register before you deal with us."
               seal={<AmfiSeal />}
             />
           </FadeUp>
-          <div className="lg:mt-24">
+          <div className="col-span-12 md:col-span-6 lg:mt-24">
             <FadeUp delay={0.25}>
               <CredentialPanel
-                title="SEBI Compliance"
-                body="We operate under the regulatory framework of the Securities and Exchange Board of India (SEBI), maintaining full transparency and investor protection across all offerings."
+                title="What we are not"
+                body="We distribute SEBI-regulated products. We do not hold your funds or your securities, and we are not a broker, investment adviser, portfolio manager or research analyst."
                 seal={<SebiSeal />}
               />
             </FadeUp>

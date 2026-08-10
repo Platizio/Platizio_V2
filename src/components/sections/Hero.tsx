@@ -29,7 +29,7 @@ function HeroLine({
         <span key={i}>
           <span className="inline-block overflow-hidden pb-[0.14em] -mb-[0.14em] align-bottom">
           <motion.span
-            className={`inline-block will-change-transform ${className}`}
+            className={`inline-block ${className}`}
             initial={reduce ? false : { y: "112%" }}
             animate={ready ? { y: "0%" } : {}}
             transition={{ ...SPRING_ENTER, delay: baseDelay + i * 0.07 }}
@@ -109,7 +109,7 @@ export default function Hero() {
             what AMFI's code exists to prevent. */}
         <motion.div
           {...fadeIn(1.05)}
-          className="mt-14 grid grid-cols-1 gap-6 border-t border-lavender/15 pt-8 sm:grid-cols-2 md:mt-16"
+          className="mt-14 grid grid-cols-1 gap-8 border-t border-lavender/15 pt-8 sm:grid-cols-2 md:mt-16"
         >
           <div className="flex flex-col gap-1">
             <span className="font-display track-caption text-2xl text-porcelain md:text-3xl">

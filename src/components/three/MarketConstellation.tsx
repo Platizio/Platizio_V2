@@ -13,9 +13,44 @@ import { Billboard, Line } from "@react-three/drei";
  * page's #171129 violet-black.
  */
 
-const VIOLET = "#8f7bff";
-const BRASS = "#d8a94e";
-const SPACE = "#171129";
+/**
+ * The canvas has to speak the same palette as the DOM. These used to be three
+ * hardcoded hexes that were near-misses of the tokens they were named after —
+ * #8f7bff against a --color-violet-bright of oklch(0.7 0.16 283), and so on —
+ * so the two could drift apart with nobody noticing.
+ *
+ * three.js cannot parse oklch(), and the palette is authored in it, so the
+ * tokens are resolved through a canvas: assigning any CSS colour syntax to
+ * fillStyle and reading the pixel back gives true sRGB. Falls back to the
+ * previous literals if the properties are missing.
+ */
+function resolveToken(name: string, fallback: string): string {
+  if (typeof document === "undefined") return fallback;
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+  if (!value) return fallback;
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = 1;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return fallback;
+  ctx.fillStyle = "#000";
+  ctx.fillStyle = value;
+  ctx.fillRect(0, 0, 1, 1);
+  const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+  return `#${[r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("")}`;
+}
+
+function usePalette() {
+  return useMemo(
+    () => ({
+      violet: resolveToken("--color-violet-bright", "#8f7bff"),
+      brass: resolveToken("--color-brass", "#d8a94e"),
+      space: resolveToken("--color-midnight", "#171129"),
+    }),
+    [],
+  );
+}
 
 const COLS = 110;
 const ROWS = 55;
@@ -32,6 +67,7 @@ function waveY(x: number, z: number, t: number): number {
 }
 
 function Terrain({ reduced }: { reduced: boolean }) {
+  const palette = usePalette();
   const { geometry, baseX, baseZ } = useMemo(() => {
     const count = COLS * ROWS;
     const positions = new Float32Array(count * 3);
@@ -71,7 +107,7 @@ function Terrain({ reduced }: { reduced: boolean }) {
   return (
     <points geometry={geometry}>
       <pointsMaterial
-        color={VIOLET}
+        color={palette.violet}
         size={0.035}
         sizeAttenuation
         transparent
@@ -224,7 +260,7 @@ function traceBrightness(u: number): number {
 }
 
 /** Radial-gradient bloom for the leading marker — generated, no asset fetch. */
-function useGlowTexture(): THREE.CanvasTexture | null {
+function useGlowTexture(brass: string): THREE.CanvasTexture | null {
   const texture = useMemo(() => {
     const S = 128;
     const canvas = document.createElement("canvas");
@@ -233,24 +269,28 @@ function useGlowTexture(): THREE.CanvasTexture | null {
     const ctx = canvas.getContext("2d");
     if (!ctx) return null;
     const g = ctx.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
-    g.addColorStop(0, "rgba(216,169,78,0.90)");
-    g.addColorStop(0.25, "rgba(216,169,78,0.30)");
-    g.addColorStop(0.55, "rgba(216,169,78,0.08)");
-    g.addColorStop(1, "rgba(216,169,78,0)");
+    // Same brass as the trace, so the bloom cannot drift from the line it
+    // belongs to. Hex + two-digit alpha is the shortest form the 2D context
+    // parses without another colour-space round trip.
+    g.addColorStop(0, `${brass}e6`);
+    g.addColorStop(0.25, `${brass}4d`);
+    g.addColorStop(0.55, `${brass}14`);
+    g.addColorStop(1, `${brass}00`);
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, S, S);
     return new THREE.CanvasTexture(canvas);
-  }, []);
+  }, [brass]);
 
   useEffect(() => () => texture?.dispose(), [texture]);
   return texture;
 }
 
 function IndexLine({ reduced }: { reduced: boolean }) {
+  const palette = usePalette();
   const fit = useChartFit();
   const nodesRef = useRef<THREE.Group>(null);
   const glowRef = useRef<THREE.Sprite>(null);
-  const glow = useGlowTexture();
+  const glow = useGlowTexture(palette.brass);
 
   const { linePoints, lineColors, nodePoints, goalPoint } = useMemo(() => {
     const stops = STAR_STOPS.map((i) => profilePoint(PROFILE[i], fit));
@@ -295,7 +335,7 @@ function IndexLine({ reduced }: { reduced: boolean }) {
       <Line
         points={linePoints}
         vertexColors={lineColors}
-        color={BRASS}
+        color={palette.brass}
         lineWidth={1.4}
         transparent
         opacity={0.85}
@@ -311,7 +351,7 @@ function IndexLine({ reduced }: { reduced: boolean }) {
               <mesh renderOrder={2}>
                 <circleGeometry args={[NODE_R - NODE_STROKE + 0.003, 24]} />
                 <meshBasicMaterial
-                  color={SPACE}
+                  color={palette.space}
                   transparent
                   opacity={opacity * 0.9}
                   depthWrite={false}
@@ -320,7 +360,7 @@ function IndexLine({ reduced }: { reduced: boolean }) {
               <mesh renderOrder={3}>
                 <ringGeometry args={[NODE_R - NODE_STROKE, NODE_R, 32]} />
                 <meshBasicMaterial
-                  color={BRASS}
+                  color={palette.brass}
                   transparent
                   opacity={opacity}
                   depthWrite={false}
@@ -348,7 +388,7 @@ function IndexLine({ reduced }: { reduced: boolean }) {
           <mesh renderOrder={5}>
             <ringGeometry args={[GOAL_R * 1.9, GOAL_R * 2.05, 48]} />
             <meshBasicMaterial
-              color={BRASS}
+              color={palette.brass}
               transparent
               opacity={0.32}
               depthWrite={false}
@@ -356,7 +396,7 @@ function IndexLine({ reduced }: { reduced: boolean }) {
           </mesh>
           <mesh renderOrder={6}>
             <circleGeometry args={[GOAL_R, 32]} />
-            <meshBasicMaterial color={BRASS} depthWrite={false} />
+            <meshBasicMaterial color={palette.brass} depthWrite={false} />
           </mesh>
         </Billboard>
       </group>
@@ -405,6 +445,7 @@ function subscribeReducedMotion(callback: () => void) {
 }
 
 export default function MarketConstellation({ className = "" }: { className?: string }) {
+  const palette = usePalette();
   const reduced = useSyncExternalStore(
     subscribeReducedMotion,
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -421,7 +462,7 @@ export default function MarketConstellation({ className = "" }: { className?: st
         onCreated={({ camera }) => camera.lookAt(0, 0.2, 0)}
       >
         {/* Fog toward the page background fades the far edge of the terrain. */}
-        <fog attach="fog" args={[SPACE, 8, 22]} />
+        <fog attach="fog" args={[palette.space, 8, 22]} />
         <SceneRig reduced={reduced} />
       </Canvas>
     </div>

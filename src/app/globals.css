@@ -22,8 +22,22 @@
   --font-display: var(--font-fraunces), "Fraunces", serif;
   --font-sans: var(--font-dm-sans), "DM Sans", sans-serif;
 
-  /* ── Motion ────────────────────────────────────────────────── */
+  /* ── Motion ──────────────────────────────────────────────────
+     Named timings so hover feel is set once rather than at 41 call
+     sites. These mirror the spring presets in lib/motion.ts, so a
+     CSS transition and a spring that do the same job read the same:
+       press  <-> instant pointer-down feedback
+       hover  <-> SPRING_SNAP   (visualDuration 0.22)
+       ui     <-> SPRING        (visualDuration 0.4)
+       chrome <-> nav and material, deliberately slower than content
+     Tailwind resolves duration-* from the --transition-duration
+     namespace, so these become duration-press / -hover / -ui / -chrome. */
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --transition-duration-press: 110ms;
+  --transition-duration-hover: 220ms;
+  --transition-duration-ui: 400ms;
+  --transition-duration-chrome: 500ms;
+  --transition-duration-drift: 700ms; /* slow image/ambient movement */
 }
 
 html {
@@ -171,6 +185,48 @@ h3 {
 .text-vibrant {
   font-weight: 500;
   letter-spacing: 0.012em;
+}
+
+/* Pointer-down feedback. Everything the pointer can reach should answer
+   on press, not wait for the release to confirm it — without this the
+   interface goes quiet at the exact moment it should acknowledge the
+   touch. Only the magnetic buttons had it; rows and links did not.
+   `--press-scale` lets a full-bleed row move less than a compact
+   button while sharing one timing. */
+@layer utilities {
+  .press {
+    --press-scale: 0.97;
+    /* Owns both jobs deliberately. An earlier version declared only the
+       transform, and because it lands after Tailwind's own utilities in this
+       layer it replaced `transition-colors` wholesale — retiming every hover
+       on the element to the press duration. Declaring both properties with
+       their own durations keeps press instant and hover at hover speed, and
+       means the element needs no separate transition-colors class. */
+    transition-property: transform, color, background-color, border-color;
+    transition-duration: var(--transition-duration-press),
+      var(--transition-duration-hover), var(--transition-duration-hover),
+      var(--transition-duration-hover);
+    transition-timing-function: var(--ease-out-expo);
+  }
+  .press:active {
+    transform: scale(var(--press-scale));
+  }
+  /* A full-width row scaling by 3% reads as a glitch; 0.4% reads as a press. */
+  .press-row {
+    --press-scale: 0.996;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Reduced motion is not "no feedback" — swap the transform for a
+     non-vestibular dip so the press still registers. */
+  .press {
+    transition: opacity var(--transition-duration-press) linear;
+  }
+  .press:active {
+    transform: none;
+    opacity: 0.72;
+  }
 }
 
 @supports not (backdrop-filter: blur(1px)) {

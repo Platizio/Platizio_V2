@@ -76,7 +76,7 @@ export default function LegalPage({ doc }: { doc: LegalDoc }) {
                     <a
                       key={item.id}
                       href={`#${item.id}`}
-                      className="text-sm leading-snug text-ink-muted transition-colors duration-200 hover:text-ink"
+                      className="text-sm leading-snug text-ink-muted transition-colors duration-hover hover:text-ink"
                     >
                       {item.text}
                     </a>
