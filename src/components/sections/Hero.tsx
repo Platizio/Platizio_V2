@@ -1,15 +1,9 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import dynamic from "next/dynamic";
 import { SPRING_ENTER } from "@/lib/motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useIntroDone } from "@/components/IntroProvider";
-
-const MarketConstellation = dynamic(
-  () => import("@/components/three/MarketConstellation"),
-  { ssr: false },
-);
 
 function HeroLine({
   words,
@@ -62,10 +56,6 @@ export default function Hero() {
       id="top"
       className="relative flex min-h-[100svh] flex-col overflow-hidden bg-midnight text-lavender"
     >
-      <MarketConstellation className="opacity-90" />
-      {/* legibility scrim — canvas fades into the drenched base */}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,oklch(0.16_0.045_288/0.72),transparent_38%,transparent_62%,oklch(0.16_0.045_288/0.92))]" />
-
       {/* Gutter outside the 1400 container, matching every content section.
           With the padding inside the container the hero's left rail landed
           64px right of every section below it above 1528px wide. */}
