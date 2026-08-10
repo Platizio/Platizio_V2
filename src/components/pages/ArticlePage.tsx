@@ -99,7 +99,7 @@ export default function ArticlePage({
                     <a
                       key={item.id}
                       href={`#${item.id}`}
-                      className="text-sm leading-snug text-ink-muted transition-colors duration-200 hover:text-ink"
+                      className="text-sm leading-snug text-ink-muted transition-colors duration-hover hover:text-ink"
                     >
                       {item.text}
                     </a>
@@ -124,12 +124,12 @@ export default function ArticlePage({
                   className="group flex flex-col"
                 >
                   <span className="text-sm text-lavender-dim">{a.date}</span>
-                  <h3 className="mt-3 font-display text-xl leading-tight tracking-tight text-porcelain transition-colors duration-300 group-hover:text-brass md:text-2xl">
+                  <h3 className="mt-3 font-display text-xl leading-tight tracking-tight text-porcelain transition-colors duration-hover group-hover:text-brass md:text-2xl">
                     {a.title}
                   </h3>
                   <span className="mt-4 inline-flex items-center gap-2 text-sm text-brass">
                     Read
-                    <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    <span className="transition-transform duration-hover group-hover:translate-x-1">→</span>
                   </span>
                 </Link>
               ))}

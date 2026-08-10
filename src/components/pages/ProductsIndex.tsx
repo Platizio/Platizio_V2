@@ -34,7 +34,7 @@ function ProductRow({
   return (
     <Link
       href={href}
-      className="group relative block overflow-hidden border-t border-mist"
+      className="press press-row group relative block overflow-hidden border-t border-mist"
       onMouseEnter={onActivate}
       onMouseLeave={onDeactivate}
       onFocus={onActivate}
@@ -42,7 +42,7 @@ function ProductRow({
     >
       <motion.div
         aria-hidden
-        className="absolute inset-0 bg-midnight will-change-transform"
+        className="absolute inset-0 bg-midnight"
         initial={false}
         animate={
           reduce
@@ -55,7 +55,7 @@ function ProductRow({
 
       <div className="relative z-10 flex flex-col gap-3 px-1 py-8 md:py-10 lg:grid lg:grid-cols-[7rem_1fr_minmax(0,20rem)_3.5rem] lg:items-center lg:gap-8">
         <span
-          className={`text-sm tabular-nums transition-colors duration-300 ${
+          className={`text-sm tabular-nums transition-colors duration-hover ${
             active ? "text-brass" : "text-brass-deep"
           }`}
         >
@@ -65,7 +65,7 @@ function ProductRow({
         </span>
 
         <span
-          className={`font-display text-[clamp(1.8rem,3.2vw,3rem)] leading-[1.05] tracking-tight transition-colors duration-300 ${
+          className={`font-display text-[clamp(1.8rem,3.2vw,3rem)] leading-[1.05] tracking-tight transition-colors duration-hover ${
             active ? "text-violet-bright" : "text-ink"
           }`}
         >
@@ -73,7 +73,7 @@ function ProductRow({
         </span>
 
         <span
-          className={`max-w-md text-sm leading-relaxed transition-colors duration-300 md:text-base ${
+          className={`max-w-md text-sm leading-relaxed transition-colors duration-hover md:text-base ${
             active ? "text-lavender-dim" : "text-ink-muted"
           }`}
         >
@@ -82,7 +82,7 @@ function ProductRow({
 
         <span
           aria-hidden
-          className={`hidden justify-self-end transition-all duration-300 ease-out lg:block ${
+          className={`hidden justify-self-end transition-all duration-hover ease-out lg:block ${
             active ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"
           }`}
         >

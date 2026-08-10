@@ -191,7 +191,7 @@ function Block({ block, tone }: { block: ProductBlock; tone: Tone }) {
               {block.items.map((item, i) => (
                 <FadeUp key={item.title} delay={(i % 3) * 0.08}>
                   <article
-                    className={`h-full border ${t.cardBorder} p-7 transition-colors duration-500 md:p-8`}
+                    className={`h-full border ${t.cardBorder} p-7 transition-colors duration-ui md:p-8`}
                   >
                     {item.label && (
                       <span className={`text-sm tabular-nums ${t.label}`}>{item.label}</span>

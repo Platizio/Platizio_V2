@@ -67,7 +67,7 @@ function ProductRow({
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group relative block cursor-pointer overflow-hidden border-t border-mist"
+      className="press press-row group relative block cursor-pointer overflow-hidden border-t border-mist"
       onMouseEnter={onActivate}
       onMouseLeave={onDeactivate}
       onFocus={onActivate}
@@ -78,7 +78,7 @@ function ProductRow({
           interrupted sweep snapped to the opposite edge mid-flight. */}
       <motion.div
         aria-hidden
-        className="absolute inset-0 bg-midnight will-change-transform"
+        className="absolute inset-0 bg-midnight"
         initial={false}
         animate={
           reduce
@@ -96,7 +96,7 @@ function ProductRow({
             have. Numbering stays exclusive to Journey, where the order is
             real. The tag survives any reordering because it is true. */}
         <span
-          className={`text-sm tracking-[0.08em] transition-colors duration-300 ${
+          className={`text-sm tracking-[0.08em] transition-colors duration-hover ${
             active ? "text-brass" : "text-brass-deep"
           }`}
         >
@@ -105,7 +105,7 @@ function ProductRow({
 
         {/* Name */}
         <span
-          className={`font-display text-[clamp(1.8rem,3.2vw,3rem)] leading-[1.05] tracking-tight transition-colors duration-300 ${
+          className={`font-display text-[clamp(1.8rem,3.2vw,3rem)] leading-[1.05] tracking-tight transition-colors duration-hover ${
             active ? "text-violet-bright" : "text-ink"
           }`}
         >
@@ -114,7 +114,7 @@ function ProductRow({
 
         {/* Description */}
         <span
-          className={`max-w-md text-sm leading-relaxed transition-colors duration-300 md:text-base ${
+          className={`max-w-md text-sm leading-relaxed transition-colors duration-hover md:text-base ${
             active ? "text-lavender-dim" : "text-ink-muted"
           }`}
         >
@@ -124,7 +124,7 @@ function ProductRow({
         {/* Trailing arrow — slides in on hover/focus */}
         <span
           aria-hidden
-          className={`hidden justify-self-end transition-all duration-300 ease-out lg:block ${
+          className={`hidden justify-self-end transition-all duration-hover ease-out lg:block ${
             active ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"
           }`}
         >
@@ -167,15 +167,20 @@ export default function Products() {
       className="bg-porcelain px-6 py-24 text-ink md:px-10 md:py-36 lg:px-16"
     >
       <div className="mx-auto max-w-[1400px]">
-        {/* Asymmetric heading — headline pushed right, note anchored bottom-left */}
-        <div className="mb-16 md:mb-20 lg:mb-24 lg:flex lg:flex-row-reverse lg:items-end lg:justify-between lg:gap-16">
+        {/* Asymmetric heading — headline pushed right, note anchored bottom-left.
+            Expressed in the shared 12-column, 32px system rather than a flex
+            row with its own 64px gutter. */}
+        <div className="mb-16 grid grid-cols-12 gap-x-8 gap-y-6 md:mb-20 lg:mb-24 lg:items-end">
           <RevealWords
             text="Five instruments. One discipline."
             as="h2"
             accent={["discipline."]}
-            className="block max-w-[16ch] font-display text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.02] tracking-tight lg:ml-auto lg:text-right"
+            className="col-span-12 block max-w-[16ch] font-display text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.02] tracking-tight lg:col-span-7 lg:col-start-6 lg:ml-auto lg:text-right"
           />
-          <FadeUp delay={0.25} className="mt-6 lg:mt-0 lg:max-w-sm lg:pb-2">
+          <FadeUp
+            delay={0.25}
+            className="col-span-12 lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:self-end lg:pb-2"
+          >
             <p className="max-w-md text-base text-ink-muted md:text-lg">
               SEBI-regulated products, matched to your goals, horizon and
               appetite for risk.
@@ -183,9 +188,9 @@ export default function Products() {
           </FadeUp>
         </div>
 
-        <div className="lg:grid lg:grid-cols-[1fr_20rem] lg:items-start lg:gap-16 xl:grid-cols-[1fr_22rem]">
+        <div className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-8">
           {/* The index */}
-          <div className="border-b border-mist">
+          <div className="border-b border-mist lg:col-span-9">
             {PRODUCTS.map((product, i) => (
               <FadeUp key={product.tag} delay={0.08 + i * 0.07}>
                 <ProductRow
@@ -199,7 +204,10 @@ export default function Products() {
           </div>
 
           {/* Fixed preview panel — crossfades a glyph per product (lg+) */}
-          <FadeUp delay={0.3} className="hidden lg:block lg:sticky lg:top-24">
+          <FadeUp
+            delay={0.3}
+            className="hidden lg:sticky lg:top-24 lg:col-span-3 lg:block"
+          >
             {/* Solid, not glass: nothing sits behind this panel worth showing
                 through. It earns depth from elevation instead — a light
                 shadow, because the ground here is plain rather than busy. */}

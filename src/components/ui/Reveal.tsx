@@ -83,7 +83,7 @@ export function RevealWords({
             <motion.span
               data-reveal
               variants={wordVariants}
-              className={`inline-block will-change-transform ${wordClassName} ${
+              className={`inline-block ${wordClassName} ${
                 accent.includes(word) ? accentClassName : ""
               }`}
             >

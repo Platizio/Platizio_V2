@@ -2,7 +2,6 @@ import { IntroProvider } from "@/components/IntroProvider";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import Nav from "@/components/Nav";
 import Hero from "@/components/sections/Hero";
-import Ticker from "@/components/sections/Ticker";
 import Manifesto from "@/components/sections/Manifesto";
 import Products from "@/components/sections/Products";
 import Journey from "@/components/sections/Journey";
@@ -17,7 +16,13 @@ export default function Home() {
         <Nav />
         <main>
           <Hero />
-          <Ticker />
+          {/* Ticker removed, not deleted. A ticker promises live, changing
+              information; this one carried the five product names plus two
+              compliance badges — every item repeating verbatim in the section
+              directly below and again in the footer. There is no market-data
+              source in this project, and inventing figures is the mistake the
+              hero's +24.8% already made. sections/Ticker.tsx is kept: restore
+              it if a real feed with an as-of timestamp and attribution exists. */}
           <Manifesto />
           <Products />
           <Journey />

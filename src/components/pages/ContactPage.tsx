@@ -74,7 +74,7 @@ function Field({
 }
 
 const INPUT =
-  "w-full border-b border-mist bg-transparent py-3 text-ink outline-none transition-colors duration-300 placeholder:text-ink-muted/70 focus:border-brass-deep";
+  "w-full border-b border-mist bg-transparent py-3 text-ink outline-none transition-colors duration-hover placeholder:text-ink-muted/70 focus:border-brass-deep";
 
 export default function ContactPage() {
   const [opened, setOpened] = useState<null | "whatsapp" | "email">(null);
@@ -158,7 +158,7 @@ export default function ContactPage() {
               <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
                 <button
                   type="submit"
-                  className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-midnight px-8 py-3.5 font-medium text-porcelain transition-colors duration-300 hover:bg-violet"
+                  className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-midnight px-8 py-3.5 font-medium text-porcelain transition-colors duration-hover hover:bg-violet"
                 >
                   Submit via WhatsApp
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>

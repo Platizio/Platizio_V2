@@ -108,14 +108,14 @@ export default function Journey() {
           ))}
         </div>
 
-        {/* Desktop: sticky scrollytelling (~300vh track) */}
+        {/* Desktop: sticky scrollytelling (~204vh track) */}
         {!reduce && (
           <div
             ref={trackRef}
-            className="hidden lg:grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-20 mt-8"
+            className="hidden lg:grid grid-cols-12 gap-x-8 mt-8"
           >
             {/* Sticky left: big rolling number + progress line */}
-            <div>
+            <div className="col-span-5">
               <div className="sticky top-0 h-screen flex items-center">
                 <div className="flex items-center gap-12" aria-hidden="true">
                   {/* Progress line */}
@@ -131,7 +131,7 @@ export default function Journey() {
                       {STEPS.map((step, i) => (
                         <motion.span
                           key={step.num}
-                          className="absolute inset-0 block will-change-transform"
+                          className="absolute inset-0 block"
                           initial={false}
                           animate={{
                             opacity: active === i ? 1 : 0,
@@ -157,16 +157,18 @@ export default function Journey() {
               </div>
             </div>
 
-            {/* Scrolling right: one viewport-height block per step */}
-            <div>
+            {/* Scrolling right: one block per step */}
+            <div className="col-span-7">
               {STEPS.map((step, i) => (
                 <div
                   key={step.num}
-                  className="min-h-screen flex items-center"
+                  // 68vh, not 100vh: three steps of one heading and ~25
+                  // words did not earn 3.5 viewports of scroll.
+                  className="min-h-[68vh] flex items-center"
                 >
                   <div>
                     <h3
-                      className={`font-display text-[clamp(2rem,4vw,3.25rem)] leading-[1.05] tracking-tight transition-colors duration-500 ${
+                      className={`font-display text-[clamp(2rem,4vw,3.25rem)] leading-[1.05] tracking-tight transition-colors duration-ui ${
                         active === i ? "text-brass" : "text-lavender"
                       }`}
                     >

@@ -1,6 +1,26 @@
 import Link from "next/link";
 import { RISK_DISCLAIMER } from "@/lib/products";
 
+// Named by channel rather than by handle alone, so the reader knows which
+// part of the line-up each one covers before clicking away.
+const YOUTUBE_CHANNELS = [
+  {
+    name: "SIF Insights",
+    handle: "@sifinsights",
+    href: "https://www.youtube.com/@sifinsights",
+  },
+  {
+    name: "Platizio Alternatives",
+    handle: "@PlatizioAlternatives",
+    href: "https://www.youtube.com/@PlatizioAlternatives",
+  },
+  {
+    name: "Platizio Global",
+    handle: "@PlatizioGlobal",
+    href: "https://www.youtube.com/@PlatizioGlobal",
+  },
+];
+
 // Labels match the nav for the three shared destinations — a link should not
 // change its name between the header and the footer.
 const QUICK_LINKS = [
@@ -31,38 +51,51 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-midnight text-lavender">
       <div className="mx-auto max-w-[1400px] px-6 pb-10 pt-20 md:px-10 md:pt-28 lg:px-16">
-        <div className="grid gap-14 border-b border-lavender/10 pb-16 md:grid-cols-[1.4fr_1fr_1fr]">
-          <div className="flex flex-col gap-5">
+        <div className="grid grid-cols-12 gap-x-8 gap-y-14 border-b border-lavender/10 pb-16">
+          <div className="col-span-12 flex flex-col gap-5 md:col-span-6">
             <span className="font-display track-caption text-3xl text-porcelain">
               Platizio
             </span>
-            <p className="max-w-[36ch] text-[0.95rem] leading-relaxed text-lavender-dim">
+            <p className="max-w-[36ch] text-base leading-relaxed text-lavender-dim">
               Navigate every market with confidence — regulated, transparent,
               disciplined.
             </p>
-            <a
-              href="https://www.youtube.com/@sifinsights"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group mt-2 inline-flex w-fit items-center gap-2 text-sm text-lavender-dim transition-colors duration-300 hover:text-brass"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <rect
-                  x="2.5"
-                  y="5.5"
-                  width="19"
-                  height="13"
-                  rx="3.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                />
-                <path d="m10 9.5 5 2.5-5 2.5v-5Z" fill="currentColor" />
-              </svg>
-              YouTube — @sifinsights
-            </a>
+            {/* Three channels, so each one is named. A bare "YouTube" link
+                told the reader nothing about whose channel it was or what was
+                on it; with three that ambiguity compounds. One icon marks the
+                group rather than repeating identically on every row. */}
+            <div className="mt-2 flex flex-col gap-3">
+              <span className="flex items-center gap-2 text-sm text-lavender">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <rect
+                    x="2.5"
+                    y="5.5"
+                    width="19"
+                    height="13"
+                    rx="3.5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  />
+                  <path d="m10 9.5 5 2.5-5 2.5v-5Z" fill="currentColor" />
+                </svg>
+                YouTube
+              </span>
+              {YOUTUBE_CHANNELS.map((c) => (
+                <a
+                  key={c.handle}
+                  href={c.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="press -my-1.5 w-fit py-1.5 text-sm text-lavender-dim hover:text-porcelain"
+                >
+                  {c.name}{" "}
+                  <span className="text-lavender-dim/70">{c.handle}</span>
+                </a>
+              ))}
+            </div>
           </div>
 
-          <nav aria-label="Quick links" className="flex flex-col gap-3">
+          <nav aria-label="Quick links" className="col-span-12 flex flex-col gap-3 sm:col-span-6 md:col-span-3">
             <span className="mb-1 font-display track-caption text-lg text-porcelain">
               Quick links
             </span>
@@ -73,14 +106,14 @@ export default function Footer() {
                 // py/-my is exactly half the 12px column gap, so the hit box
                 // grows from 22px to 34px and adjacent targets abut without
                 // overlapping. No visual pixel moves.
-                className="-my-1.5 w-fit py-1.5 text-[0.92rem] text-lavender-dim transition-colors duration-300 hover:text-porcelain"
+                className="press -my-1.5 w-fit py-1.5 text-sm text-lavender-dim hover:text-porcelain"
               >
                 {l.label}
               </Link>
             ))}
           </nav>
 
-          <nav aria-label="Products" className="flex flex-col gap-3">
+          <nav aria-label="Products" className="col-span-12 flex flex-col gap-3 sm:col-span-6 md:col-span-3">
             <span className="mb-1 font-display track-caption text-lg text-porcelain">
               Products
             </span>
@@ -91,7 +124,7 @@ export default function Footer() {
                 // py/-my is exactly half the 12px column gap, so the hit box
                 // grows from 22px to 34px and adjacent targets abut without
                 // overlapping. No visual pixel moves.
-                className="-my-1.5 w-fit py-1.5 text-[0.92rem] text-lavender-dim transition-colors duration-300 hover:text-porcelain"
+                className="press -my-1.5 w-fit py-1.5 text-sm text-lavender-dim hover:text-porcelain"
               >
                 {l.label}
               </Link>
@@ -99,7 +132,7 @@ export default function Footer() {
           </nav>
         </div>
 
-        <div className="flex flex-col gap-4 py-8 text-[0.85rem] leading-relaxed text-lavender-dim md:flex-row md:items-start md:justify-between">
+        <div className="flex flex-col gap-4 py-8 text-sm leading-relaxed text-lavender-dim md:flex-row md:items-start md:justify-between">
           {/* The page markets five categories, so the disclaimer has to cover
               five. This is the reviewed string from lib/products.tsx, reused
               rather than re-worded. */}

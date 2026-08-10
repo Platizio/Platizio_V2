@@ -83,14 +83,14 @@ export default function Nav() {
             separate from, so no material shows until content scrolls under. */}
         <div
           aria-hidden
-          className={`material-chrome material-edge absolute inset-0 transition-opacity duration-500 ${
+          className={`material-chrome material-edge absolute inset-0 transition-opacity duration-chrome ${
             scrolled && !open ? "opacity-100" : "opacity-0"
           }`}
         />
         {/* Gutter outside the 1400 container so the brand shares a left rail
             with the hero and every content section below. */}
         <nav
-          className={`relative px-6 md:px-10 lg:px-16 transition-[padding] duration-500 ${
+          className={`relative px-6 md:px-10 lg:px-16 transition-[padding] duration-chrome ${
             scrolled ? "py-3.5" : "py-6"
           }`}
           aria-label="Primary"
@@ -108,15 +108,15 @@ export default function Nav() {
               <Link
                 key={l.label}
                 href={l.href}
-                className="group relative py-2 text-[0.92rem] text-vibrant text-lavender transition-colors duration-300 hover:text-porcelain"
+                className="press group relative py-2 text-sm text-vibrant text-lavender hover:text-porcelain"
               >
                 {l.label}
-                <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-brass transition-transform duration-300 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100" />
+                <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-brass transition-transform duration-hover [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-100" />
               </Link>
             ))}
             <Link
               href="/contact"
-              className="rounded-full border border-brass/60 px-5 py-2 text-[0.92rem] font-medium text-brass transition-colors duration-300 hover:bg-brass hover:text-midnight"
+              className="press rounded-full border border-brass/60 px-5 py-2 text-sm font-medium text-brass hover:bg-brass hover:text-midnight"
             >
               Book a consultation
             </Link>
@@ -131,12 +131,12 @@ export default function Nav() {
             aria-label={open ? "Close menu" : "Open menu"}
           >
             <span
-              className={`h-px w-6 bg-porcelain transition-transform duration-300 ${
+              className={`h-px w-6 bg-porcelain transition-transform duration-hover ${
                 open ? "translate-y-[3.5px] rotate-45" : ""
               }`}
             />
             <span
-              className={`h-px w-6 bg-porcelain transition-transform duration-300 ${
+              className={`h-px w-6 bg-porcelain transition-transform duration-hover ${
                 open ? "-translate-y-[3.5px] -rotate-45" : ""
               }`}
             />
@@ -179,10 +179,16 @@ export default function Nav() {
             <MotionLink
               href="/contact"
               onClick={() => setOpen(false)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.4 }}
-              className="mt-10 inline-flex w-fit items-center rounded-full bg-brass px-7 py-3.5 font-medium text-midnight"
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              // Was a raw 0.5s-delayed tween sitting six lines below three
+              // springs — the sheet's primary action stayed invisible for most
+              // of a second after the menu opened. Now it lands just behind the
+              // last link, on the same spring as everything else here.
+              transition={
+                reduce ? CROSSFADE : { ...SPRING_ENTER, delay: 0.15 + LINKS.length * 0.06 }
+              }
+              className="press mt-10 inline-flex w-fit items-center rounded-full bg-brass px-7 py-3.5 font-medium text-midnight"
             >
               Book a consultation
             </MotionLink>

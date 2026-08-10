@@ -316,9 +316,9 @@ function AboutContent() {
                         alt={member.name}
                         fill
                         sizes="(min-width: 1024px) 22vw, (min-width: 640px) 30vw, 48vw"
-                        className="object-cover transition duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.04]"
+                        className="object-cover transition duration-drift [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.04]"
                       />
-                      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/30 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/30 to-transparent opacity-0 transition-opacity duration-ui group-hover:opacity-100" />
                     </div>
                     <h3 className="mt-4 font-display text-xl tracking-tight md:text-2xl">{member.name}</h3>
                     <p className="mt-1 text-sm text-ink-muted">{member.role}</p>
@@ -347,7 +347,7 @@ function AboutContent() {
 
             <div className="mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:gap-8">
               <FadeUp>
-                <article className="group h-full border border-lavender/15 bg-midnight-2 p-8 transition-colors duration-500 hover:border-brass/50 md:p-10">
+                <article className="group h-full border border-lavender/15 bg-midnight-2 p-8 transition-colors duration-ui hover:border-brass/50 md:p-10">
                   <CompassSeal variant="amfi" />
                   <h3 className="mt-10 font-display text-3xl tracking-tight text-porcelain">AMFI Registration</h3>
                   <p className="mt-5 max-w-[48ch] leading-relaxed text-lavender-dim">
@@ -358,7 +358,7 @@ function AboutContent() {
                 </article>
               </FadeUp>
               <FadeUp delay={0.14} className="md:mt-16">
-                <article className="group h-full border border-lavender/15 bg-midnight-2 p-8 transition-colors duration-500 hover:border-brass/50 md:p-10">
+                <article className="group h-full border border-lavender/15 bg-midnight-2 p-8 transition-colors duration-ui hover:border-brass/50 md:p-10">
                   <CompassSeal variant="sebi" />
                   <h3 className="mt-10 font-display text-3xl tracking-tight text-porcelain">SEBI Compliance</h3>
                   <p className="mt-5 max-w-[48ch] leading-relaxed text-lavender-dim">

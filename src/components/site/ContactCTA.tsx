@@ -88,10 +88,10 @@ export default function ContactCTA({
                 href={secondary.href}
                 target={secondary.href.startsWith("http") ? "_blank" : undefined}
                 rel={secondary.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="group inline-flex items-center gap-2 text-base text-porcelain/85 transition-colors duration-300 hover:text-porcelain"
+                className="group inline-flex items-center gap-2 text-base text-porcelain/85 transition-colors duration-hover hover:text-porcelain"
               >
                 {secondary.label}
-                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                <span className="transition-transform duration-hover group-hover:translate-x-1">→</span>
               </a>
             )}
           </div>

@@ -36,18 +36,18 @@ function ArticleCard({
   return (
     <Link
       href={`/insights/${slug}`}
-      className="group flex h-full flex-col border-t border-mist pt-6 transition-colors duration-500 hover:border-brass-deep/50"
+      className="press press-row group flex h-full flex-col border-t border-mist pt-6 hover:border-brass-deep/50"
     >
       <div className="flex items-center justify-between">
         <span className="text-sm text-brass-deep">{category}</span>
-        <span className="flex size-11 items-center justify-center border border-mist text-brass-deep transition-colors duration-500 group-hover:border-brass-deep/60">
+        <span className="flex size-11 items-center justify-center border border-mist text-brass-deep transition-colors duration-ui group-hover:border-brass-deep/60">
           <svg viewBox="0 0 120 120" className="w-3/5" aria-hidden>
             {PRODUCT_GLYPHS[CATEGORY_GLYPH[category]]}
           </svg>
         </span>
       </div>
 
-      <h3 className="mt-6 font-display text-2xl leading-tight tracking-tight text-ink transition-colors duration-300 group-hover:text-brass-deep md:text-[1.7rem]">
+      <h3 className="mt-6 font-display text-2xl leading-tight tracking-tight text-ink transition-colors duration-hover group-hover:text-brass-deep md:text-[1.7rem]">
         {title}
       </h3>
 
@@ -57,7 +57,7 @@ function ArticleCard({
         <span>{date}</span>
         <span className="inline-flex items-center gap-2 text-brass-deep">
           {feature ? "Read article" : "Read note"}
-          <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+          <span className="transition-transform duration-hover group-hover:translate-x-1">→</span>
         </span>
       </div>
     </Link>
@@ -93,7 +93,7 @@ export default function InsightsIndex() {
                   key={cat}
                   onClick={() => setActive(cat)}
                   aria-pressed={on}
-                  className={`cursor-pointer rounded-full border px-4 py-2 text-sm transition-colors duration-300 ${
+                  className={`cursor-pointer rounded-full border px-4 py-2 text-sm transition-colors duration-hover ${
                     on
                       ? "border-transparent bg-midnight text-porcelain"
                       : "border-mist text-ink-muted hover:border-ink/40 hover:text-ink"
@@ -137,7 +137,7 @@ export default function InsightsIndex() {
               href={YT}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-3 rounded-full border border-brass/60 px-6 py-3.5 text-brass transition-colors duration-300 hover:bg-brass hover:text-midnight"
+              className="group inline-flex items-center gap-3 rounded-full border border-brass/60 px-6 py-3.5 text-brass transition-colors duration-hover hover:bg-brass hover:text-midnight"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <rect x="2.5" y="5.5" width="19" height="13" rx="3.5" stroke="currentColor" strokeWidth="1.5" />

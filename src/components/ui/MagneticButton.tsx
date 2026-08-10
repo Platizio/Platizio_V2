@@ -63,7 +63,7 @@ export function MagneticButton({
     y.set(0);
   }
 
-  const cls = `inline-flex cursor-pointer items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[0.95rem] font-medium tracking-wide transition-colors duration-300 ${variants[variant]} ${className}`;
+  const cls = `inline-flex cursor-pointer items-center justify-center gap-2 rounded-full px-7 py-3.5 text-base font-medium tracking-wide transition-colors duration-hover ${variants[variant]} ${className}`;
 
   // whileTap fires on pointer-down, so the press reads immediately rather than
   // waiting for the release to confirm it.

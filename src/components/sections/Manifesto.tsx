@@ -53,10 +53,10 @@ export default function Manifesto() {
       id="about"
       className="bg-porcelain px-6 py-28 text-ink md:px-10 md:py-40 lg:px-16"
     >
-      <div className="mx-auto grid max-w-[1400px] gap-14 lg:grid-cols-[1fr_minmax(0,240px)]">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-8 gap-y-14">
         <p
           ref={ref}
-          className="max-w-[24ch] font-display text-[clamp(1.9rem,4.6vw,3.6rem)] font-medium leading-[1.18] tracking-tight"
+          className="col-span-12 max-w-[24ch] font-display text-[clamp(1.9rem,4.6vw,3.6rem)] font-medium leading-[1.18] tracking-tight lg:col-span-8"
         >
           {reduce
             ? STATEMENT
@@ -71,11 +71,16 @@ export default function Manifesto() {
               ))}
         </p>
 
-        <FadeUp delay={0.15} className="self-end">
+        <FadeUp
+          delay={0.15}
+          className="col-span-12 self-end lg:col-span-3 lg:col-start-10"
+        >
           <div className="border-t border-mist pt-6">
-            <p className="text-[0.95rem] leading-relaxed text-ink-muted">
-              Platizio Services LLP is a licensed and certified distributor of
-              Mutual Funds and Specialised Investment Funds (SIFs).
+            {/* The credential itself, not a description of one — and stated
+                once here rather than three times across the page. */}
+            <p className="text-base leading-relaxed text-ink-muted">
+              Platizio Services LLP — AMFI-registered mutual fund distributor,
+              ARN 341407.
             </p>
           </div>
         </FadeUp>
