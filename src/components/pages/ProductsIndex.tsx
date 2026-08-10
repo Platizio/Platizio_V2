@@ -44,11 +44,8 @@ function ProductRow({
         aria-hidden
         className="absolute inset-0 bg-midnight"
         initial={false}
-        animate={
-          reduce
-            ? { opacity: active ? 1 : 0, scaleY: 1 }
-            : { opacity: 1, scaleY: active ? 1 : 0 }
-        }
+        // One animate shape — see the note in sections/Products.tsx.
+        animate={{ opacity: 1, scaleY: active ? 1 : 0 }}
         style={{ originY: 1 }}
         transition={reduce ? CROSSFADE : SPRING}
       />
@@ -154,9 +151,9 @@ export default function ProductsIndex() {
                   <motion.div
                     key={preview.tag}
                     className="absolute inset-0 flex flex-col justify-between p-8"
-                    initial={reduce ? { opacity: 0 } : { opacity: 0, y: 14 }}
+                    initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={reduce ? { opacity: 0 } : { opacity: 0, y: -14 }}
+                    exit={{ opacity: 0, y: -14 }}
                     transition={reduce ? CROSSFADE : SPRING_SNAP}
                   >
                     <span className="text-sm tabular-nums text-brass">

@@ -49,9 +49,9 @@ export default function PageHero({
   const words = headline.split(" ");
 
   const rise = (delay: number) => ({
-    initial: reduce ? false : { opacity: 0, y: 26 },
+    initial: { opacity: 0, y: 26 },
     animate: { opacity: 1, y: 0 },
-    transition: { ...SPRING_ENTER, delay },
+    transition: reduce ? { duration: 0 } : { ...SPRING_ENTER, delay },
   });
 
   return (
@@ -71,10 +71,10 @@ export default function PageHero({
             key={i}
             className="absolute rounded-full bg-brass"
             style={{ left: `${x}%`, top: `${y}%`, width: size * 2, height: size * 2 }}
-            animate={reduce ? undefined : { opacity: [0.3, 1, 0.3], scale: [1, 1.45, 1] }}
+            animate={{ opacity: [0.3, 1, 0.3], scale: [1, 1.45, 1] }}
             transition={{
               duration: 3.5 + i * 0.35,
-              repeat: Infinity,
+              repeat: reduce ? 0 : Infinity,
               ease: "easeInOut",
               delay: i * 0.2,
             }}

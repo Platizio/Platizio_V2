@@ -3,8 +3,7 @@
 import { useRef, useState } from "react";
 import {
   motion,
-  useMotionValueEvent,
-  useReducedMotion,
+  useMotionValueEvent,
   useScroll,
 } from "motion/react";
 import { FadeUp, RevealWords } from "@/components/ui/Reveal";
@@ -49,8 +48,7 @@ function StepBody({ step }: { step: Step }) {
   );
 }
 
-export default function Journey() {
-  const reduce = useReducedMotion();
+export default function Journey() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
@@ -87,14 +85,13 @@ export default function Journey() {
           </FadeUp>
         </div>
 
-        {/* Mobile / reduced-motion: static stacked list */}
-        <div
-          className={
-            reduce
-              ? "mt-16 divide-y divide-lavender/15"
-              : "mt-16 divide-y divide-lavender/15 lg:hidden"
-          }
-        >
+        {/* Mobile / reduced-motion: static stacked list.
+            Which of these two blocks is visible is decided in CSS, not by a
+            render branch. useReducedMotion() is false during SSR, so mounting
+            one tree on the server and the other on the client failed
+            hydration for reduced-motion users. Both are always rendered; the
+            media query picks. */}
+        <div className="mt-16 divide-y divide-lavender/15 lg:hidden motion-reduce:lg:block">
           {STEPS.map((step, i) => (
             <FadeUp key={step.num} delay={i * 0.12} className="py-10">
               <span className="block font-display track-caption text-3xl leading-none text-brass">
@@ -108,12 +105,12 @@ export default function Journey() {
           ))}
         </div>
 
-        {/* Desktop: sticky scrollytelling (~204vh track) */}
-        {!reduce && (
-          <div
-            ref={trackRef}
-            className="hidden lg:grid grid-cols-12 gap-x-8 mt-8"
-          >
+        {/* Desktop: sticky scrollytelling (~204vh track). Hidden under
+            reduced motion by the media query above, not by unmounting. */}
+        <div
+          ref={trackRef}
+          className="hidden lg:grid grid-cols-12 gap-x-8 mt-8 motion-reduce:lg:hidden"
+        >
             {/* Sticky left: big rolling number + progress line */}
             <div className="col-span-5">
               <div className="sticky top-0 h-screen flex items-center">
@@ -178,9 +175,8 @@ export default function Journey() {
                   </div>
                 </div>
               ))}
-            </div>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );

@@ -7,7 +7,7 @@ import {
   useSpring,
 } from "motion/react";
 import { useRef, type ReactNode } from "react";
-import { SPRING_CONFIG, SPRING_SNAP } from "@/lib/motion";
+import { SPRING_CONFIG } from "@/lib/motion";
 
 const variants = {
   brass:
@@ -63,30 +63,26 @@ export function MagneticButton({
     y.set(0);
   }
 
-  const cls = `inline-flex cursor-pointer items-center justify-center gap-2 rounded-full px-7 py-3.5 text-base font-medium tracking-wide transition-colors duration-hover ${variants[variant]} ${className}`;
-
-  // whileTap fires on pointer-down, so the press reads immediately rather than
-  // waiting for the release to confirm it.
-  const press = reduce ? undefined : { scale: 0.96 };
+  /**
+   * The press uses the shared `.press` utility rather than Motion's whileTap.
+   * Two reasons. It is now the single press mechanism on the site, so the
+   * feedback is identical here and on rows, nav links and footer links —
+   * including the reduced-motion path, where `.press` swaps the transform for
+   * an opacity dip. And whileTap made Motion emit `tabindex="0"`; because the
+   * prop was gated on useReducedMotion() — false during SSR — the server wrote
+   * that attribute and a reduced-motion client did not, failing hydration.
+   * `.press` also owns the colour transition, so no `transition-colors` here.
+   */
+  const cls = `press inline-flex cursor-pointer items-center justify-center gap-2 rounded-full px-7 py-3.5 text-base font-medium tracking-wide ${variants[variant]} ${className}`;
 
   const inner = href ? (
-    <motion.a
-      href={href}
-      className={cls}
-      whileTap={press}
-      transition={SPRING_SNAP}
-    >
+    <a href={href} className={cls}>
       {children}
-    </motion.a>
+    </a>
   ) : (
-    <motion.button
-      onClick={onClick}
-      className={cls}
-      whileTap={press}
-      transition={SPRING_SNAP}
-    >
+    <button onClick={onClick} className={cls}>
       {children}
-    </motion.button>
+    </button>
   );
 
   return (
@@ -97,7 +93,7 @@ export function MagneticButton({
       onPointerLeave={onLeave}
       onPointerCancel={onLeave}
     >
-      <motion.div style={reduce ? undefined : { x: sx, y: sy }}>
+      <motion.div style={{ x: sx, y: sy }}>
         {inner}
       </motion.div>
     </div>

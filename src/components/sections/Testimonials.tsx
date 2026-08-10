@@ -9,6 +9,11 @@ import {
 } from "motion/react";
 import { RevealWords, FadeUp } from "@/components/ui/Reveal";
 
+// NOTE for whoever restores this section: the two `style={reduce ? ... }`
+// branches below are a hydration bug. useReducedMotion() is false during SSR,
+// so the server writes a transform the reduced-motion client does not, and
+// hydration fails. Every other component was moved off that pattern — only
+// `transition` may depend on `reduce`, never `initial`, `animate` or `style`.
 const QUOTES = [
   {
     text: "What I appreciate most about Platizio is transparency. Every recommendation is explained clearly — why it fits my goals, what risks exist, and how it behaves in different market conditions. This level of clarity is rare in financial advisory.",

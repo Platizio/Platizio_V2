@@ -1,8 +1,7 @@
 "use client";
 
 import {
-  motion,
-  useReducedMotion,
+  motion,
   useScroll,
   useTransform,
   type MotionValue,
@@ -28,7 +27,10 @@ function Word({
 }) {
   const opacity = useTransform(progress, range, [0.16, 1]);
   return (
-    <motion.span style={{ opacity }} className="inline">
+    // data-reveal so the reduced-motion rule in globals.css pins this to full
+    // opacity. Handling it in CSS rather than a render branch is what keeps
+    // the server and client markup identical — see below.
+    <motion.span data-reveal style={{ opacity }} className="inline">
       {children}{" "}
     </motion.span>
   );
@@ -39,8 +41,7 @@ function Word({
  * The thesis statement inks itself in, word by word, as you scroll.
  */
 export default function Manifesto() {
-  const ref = useRef<HTMLParagraphElement>(null);
-  const reduce = useReducedMotion();
+  const ref = useRef<HTMLParagraphElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start 0.85", "end 0.45"],
@@ -58,17 +59,20 @@ export default function Manifesto() {
           ref={ref}
           className="col-span-12 max-w-[24ch] font-display text-[clamp(1.9rem,4.6vw,3.6rem)] font-medium leading-[1.18] tracking-tight lg:col-span-8"
         >
-          {reduce
-            ? STATEMENT
-            : words.map((word, i) => (
-                <Word
-                  key={i}
-                  progress={scrollYProgress}
-                  range={[i / words.length, (i + 1) / words.length]}
-                >
-                  {word}
-                </Word>
-              ))}
+          {/* One markup shape for everyone. Branching here on
+              useReducedMotion() emitted plain text on the client and <Word>
+              spans on the server — that value is false during SSR — so
+              hydration failed for exactly the users who asked for less motion.
+              Reduced motion is handled by the [data-reveal] rule instead. */}
+          {words.map((word, i) => (
+            <Word
+              key={i}
+              progress={scrollYProgress}
+              range={[i / words.length, (i + 1) / words.length]}
+            >
+              {word}
+            </Word>
+          ))}
         </p>
 
         <FadeUp

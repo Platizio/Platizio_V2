@@ -31,9 +31,9 @@ export default function ArticlePage({
   ).slice(0, 2);
 
   const rise = (delay: number) => ({
-    initial: reduce ? false : { opacity: 0, y: 24 },
+    initial: { opacity: 0, y: 24 },
     animate: { opacity: 1, y: 0 },
-    transition: { ...SPRING_ENTER, delay },
+    transition: reduce ? { duration: 0 } : { ...SPRING_ENTER, delay },
   });
 
   return (

@@ -30,9 +30,13 @@ function HeroLine({
           <span className="inline-block overflow-hidden pb-[0.14em] -mb-[0.14em] align-bottom">
           <motion.span
             className={`inline-block ${className}`}
-            initial={reduce ? false : { y: "112%" }}
+            initial={{ y: "112%" }}
             animate={ready ? { y: "0%" } : {}}
-            transition={{ ...SPRING_ENTER, delay: baseDelay + i * 0.07 }}
+            transition={
+              reduce
+                ? { duration: 0 }
+                : { ...SPRING_ENTER, delay: baseDelay + i * 0.07 }
+            }
           >
             {word}
           </motion.span>
@@ -48,9 +52,9 @@ export default function Hero() {
   const reduce = useReducedMotion();
 
   const fadeIn = (delay: number) => ({
-    initial: reduce ? false : { opacity: 0, y: 24 },
+    initial: { opacity: 0, y: 24 },
     animate: ready ? { opacity: 1, y: 0 } : {},
-    transition: { ...SPRING_ENTER, delay },
+    transition: reduce ? { duration: 0 } : { ...SPRING_ENTER, delay },
   });
 
   return (

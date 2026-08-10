@@ -111,9 +111,11 @@ export default function InsightsIndex() {
               <motion.div
                 key={a.slug}
                 layout={!reduce}
-                initial={reduce ? false : { opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ ...SPRING_ENTER, delay: (i % 3) * 0.06 }}
+                transition={
+                  reduce ? { duration: 0 } : { ...SPRING_ENTER, delay: (i % 3) * 0.06 }
+                }
               >
                 <ArticleCard {...a} />
               </motion.div>

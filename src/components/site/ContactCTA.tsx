@@ -47,8 +47,12 @@ export default function ContactCTA({
       <motion.svg
         viewBox="0 0 600 600"
         className="pointer-events-none absolute -right-40 -top-40 h-[34rem] w-[34rem] text-porcelain/10 md:-right-24 md:-top-24"
-        animate={reduce ? undefined : { rotate: 360 }}
-        transition={{ duration: 160, repeat: Infinity, ease: "linear" }}
+        animate={{ rotate: 360 }}
+        transition={{
+          duration: 160,
+          repeat: reduce ? 0 : Infinity,
+          ease: "linear",
+        }}
         aria-hidden
       >
         <circle cx="300" cy="300" r="280" fill="none" stroke="currentColor" strokeWidth="1" />

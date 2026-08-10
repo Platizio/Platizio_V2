@@ -86,11 +86,19 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
 
   return (
     <AnimatePresence>
-      {visible && !reduce && (
+      {/* Not `visible && !reduce`. useReducedMotion() is false during SSR, so
+          gating the curtain on it rendered it on the server and omitted it on
+          a reduced-motion client — the markup diverged at hydration. The
+          effect above calls finish() immediately when reduce is set, so the
+          curtain is dismissed on the first commit instead. `exit` is never
+          serialised, so it may branch. */}
+      {visible && (
         <motion.div
           className="fixed inset-0 z-50 flex flex-col justify-between bg-violet px-6 py-6 md:px-10 md:py-8"
-          exit={{ y: "-100%" }}
-          transition={{ duration: 0.55, ease: EXPO }}
+          exit={reduce ? { opacity: 0 } : { y: "-100%" }}
+          transition={
+            reduce ? { duration: 0.15 } : { duration: 0.55, ease: EXPO }
+          }
           aria-hidden
         >
           <div />
