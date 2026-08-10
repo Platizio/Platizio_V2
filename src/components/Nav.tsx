@@ -71,9 +71,9 @@ export default function Nav() {
   return (
     <>
       <motion.header
-        initial={reduce ? false : { y: -64, opacity: 0 }}
+        initial={{ y: -64, opacity: 0 }}
         animate={ready ? { y: 0, opacity: 1 } : {}}
-        transition={{ ...SPRING_ENTER, delay: 0.15 }}
+        transition={reduce ? { duration: 0 } : { ...SPRING_ENTER, delay: 0.15 }}
         className="fixed inset-x-0 top-0 z-40"
       >
         {/* The material is its own layer so that opacity is what animates.

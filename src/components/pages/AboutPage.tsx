@@ -130,9 +130,9 @@ function AboutHero() {
   const reduce = useReducedMotion();
 
   const rise = (delay: number) => ({
-    initial: reduce ? false : { opacity: 0, y: 28 },
+    initial: { opacity: 0, y: 28 },
     animate: ready ? { opacity: 1, y: 0 } : {},
-    transition: { ...SPRING_ENTER, delay },
+    transition: reduce ? { duration: 0 } : { ...SPRING_ENTER, delay },
   });
 
   return (
@@ -149,8 +149,8 @@ function AboutHero() {
             key={i}
             className="absolute rounded-full bg-brass"
             style={{ left: `${x}%`, top: `${y}%`, width: size * 2, height: size * 2 }}
-            animate={reduce ? undefined : { opacity: [0.3, 1, 0.3], scale: [1, 1.45, 1] }}
-            transition={{ duration: 3.5 + i * 0.35, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
+            animate={{ opacity: [0.3, 1, 0.3], scale: [1, 1.45, 1] }}
+            transition={{ duration: 3.5 + i * 0.35, repeat: reduce ? 0 : Infinity, ease: "easeInOut", delay: i * 0.2 }}
           />
         ))}
         <svg viewBox="0 0 1000 560" className="absolute -bottom-16 right-[-12rem] h-[34rem] w-[62rem] text-violet-bright/25" fill="none">
