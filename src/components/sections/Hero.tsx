@@ -22,7 +22,12 @@ function HeroLine({
       {words.split(" ").map((word, i) => (
         <span key={i}>
           <span className="inline-block overflow-hidden pb-[0.14em] -mb-[0.14em] align-bottom">
+          {/* data-reveal is the CSS net in globals.css. This word starts
+              translated fully below its own mask, so without the net it is
+              clipped out of view rather than merely transparent — the one
+              parked state that opacity alone would not rescue. */}
           <motion.span
+            data-reveal
             className={`inline-block ${className}`}
             initial={{ y: "112%" }}
             animate={ready ? { y: "0%" } : {}}
@@ -54,7 +59,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[100svh] flex-col overflow-hidden bg-midnight text-lavender"
+      className="relative flex min-h-[100svh] flex-col bg-midnight text-lavender"
     >
       {/* Gutter outside the 1400 container, matching every content section.
           With the padding inside the container the hero's left rail landed
@@ -66,16 +71,32 @@ export default function Hero() {
             Investment Funds.
           </p>
 
-          {/* Centred in whatever height the rail leaves. The old justify-end
-              was right while the terrain filled the upper third; on flat
-              midnight it just left that third dead. */}
+          {/* Centred in whatever height the rail leaves. Anchoring the block
+              to the bottom edge only ever made sense when something else
+              occupied the upper third of the section; with the ground flat
+              from the nav down, that third was simply empty. */}
           <div className="flex flex-1 flex-col justify-center">
-            {/* Columns are placed explicitly rather than left to
-                auto-placement. A 6-wide CTA row cannot fit the two-column
-                remainder of row 1, so auto-placement happens to give the
-                right answer — by accident, and only until a span changes. */}
-            <div className="grid grid-cols-12 gap-x-8 gap-y-10 lg:items-end">
-              <h1 className="col-span-12 max-w-[13ch] font-display text-[clamp(2.9rem,8vw,6rem)] font-medium leading-[1.02] tracking-tight text-porcelain lg:col-span-6 lg:col-start-1 lg:row-start-1">
+            {/* Three compositions on one grid, all placed explicitly rather
+                than left to auto-placement:
+                  base  — one column, source order.
+                  md    — headline across the top, then subhead left and CTAs
+                          right sharing row 2, bottom-aligned.
+                  lg    — headline left of row 1, subhead right of it, CTAs
+                          below the headline in row 2.
+                Auto-placement cannot express the md row (a 6-wide cell would
+                not fit beside a 12-wide headline) and only appears to get lg
+                right by accident, so every cell states its own start. */}
+            <div className="grid grid-cols-12 gap-x-8 gap-y-10 md:items-end">
+              {/* Seven columns at lg, not the six the spec drew: six is
+                  narrower than "Navigate every" everywhere below ~1215px, and
+                  the headline broke to four lines across that whole band. Six
+                  columns grow at half the viewport rate while the type climbs
+                  at 8vw, so they only pull clear slowly — 3px of daylight at
+                  1280, 62px once the container caps at 1400. The spec's
+                  six-column composition therefore returns at 2xl rather than
+                  xl. Nothing moves at that seam: the line is shorter than
+                  either box, so the span decides only where it would break. */}
+              <h1 className="col-span-12 max-w-[13ch] font-display text-[clamp(2.9rem,8vw,7.25rem)] font-medium leading-[1.02] tracking-tight text-porcelain md:row-start-1 lg:col-span-7 lg:col-start-1 lg:row-start-1 2xl:col-span-6">
                 <HeroLine words="Navigate every" ready={ready} baseDelay={0.25} />
                 <HeroLine words="market with" ready={ready} baseDelay={0.42} />
                 <HeroLine
@@ -86,21 +107,29 @@ export default function Hero() {
                 />
               </h1>
 
-              {/* lg:items-end bottom-aligns this to the headline's block,
-                  which is what makes the eye run diagonally from "Navigate"
-                  down to here. Below lg the max-w does the work instead —
-                  twelve columns at 768px is far too wide to read. */}
+              {/* items-end bottom-aligns this to whatever shares its row: the
+                  CTAs at md, the headline at lg — which is what makes the eye
+                  run diagonally from "Navigate" down to here. Below md the
+                  max-w does the work instead, since one column at 640px is
+                  already wider than this reads well at. */}
               <motion.p
                 {...fadeIn(0.75)}
-                className="col-span-12 max-w-[46ch] text-base leading-relaxed text-lavender-dim md:text-lg lg:col-span-4 lg:col-start-9 lg:row-start-1"
+                data-reveal
+                className="col-span-12 max-w-[46ch] text-base leading-relaxed text-lavender-dim md:col-span-6 md:col-start-1 md:row-start-2 md:text-lg lg:col-span-4 lg:col-start-9 lg:row-start-1"
               >
                 Regulated products, matched to your goals, your horizon and
                 your appetite for risk — and explained before you commit.
               </motion.p>
 
+              {/* Shares row 2 with the subhead from md up, pinned to the right
+                  edge of the container — the pairing this section had before
+                  the grid rewrite, which the rewrite dropped by giving both
+                  cells twelve columns until lg. Back on the left below the
+                  headline at lg, where the subhead moves up into row 1. */}
               <motion.div
                 {...fadeIn(0.9)}
-                className="col-span-12 flex flex-wrap gap-4 lg:col-span-6 lg:col-start-1 lg:row-start-2"
+                data-reveal
+                className="col-span-12 flex flex-wrap gap-4 md:col-span-6 md:col-start-7 md:row-start-2 md:justify-end lg:col-span-7 lg:col-start-1 lg:row-start-2 lg:justify-start 2xl:col-span-6"
               >
                 <MagneticButton href="/contact" variant="brass">
                   Book a consultation
@@ -127,6 +156,7 @@ export default function Hero() {
               columns a second rule is noise. */}
           <motion.div
             {...fadeIn(1.05)}
+            data-reveal
             className="mt-14 grid grid-cols-12 gap-x-8 gap-y-8 border-t border-lavender/15 pt-8 md:mt-16"
           >
             <div className="col-span-12 flex flex-col gap-1 sm:col-span-6 lg:col-span-4 lg:col-start-1">
