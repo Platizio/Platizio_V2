@@ -102,7 +102,7 @@ export default function Trust() {
     >
       <div className="mx-auto max-w-[1400px]">
         {/* Asymmetric header: heading left, the actual credential offset right */}
-        <div className="grid grid-cols-12 gap-x-8 gap-y-12 lg:items-end">
+        <div className="grid grid-cols-12 gap-x-4 gap-y-12 sm:gap-x-8 lg:items-end">
           <div className="col-span-12 lg:col-span-7">
             <RevealWords
               text="Built on trust, run with discipline"
@@ -133,7 +133,7 @@ export default function Trust() {
         </div>
 
         {/* Credential panels — offset vertically, never a perfect pair */}
-        <div className="mt-16 grid grid-cols-12 items-start gap-x-8 gap-y-6 md:mt-24">
+        <div className="mt-16 grid grid-cols-12 items-start gap-x-4 gap-y-6 sm:gap-x-8 md:mt-24">
           <FadeUp delay={0.1} className="col-span-12 md:col-span-6">
             <CredentialPanel
               title="What we are registered as"

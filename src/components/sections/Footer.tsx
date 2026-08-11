@@ -51,7 +51,7 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-midnight text-lavender">
       <div className="mx-auto max-w-[1400px] px-6 pb-10 pt-20 md:px-10 md:pt-28 lg:px-16">
-        <div className="grid grid-cols-12 gap-x-8 gap-y-14 border-b border-lavender/10 pb-16">
+        <div className="grid grid-cols-12 gap-x-4 gap-y-14 border-b border-lavender/10 pb-16 sm:gap-x-8">
           <div className="col-span-12 flex flex-col gap-5 md:col-span-6">
             <span className="font-display track-caption text-3xl text-porcelain">
               Platizio

@@ -86,7 +86,7 @@ export default function Hero() {
                 Auto-placement cannot express the md row (a 6-wide cell would
                 not fit beside a 12-wide headline) and only appears to get lg
                 right by accident, so every cell states its own start. */}
-            <div className="grid grid-cols-12 gap-x-8 gap-y-10 md:items-end">
+            <div className="grid grid-cols-12 gap-x-4 gap-y-10 sm:gap-x-8 md:items-end">
               {/* Seven columns at lg, not the six the spec drew: six is
                   narrower than "Navigate every" everywhere below ~1215px, and
                   the headline broke to four lines across that whole band. Six
@@ -157,7 +157,7 @@ export default function Hero() {
           <motion.div
             {...fadeIn(1.05)}
             data-reveal
-            className="mt-14 grid grid-cols-12 gap-x-8 gap-y-8 border-t border-lavender/15 pt-8 md:mt-16"
+            className="mt-14 grid grid-cols-12 gap-x-4 gap-y-8 border-t border-lavender/15 pt-8 sm:gap-x-8 md:mt-16"
           >
             <div className="col-span-12 flex flex-col gap-1 sm:col-span-6 lg:col-span-4 lg:col-start-1">
               <span className="font-display track-caption text-2xl text-porcelain md:text-3xl">

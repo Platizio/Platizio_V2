@@ -169,7 +169,7 @@ export default function Products() {
         {/* Asymmetric heading — headline pushed right, note anchored bottom-left.
             Expressed in the shared 12-column, 32px system rather than a flex
             row with its own 64px gutter. */}
-        <div className="mb-16 grid grid-cols-12 gap-x-8 gap-y-6 md:mb-20 lg:mb-24 lg:items-end">
+        <div className="mb-16 grid grid-cols-12 gap-x-4 gap-y-6 sm:gap-x-8 md:mb-20 lg:mb-24 lg:items-end">
           <RevealWords
             text="Five instruments. One discipline."
             as="h2"

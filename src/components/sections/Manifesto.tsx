@@ -54,7 +54,7 @@ export default function Manifesto() {
       id="about"
       className="bg-porcelain px-6 py-28 text-ink md:px-10 md:py-40 lg:px-16"
     >
-      <div className="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-8 gap-y-14">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-12 gap-x-4 gap-y-14 sm:gap-x-8">
         <p
           ref={ref}
           className="col-span-12 max-w-[24ch] font-display text-[clamp(1.9rem,4.6vw,3.6rem)] font-medium leading-[1.18] tracking-tight lg:col-span-8"
