@@ -27,6 +27,14 @@ Tailwind CSS v4, Motion 12.42.2.
   here with "the page is not compositing frames". Use the Playwright MCP
   (`mcp__plugin_playwright_playwright__*`) against the dev server. Wait ~3.5s
   after navigating so the intro animation settles.
+- **Check 1024, 1152 and 1200 as well as 1440 / 768 / 375.** Every layout
+  defect this plan shipped lived between 1024 and 1200: the band where `lg`
+  has engaged, so the cells have taken their desktop spans, but the container
+  is still narrow and the headline is still climbing at 8vw. 1440 is the
+  widest each column ever gets and 768 is below the breakpoint entirely, so
+  neither width can see it. Check 1280 and 1536 too when a span changes at
+  `xl` or `2xl` — a column that drops a track at a breakpoint is at its
+  tightest one pixel past it.
 - **Do not change any copy.** The headline, subhead, both CTA labels and both
   registration strings keep their exact current wording. The unattributed
   `+24.8%` figure that used to lead the rail was removed on purpose — do not
@@ -351,13 +359,20 @@ Do **not** switch to `items-baseline` — it aligns *first* baselines, which
 would hang the subhead off the top of the headline. Re-screenshot after any
 nudge.
 
-- [ ] **Step 5: Screenshot tablet and mobile**
+- [ ] **Step 5: Screenshot the narrow desktop band, tablet and mobile**
 
-Resize to 768×1024, reload, wait 3500ms, screenshot. Then 375×812, same.
+Resize to 1024×800, reload, wait 3500ms, screenshot. Then 1152 and 1200, then
+768×1024, then 375×812.
 
-Expected at both: a single column in the order headline, subhead, CTAs, AMFI,
-SEBI. The subhead is capped by `max-w-[46ch]` rather than running the full
-768px measure. Both CTA pills are fully visible and not clipped.
+Expected at 1024–1200: the headline still breaks across exactly three lines.
+This is the band the plan as first written never looked at, and where it was
+wrong — see the Global Constraints.
+
+Expected at 768: two rows, headline across the top, then the subhead left and
+the CTA pair right, bottom-aligned to each other. At 375: a single column in
+the order headline, subhead, CTAs, AMFI, SEBI. The subhead is capped by
+`max-w-[46ch]` rather than running the full measure. Both CTA pills are fully
+visible and not clipped.
 
 - [ ] **Step 6: Check the console and hydration in both motion modes**
 

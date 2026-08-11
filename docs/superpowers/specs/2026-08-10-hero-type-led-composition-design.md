@@ -57,11 +57,11 @@ line up across the seam.
 
 Grid A, inside the centred block:
 
-| Element | Columns | Row |
-| --- | --- | --- |
-| `h1` | 1–6 | 1 |
-| Subhead | 9–12 | 1 |
-| CTA pair | 1–6 | 2 |
+| Element | Columns (`lg`) | Columns (`2xl`) | Row |
+| --- | --- | --- | --- |
+| `h1` | 1–7 | 1–6 | 1 |
+| Subhead | 9–12 | 9–12 | 1 |
+| CTA pair | 1–7 | 1–6 | 2 |
 
 Grid B, the rail at the bottom edge:
 
@@ -80,15 +80,60 @@ rather than left to auto-placement. A 6-wide CTA row cannot fit the
 two-column remainder of row 1, so auto-placement happens to give the right
 answer — but only by accident, and it would break the moment a span changed.
 
-Columns 1–6 measure 682px on a 1400px container, which is within a few pixels
-of the current `max-w-[13ch]`. The headline therefore keeps its existing
-`clamp(2.9rem, 8vw, 6rem)` and still breaks across three lines.
+#### Amendment, 2026-08-11: seven columns, and a taller ceiling
+
+Six columns was measured only on a 1400px container, where it comes to 684px.
+It is much narrower than that for the whole band where `lg` has engaged but
+the container has not caught up: 425px at 1024, 481px at 1137. "Navigate
+every" needs 5.4× the font size, and the font is still climbing at 8vw there,
+so the first line broke in two and the headline rendered on four lines from
+1024 up to roughly 1200. The user ruled that the headline take **columns 1–7
+at `lg`**, returning to **1–6** once there is width for it, and that the
+`clamp` ceiling rise from `6rem` so the type fills its column on a 1440
+screen instead of freezing at 96px from 1200 up.
+
+The ceiling landed at **`7.25rem`**. At 1536 and above the container is capped
+at 1400, six columns measure 680px, and the longest line measures 618px — a
+10% margin, which is the widest the type can be and still leave one.
+
+The return to six columns waits for `2xl` rather than `xl`, which is the one
+place this deviates from the ruling as written. Between 1280 and 1528 the type
+is on 8vw while six columns grow at half the viewport rate, and the two curves
+run within 3px of each other for that whole stretch — at 1280 exactly, six
+columns measure 552.5px against a 549.6px line. Nothing renders differently
+either way (measured: identical line breaks, widths and box heights at 1280),
+so the wider span costs nothing visually and buys the 100px of slack that
+keeps the next copy edit from reintroducing the four-line wrap.
+
+The CTA row carries the same spans, for the same reason at a different scale:
+the two pills need 458px side by side, and six columns at 1024 give only
+424px.
+
+`max-w-[13ch]` on the `h1` is now inert from `lg` up — 13ch is 7.55em against
+a column that is never wider than 6.1em of type — and it has never been
+tighter than the 5.4em the longest line needs, so it cannot cause a wrap. It
+is left in place as the cap below `lg`, where twelve columns are wider than
+the headline should ever run.
 
 ### Below `lg`
 
-A single column in source order: headline, subhead, CTAs, then the two
-registrations. Every cell falls back to `col-span-12`. This is the current
-mobile behaviour and needs no change beyond the class names.
+Two arrangements, not one.
+
+From `md` (768px) up, the headline runs across the top and the subhead and CTA
+pair share the row beneath it, subhead in columns 1–6 and CTAs in 7–12 pushed
+to the right edge, both bottom-aligned. This is the pairing the section had
+before the grid rewrite, where it was a nested `md:flex-row md:items-end
+md:justify-between`; expressing it in the 12-column grid keeps one grid rather
+than a grid wrapping a flex row. Six columns is 328px at 768, close to the
+~318px the flex row shrank the subhead to, and the CTA pair wraps to two
+right-aligned lines there exactly as it did before.
+
+Below `md` it is a single column in source order: headline, subhead, CTAs,
+then the two registrations.
+
+Cells fall back to `col-span-12` in grid A. The rail is the exception: its two
+cells carry `sm:col-span-6`, so they pair up from 640px and only stack below
+that.
 
 ### Vertical placement
 
@@ -153,9 +198,11 @@ hydration class of bugs fixed in `d6f4103` is not reintroduced.
 ## Verification
 
 1. `tsc --noEmit`, `eslint`, `next build` all clean.
-2. Playwright screenshots at 1440×900, 768×1024 and 375×812. Judge the result
-   by eye before calling it done — this hero has been signed off on geometry
-   alone before and was wrong.
+2. Playwright screenshots at 1440×900, 768×1024 and 375×812, plus 1024, 1152
+   and 1200 — the band where `lg` has engaged but the container is still
+   narrow, which is where the four-line headline hid. Judge the result by eye
+   before calling it done — this hero has been signed off on geometry alone
+   before and was wrong.
 3. Console clean, and zero hydration errors with `prefers-reduced-motion` both
    set and unset.
 4. Confirm no `three` chunk appears in the build output.
@@ -167,12 +214,18 @@ the type and the void. The remedy is the "monumental headline" option that was
 considered and not chosen: scale the headline up to claim more width. Surface
 the screenshot and let the user decide rather than changing it silently.
 
+*Resolved 2026-08-11.* The user took that option: the ceiling raise to
+`7.25rem` is the monumental headline, arrived at from the other direction.
+The type reaches 115px at 1440 where it used to stop at 96px.
+
 **Bottom alignment is optical, not true baseline alignment.** `items-end`
 aligns box edges. The headline's last line box and the subhead's last line box
 carry different leading, so their baselines may sit a few pixels apart. If it
 shows, correct it with a small `lg:pb-*` on the subhead — do not switch to
 `items-baseline`, which aligns *first* baselines and would be wrong.
 
-**Deliberate empty columns at `lg`.** Columns 7–8 in grid A and 5–8 in grid B
-are intentionally blank. Below 1024px both grids collapse to one column, so
-the void only exists where there is width to spare for it.
+**Deliberate empty columns at `lg`.** Column 8 in grid A (7–8 at `2xl`) and
+5–8 in grid B are intentionally blank. Below `lg` grid A becomes the two-row
+`md` arrangement and then a single column below 768px; grid B pairs its cells
+from 640px and stacks below that. So the void only exists where there is width
+to spare for it.
