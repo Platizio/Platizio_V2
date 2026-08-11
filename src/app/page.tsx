@@ -6,7 +6,7 @@ import Manifesto from "@/components/sections/Manifesto";
 import Products from "@/components/sections/Products";
 import Journey from "@/components/sections/Journey";
 import Trust from "@/components/sections/Trust";
-import CTA from "@/components/sections/CTA";
+import ContactCTA from "@/components/site/ContactCTA";
 import Footer from "@/components/sections/Footer";
 
 export default function Home() {
@@ -36,7 +36,9 @@ export default function Home() {
               is a real exposure, so the section stays off the page until
               genuine, attributable quotes exist. Restore by re-adding
               <Testimonials /> once QUOTES holds real ones. */}
-          <CTA />
+          {/* Every prop defaulted: the homepage is the canonical instance of
+              the closing CTA, and interior pages override the copy. */}
+          <ContactCTA />
           <Footer />
         </main>
       </SmoothScroll>

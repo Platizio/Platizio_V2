@@ -18,8 +18,9 @@ const TICKS = Array.from({ length: 36 }, (_, i) => {
 });
 
 /**
- * The drenched-violet closing act, reused across interior pages. Defaults to
- * routing to the internal consultation page.
+ * The drenched-violet closing act. The single closing CTA on the site: the
+ * homepage renders it with every default, interior pages override the copy.
+ * Defaults route to the internal consultation page.
  */
 export default function ContactCTA({
   heading = "Begin with a conversation.",
@@ -44,9 +45,12 @@ export default function ContactCTA({
       id="contact"
       className="relative overflow-hidden bg-violet px-6 py-32 text-porcelain md:px-10 md:py-44 lg:px-16"
     >
+      {/* slow-turning compass rose, barely there */}
       <motion.svg
         viewBox="0 0 600 600"
         className="pointer-events-none absolute -right-40 -top-40 h-[34rem] w-[34rem] text-porcelain/10 md:-right-24 md:-top-24"
+        // The prop stays constant so SSR and client agree; reduced motion
+        // stops the loop by dropping the repeat rather than by removing it.
         animate={{ rotate: 360 }}
         transition={{
           duration: 160,
