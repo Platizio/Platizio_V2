@@ -1,11 +1,32 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { RevealWords, FadeUp } from "@/components/ui/Reveal";
 import { CROSSFADE, SPRING, SPRING_SNAP } from "@/lib/motion";
 import { PRODUCT_GLYPHS } from "@/lib/productGlyphs";
+
+/**
+ * Artwork for the hover preview panel — the product's tag set as display
+ * type, lit in violet with brass terminals.
+ *
+ * Deliberately not part of PRODUCT_GLYPHS. Those are stroke SVGs drawn in
+ * `currentColor` and reused by the Insights index and the product detail
+ * pages, both of which sit on porcelain; these are raster art with their own
+ * midnight ground and would not survive either context. The two sets answer
+ * to different rules, so they stay apart.
+ *
+ * Sources are 4:5, the panel's own ratio, so `object-cover` never crops.
+ */
+const PANEL_ARTWORK: Record<keyof typeof PRODUCT_GLYPHS, string> = {
+  INTL: "/products/intl.webp",
+  SIF: "/products/sif.webp",
+  MF: "/products/mf.webp",
+  PMS: "/products/pms.webp",
+  AIF: "/products/aif.webp",
+};
 
 type Product = {
   slug: string;
@@ -217,23 +238,26 @@ export default function Products() {
               <AnimatePresence initial={false}>
                 <motion.div
                   key={preview.tag}
-                  className="absolute inset-0 flex flex-col justify-between p-8"
+                  className="absolute inset-0"
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -14 }}
                   transition={reduce ? CROSSFADE : SPRING_SNAP}
                 >
-                  <span className="text-sm tracking-[0.08em] text-brass">
-                    {preview.tag}
-                  </span>
-                  <svg
-                    viewBox="0 0 120 120"
-                    className="mx-auto w-3/5 text-violet-bright"
-                    aria-hidden
-                  >
-                    {PRODUCT_GLYPHS[preview.tag]}
-                  </svg>
-                  <span className="font-display track-caption text-lg text-lavender">
+                  {/* Full-bleed rather than inset: the art carries its own
+                      midnight ground, so floating it inside the panel would
+                      show a seam wherever the two darks disagree. Decorative —
+                      the product name below names it, and the row itself is
+                      the link. The tag that used to sit at the top-left is
+                      gone: the artwork is that tag, set large. */}
+                  <Image
+                    src={PANEL_ARTWORK[preview.tag]}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 326px, 0px"
+                    className="object-cover"
+                  />
+                  <span className="absolute bottom-8 left-8 right-8 font-display track-caption text-lg text-lavender">
                     {preview.name}
                   </span>
                 </motion.div>
