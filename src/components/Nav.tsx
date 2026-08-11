@@ -70,7 +70,11 @@ export default function Nav() {
 
   return (
     <>
+      {/* data-reveal is the CSS net in globals.css: the bar ships parked 64px
+          above the viewport at zero opacity, so with no script to run the
+          entrance the site would open with no navigation at all. */}
       <motion.header
+        data-reveal
         initial={{ y: -64, opacity: 0 }}
         animate={ready ? { y: 0, opacity: 1 } : {}}
         transition={reduce ? { duration: 0 } : { ...SPRING_ENTER, delay: 0.15 }}

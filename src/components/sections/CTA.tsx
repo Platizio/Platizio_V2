@@ -65,8 +65,8 @@ export default function CTA() {
         />
         <FadeUp delay={0.2}>
           <p className="max-w-[46ch] text-lg leading-relaxed text-porcelain/75">
-            Book a consultation and see how a disciplined, regulated framework
-            can work for your wealth.
+            Book a consultation and see which regulated products fit your
+            goals, your horizon and your tolerance for loss.
           </p>
         </FadeUp>
         <FadeUp delay={0.35}>

@@ -120,14 +120,34 @@ h3 {
   .animate-marquee {
     animation: none;
   }
+}
 
-  /* Scroll-revealed content is parked off-position until an IntersectionObserver
-     fires. For reduced-motion users there is no reveal worth waiting for, so
-     force the resting state and drop the dependency on JS entirely — if the
-     observer never fires, the text is still readable. */
+/* Every animated entrance on the site ships parked: opacity 0, and often a
+   transform too — the nav 64px above the viewport, each headline word a full
+   line below its own overflow-hidden mask. JS is what un-parks them, so
+   `data-reveal` marks each parked element for the two audiences that never
+   get the animation. Reduced motion: there is no reveal worth waiting for, so
+   snap to the resting state. No scripting: nothing will ever move them.
+   One rule for both, because two copies of it drifted apart once already —
+   the hero was added to neither. `transform: none` is doing as much work as
+   the opacity here: a headline word left at translateY(112%) is clipped by
+   its mask, not merely transparent. */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
   [data-reveal] {
     transform: none !important;
     opacity: 1 !important;
+  }
+}
+
+/* `scripting: none` means the browser will not run script at all — scripting
+   turned off, a text-mode browser, most scrapers. It is not a net for a
+   bundle that fails to load or throws: with JS enabled those still match
+   `scripting: enabled`, and nothing here fires. The intro curtain is only
+   ever lifted by an effect, so where there is no script it has to come out
+   of the page entirely, or it covers the site forever. */
+@media (scripting: none) {
+  [data-intro-curtain] {
+    display: none;
   }
 }
 
@@ -171,11 +191,27 @@ h3 {
   top: 100%;
   height: 1.25rem;
   pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    color-mix(in oklch, var(--color-midnight) 34%, transparent),
-    transparent
-  );
+  /* A fading blur, not a colour wash. The previous midnight gradient was
+     ground-blind: correct over the dark sections, but over porcelain it read
+     as a grey smear laid on top of light content. Blurring the backdrop and
+     masking that blur to nothing works on either ground, because it borrows
+     whatever is behind it instead of imposing a colour. */
+  backdrop-filter: blur(7px);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+
+/* Without backdrop-filter there is nothing to fade, so fall back to the
+   hairline the edge replaced rather than leaving no boundary at all. */
+@supports not (backdrop-filter: blur(1px)) {
+  .material-edge::after {
+    height: 1px;
+    background: color-mix(in oklch, var(--color-lavender) 14%, transparent);
+    /* The gradient above fades a 20px band to nothing. Left in place over a
+       1px box it samples near its own midpoint and halves the hairline to
+       ~7% lavender — a rule nobody can see. The fallback wants the full
+       alpha, so the mask goes. */
+    mask-image: none;
+  }
 }
 
 /* Vibrancy: flat grey text loses legibility once a blurred, moving
@@ -239,8 +275,14 @@ h3 {
 }
 
 @media (prefers-reduced-transparency: reduce) {
+  /* The scroll edge blurs its backdrop too, so it belongs in this reset
+     alongside the other two — without it the reader who asked for less
+     transparency still gets a blur band under the nav. With nothing left to
+     fade it paints nothing, which is the intended result: the chrome below
+     is opaque here and needs no dissolve into it. */
   .material-chrome,
-  .material-sheet {
+  .material-sheet,
+  .material-edge::after {
     backdrop-filter: none;
   }
   .material-chrome {

@@ -94,6 +94,11 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
           serialised, so it may branch. */}
       {visible && (
         <motion.div
+          /* The curtain is only ever dismissed by the effect above, so with
+             no script it would cover the page permanently — a violet sheet
+             where the site should be. globals.css removes it outright when
+             the browser reports it will not run script. */
+          data-intro-curtain
           className="fixed inset-0 z-50 flex flex-col justify-between bg-violet px-6 py-6 md:px-10 md:py-8"
           exit={reduce ? { opacity: 0 } : { y: "-100%" }}
           transition={
@@ -104,6 +109,7 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
           <div />
           <div className="flex items-end justify-center">
             <motion.span
+              data-reveal
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: EXPO }}

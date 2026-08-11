@@ -28,7 +28,7 @@ const STEPS: Step[] = [
   {
     num: "02",
     title: "Asset Allocation",
-    lead: "A disciplined allocation across regulated instruments, explained clearly:",
+    lead: "An allocation across regulated instruments, explained clearly:",
     rest: " why it fits your goals, what risks exist, and how it behaves in different market conditions.",
   },
   {
