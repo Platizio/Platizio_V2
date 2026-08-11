@@ -12,6 +12,13 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local agent/tooling scratch dirs. None of this is app source, and
+    // .claude/worktrees/ holds whole checkouts of this repo (each with its
+    // own .next/), so leaving it in drowns real src/ findings in tens of
+    // thousands of problems. Keep in sync with .gitignore.
+    ".claude/**",
+    ".superpowers/**",
+    ".playwright-mcp/**",
   ]),
 ]);
 

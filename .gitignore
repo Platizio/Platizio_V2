@@ -40,6 +40,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# local agent/tooling scratch dirs. Only .claude/worktrees/ is excluded, not
+# .claude/ itself — launch.json and proven-config.json under it are tracked.
+# Keep in sync with the globalIgnores list in eslint.config.mjs.
+/.claude/worktrees/
+/.superpowers/
+/.playwright-mcp/
+
 # claude-flow local state: daemon pid/state, metrics and headless run logs.
 # Uses /* rather than a trailing slash so git still descends into the folder
 # and the negation below can take effect — a directory exclude is never
