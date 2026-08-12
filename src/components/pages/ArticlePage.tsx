@@ -30,7 +30,9 @@ export default function ArticlePage({
     (a) => a.slug !== article.slug && a.category === article.category,
   ).slice(0, 2);
 
+  // data-reveal is the CSS net in globals.css — see PageHero.
   const rise = (delay: number) => ({
+    "data-reveal": true,
     initial: { opacity: 0, y: 24 },
     animate: { opacity: 1, y: 0 },
     transition: reduce ? { duration: 0 } : { ...SPRING_ENTER, delay },

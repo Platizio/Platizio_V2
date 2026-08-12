@@ -129,7 +129,9 @@ function AboutHero() {
   const ready = useIntroDone();
   const reduce = useReducedMotion();
 
+  // data-reveal is the CSS net in globals.css — see PageHero.
   const rise = (delay: number) => ({
+    "data-reveal": true,
     initial: { opacity: 0, y: 28 },
     animate: ready ? { opacity: 1, y: 0 } : {},
     transition: reduce ? { duration: 0 } : { ...SPRING_ENTER, delay },

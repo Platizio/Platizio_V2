@@ -48,7 +48,13 @@ export default function PageHero({
   const reduce = useReducedMotion();
   const words = headline.split(" ");
 
+  /* data-reveal is the CSS net in globals.css: everything here ships parked
+     at opacity 0, and without JS the animation that unparks it never runs.
+     The attribute rides on the helper rather than on the nine call sites so
+     a tenth cannot be added without it — which is exactly how every hero
+     outside the homepage was missed the first time. */
   const rise = (delay: number) => ({
+    "data-reveal": true,
     initial: { opacity: 0, y: 26 },
     animate: { opacity: 1, y: 0 },
     transition: reduce ? { duration: 0 } : { ...SPRING_ENTER, delay },

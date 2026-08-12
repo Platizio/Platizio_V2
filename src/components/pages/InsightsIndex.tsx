@@ -111,6 +111,9 @@ export default function InsightsIndex() {
               <motion.div
                 key={a.slug}
                 layout={!reduce}
+                // Without this the whole article list ships invisible to a
+                // no-JS client — see the CSS net in globals.css.
+                data-reveal
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={

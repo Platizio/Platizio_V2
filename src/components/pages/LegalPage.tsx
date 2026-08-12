@@ -14,7 +14,9 @@ export default function LegalPage({ doc }: { doc: LegalDoc }) {
   const toc = buildToc(doc.blocks);
   const hasToc = toc.length > 1;
 
+  // data-reveal is the CSS net in globals.css — see PageHero.
   const rise = (delay: number) => ({
+    "data-reveal": true,
     initial: { opacity: 0, y: 22 },
     animate: { opacity: 1, y: 0 },
     transition: reduce ? { duration: 0 } : { ...SPRING_ENTER, delay },
