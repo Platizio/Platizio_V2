@@ -26,9 +26,25 @@ export default function ArticlePage({
   const hasToc = toc.length > 1;
   const minutes = readingMinutes(body);
 
-  const related = ARTICLES_SORTED.filter(
-    (a) => a.slug !== article.slug && a.category === article.category,
-  ).slice(0, 2);
+  /**
+   * Two onward reads: same category first, topped up with the most recent
+   * of anything else.
+   *
+   * Filtering on category alone used to be enough, because every category
+   * held a long-form piece and a short note. Removing the four placeholder
+   * notes left one article per category, so the filter matched nothing and
+   * the section vanished from all five articles — each one dead-ending at
+   * the CTA with no route back into the writing.
+   */
+  const others = ARTICLES_SORTED.filter((a) => a.slug !== article.slug);
+  const sameCategory = others.filter((a) => a.category === article.category);
+  const related = [
+    ...sameCategory,
+    ...others.filter((a) => a.category !== article.category),
+  ].slice(0, 2);
+  // Only claim the category when every card shown is actually in it.
+  const relatedAllSameCategory =
+    related.length > 0 && related.every((a) => a.category === article.category);
 
   // data-reveal is the CSS net in globals.css — see PageHero.
   const rise = (delay: number) => ({
@@ -117,7 +133,11 @@ export default function ArticlePage({
       {related.length > 0 && (
         <section className="bg-midnight px-6 py-20 text-lavender md:px-10 md:py-28 lg:px-16">
           <div className="mx-auto max-w-[1100px]">
-            <p className="text-sm text-brass">More in {article.category}</p>
+            <p className="text-sm text-brass">
+              {relatedAllSameCategory
+                ? `More in ${article.category}`
+                : "More insights"}
+            </p>
             <div className="mt-8 grid gap-8 border-t border-lavender/15 pt-8 md:grid-cols-2">
               {related.map((a) => (
                 <Link
