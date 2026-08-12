@@ -46,7 +46,15 @@ export type Article = {
   iso: string;
   excerpt: string;
   metaDescription: string;
-  /** True for the five long-form features; false for short-form notes. */
+  /**
+   * True for long-form features, false for short-form notes — it only picks
+   * the card's call to action ("Read article" / "Read note").
+   *
+   * Every article is currently a feature: the four notes that used to sit
+   * here were placeholder copy and were removed rather than written. The
+   * field stays because the distinction is a real editorial one the site
+   * will want again, not because anything sets it false today.
+   */
   feature: boolean;
 };
 
@@ -112,54 +120,6 @@ export const ARTICLES: Article[] = [
     metaDescription:
       "Portfolio Management Services (PMS) explained — a separate investor portfolio under SEBI regulation, discretionary vs non-discretionary mandates, common strategies, how PMS is taxed, and who it is meant for.",
     feature: true,
-  },
-  {
-    slug: "market-outlook-2025",
-    title: "Market Outlook 2025: Key Trends to Watch",
-    category: "Mutual Fund",
-    date: "December 2024",
-    iso: "2024-12-01",
-    excerpt:
-      "Analysis of major market trends and investment opportunities for the coming year.",
-    metaDescription:
-      "Market Outlook 2025 — analysis of major market trends and investment opportunities for the coming year.",
-    feature: false,
-  },
-  {
-    slug: "international-investing-guide",
-    title: "International Investing: Benefits and Considerations",
-    category: "International",
-    date: "November 2024",
-    iso: "2024-11-02",
-    excerpt:
-      "Why global diversification matters and how to approach international markets.",
-    metaDescription:
-      "International investing: benefits and considerations — why global diversification matters and how to approach international markets.",
-    feature: false,
-  },
-  {
-    slug: "power-of-asset-allocation",
-    title: "The Power of Asset Allocation",
-    category: "AIF",
-    date: "November 2024",
-    iso: "2024-11-01",
-    excerpt:
-      "How disciplined asset allocation can help navigate market cycles effectively.",
-    metaDescription:
-      "The power of asset allocation — how disciplined asset allocation can help navigate market cycles effectively.",
-    feature: false,
-  },
-  {
-    slug: "risk-management-portfolio",
-    title: "Risk Management in Portfolio Construction",
-    category: "PMS",
-    date: "October 2024",
-    iso: "2024-10-01",
-    excerpt:
-      "Essential principles for managing risk while building a resilient portfolio.",
-    metaDescription:
-      "Risk management in portfolio construction — essential principles for managing risk while building a resilient portfolio.",
-    feature: false,
   },
 ];
 
