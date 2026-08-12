@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { Product } from "@/lib/products";
+import { PANEL_ARTWORK } from "@/lib/productArtwork";
 import { SiteShell } from "@/components/site/SiteShell";
 import PageHero from "@/components/site/PageHero";
 import ProductBlocks from "@/components/site/ProductBlocks";
@@ -23,7 +24,7 @@ export default function ProductPage({ product }: { product: Product }) {
         headline={product.hero.headline}
         accent={product.hero.accent}
         intro={product.hero.intro}
-        mark={product.glyph}
+        markSrc={PANEL_ARTWORK[product.tag]}
       />
 
       <ProductBlocks blocks={product.blocks} />

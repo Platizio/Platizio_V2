@@ -7,26 +7,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { RevealWords, FadeUp } from "@/components/ui/Reveal";
 import { CROSSFADE, SPRING, SPRING_SNAP } from "@/lib/motion";
 import { PRODUCT_GLYPHS } from "@/lib/productGlyphs";
-
-/**
- * Artwork for the hover preview panel — the product's tag set as display
- * type, lit in violet with brass terminals.
- *
- * Deliberately not part of PRODUCT_GLYPHS. Those are stroke SVGs drawn in
- * `currentColor` and reused by the Insights index and the product detail
- * pages, both of which sit on porcelain; these are raster art with their own
- * midnight ground and would not survive either context. The two sets answer
- * to different rules, so they stay apart.
- *
- * Sources are 4:5, the panel's own ratio, so `object-cover` never crops.
- */
-const PANEL_ARTWORK: Record<keyof typeof PRODUCT_GLYPHS, string> = {
-  INTL: "/products/intl.webp",
-  SIF: "/products/sif.webp",
-  MF: "/products/mf.webp",
-  PMS: "/products/pms.webp",
-  AIF: "/products/aif.webp",
-};
+import { PANEL_ARTWORK } from "@/lib/productArtwork";
 
 type Product = {
   slug: string;

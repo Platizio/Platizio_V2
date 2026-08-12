@@ -1,5 +1,4 @@
-import type { ReactNode } from "react";
-import { PRODUCT_GLYPHS } from "@/lib/productGlyphs";
+import { PANEL_ARTWORK } from "@/lib/productArtwork";
 
 /**
  * Product detail content. Copy is carried faithfully from the legacy site and
@@ -63,7 +62,7 @@ export type ProductBlock =
 
 export type Product = {
   slug: ProductSlug;
-  tag: keyof typeof PRODUCT_GLYPHS;
+  tag: keyof typeof PANEL_ARTWORK;
   name: string;
   navName: string;
   metaTitle: string;
@@ -74,7 +73,6 @@ export type Product = {
     accent: string[];
     intro: string;
   };
-  glyph: ReactNode;
   blocks: ProductBlock[];
 };
 
@@ -97,7 +95,6 @@ export const PRODUCTS: Product[] = [
       intro:
         "Diversify globally and access opportunities beyond domestic markets.",
     },
-    glyph: PRODUCT_GLYPHS.INTL,
     blocks: [
       {
         kind: "prose",
@@ -192,7 +189,6 @@ export const PRODUCTS: Product[] = [
       intro:
         "Advanced portfolio strategies beyond traditional mutual funds, designed for sophisticated investors.",
     },
-    glyph: PRODUCT_GLYPHS.SIF,
     blocks: [
       {
         kind: "prose",
@@ -281,7 +277,6 @@ export const PRODUCTS: Product[] = [
       intro:
         "Professionally managed, diversified investment solutions for disciplined wealth creation.",
     },
-    glyph: PRODUCT_GLYPHS.MF,
     blocks: [
       {
         kind: "prose",
@@ -372,7 +367,6 @@ export const PRODUCTS: Product[] = [
       intro:
         "Personalized, transparent investment management for High Net-Worth Individuals.",
     },
-    glyph: PRODUCT_GLYPHS.PMS,
     blocks: [
       {
         kind: "prose",
@@ -445,7 +439,6 @@ export const PRODUCTS: Product[] = [
       intro:
         "Access non-traditional asset classes and advanced strategies for portfolio diversification.",
     },
-    glyph: PRODUCT_GLYPHS.AIF,
     blocks: [
       {
         kind: "prose",

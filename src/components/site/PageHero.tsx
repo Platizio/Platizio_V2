@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 import { SPRING_ENTER } from "@/lib/motion";
 
@@ -30,7 +30,7 @@ export default function PageHero({
   intro,
   chips,
   meta,
-  mark,
+  markSrc,
   compact = false,
 }: {
   label: string;
@@ -40,8 +40,8 @@ export default function PageHero({
   chips?: string[];
   /** Small key/value pairs shown under the intro, e.g. article date/category. */
   meta?: { label: string; value: string }[];
-  /** Optional signature glyph, framed at the top-right of the content column. */
-  mark?: ReactNode;
+  /** Optional signature plate, framed above the label. Path to a 4:5 image. */
+  markSrc?: string;
   /** Tighter vertical rhythm for text-forward pages (legal, articles). */
   compact?: boolean;
 }) {
@@ -100,15 +100,23 @@ export default function PageHero({
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-col justify-end">
-        {mark && (
+        {markSrc && (
+          /* 4:5 rather than the square this used to be, because the plate is
+             now the product's tag set as display type and a word needs the
+             width. Wider than the old badge for the same reason — at 80px a
+             four-letter mark is unreadable. The brass hairline stays: with a
+             dark plate inside it reads as a frame rather than a chip. */
           <motion.div
             {...rise(0.04)}
-            className="mb-10 flex size-20 items-center justify-center self-start border border-brass/40 text-brass md:size-24"
+            className="relative mb-10 aspect-[4/5] w-28 self-start overflow-hidden border border-brass/40 md:w-36"
             aria-hidden
           >
-            <svg viewBox="0 0 120 120" className="w-3/5">
-              {mark}
-            </svg>
+            {/* Sized up rather than zoomed in. Scaling the image to fill the
+                frame cropped the wider marks — INTL lost its first and last
+                letters at 1.55x while MF was fine — because the words differ
+                in width but share one canvas. Growing the frame keeps every
+                mark whole. */}
+            <Image src={markSrc} alt="" fill sizes="144px" className="object-cover" />
           </motion.div>
         )}
         <motion.p {...rise(0.06)} className="text-sm text-brass">

@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { PRODUCTS } from "@/lib/products";
+import { PANEL_ARTWORK } from "@/lib/productArtwork";
 import { SiteShell } from "@/components/site/SiteShell";
 import PageHero from "@/components/site/PageHero";
 import ContactCTA from "@/components/site/ContactCTA";
@@ -150,21 +152,33 @@ export default function ProductsIndex() {
                 <AnimatePresence initial={false}>
                   <motion.div
                     key={preview.tag}
-                    className="absolute inset-0 flex flex-col justify-between p-8"
+                    className="absolute inset-0"
                     initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -14 }}
                     transition={reduce ? CROSSFADE : SPRING_SNAP}
                   >
-                    <span className="text-sm tabular-nums text-brass">
+                    {/* Full-bleed: the art carries its own midnight ground, so
+                        insetting it would show a seam wherever the two darks
+                        disagree. Decorative — the name below names it. */}
+                    <Image
+                      src={PANEL_ARTWORK[preview.tag]}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1024px) 352px, 0px"
+                      className="object-cover"
+                    />
+                    {/* The counter stays where the homepage panel drops its
+                        tag: here it says position in the list, which the
+                        artwork does not, so it is not a duplicate. */}
+                    <span className="absolute left-8 top-8 text-sm tabular-nums text-brass">
                       {String(previewIndex + 1).padStart(2, "0")}
                       <span className="mx-2 opacity-40">/</span>
                       05
                     </span>
-                    <svg viewBox="0 0 120 120" className="mx-auto w-3/5 text-violet-bright" aria-hidden>
-                      {preview.glyph}
-                    </svg>
-                    <span className="font-display text-lg text-lavender">{preview.name}</span>
+                    <span className="absolute bottom-8 left-8 right-8 font-display text-lg text-lavender">
+                      {preview.name}
+                    </span>
                   </motion.div>
                 </AnimatePresence>
               </div>
