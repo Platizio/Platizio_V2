@@ -71,14 +71,26 @@ export default function LegalPage({ doc }: { doc: LegalDoc }) {
 
           {hasToc && (
             <aside>
-              <div className="lg:sticky lg:top-28">
+              {/* The contents list can outgrow the screen — the longest
+                  policy runs to 26 entries — and a sticky block taller than
+                  the viewport pins its own bottom out of reach. Capping it
+                  and letting it scroll keeps every entry reachable.
+                  overscroll-contain stops that scroll chaining into the page
+                  once the list bottoms out. */}
+              <div className="lg:sticky lg:top-28 lg:max-h-[calc(100svh-9rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-2">
                 <p className="text-sm text-brass-deep">Contents</p>
-                <nav className="mt-4 flex flex-col gap-2.5 border-l border-mist pl-4">
+                {/* Padding rather than gap carries the spacing here. At
+                    text-sm/snug each row was a 19px target, which clears WCAG
+                    2.5.8 only on the spacing exception — conformant, but a
+                    thumb-sized miss on a phone. Moving most of the 10px gap
+                    inside the links makes each one a 31px target for 4px more
+                    row pitch, and the scroll cap above absorbs that. */}
+                <nav className="mt-4 flex flex-col gap-0.5 border-l border-mist pl-4">
                   {toc.map((item) => (
                     <a
                       key={item.id}
                       href={`#${item.id}`}
-                      className="text-sm leading-snug text-ink-muted transition-colors duration-hover hover:text-ink"
+                      className="py-1.5 text-sm leading-snug text-ink-muted transition-colors duration-hover hover:text-ink"
                     >
                       {item.text}
                     </a>
