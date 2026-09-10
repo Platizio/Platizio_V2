@@ -17,6 +17,13 @@
   --color-ink: oklch(0.22 0.045 288); /* text on light */
   --color-ink-muted: oklch(0.44 0.03 288); /* muted on light */
   --color-mist: oklch(0.9 0.015 290); /* hairlines on light */
+  /* Decorative hairlines may sit as light as `mist`; the edge of a control the
+     reader has to find may not. `mist` on porcelain measures 1.26:1, so a form
+     field whose only affordance was a mist underline was effectively invisible
+     — WCAG 1.4.11 asks 3:1 for the boundary of a user interface component.
+     This is the lightest step that clears it (3.69:1) rather than reaching for
+     `ink-muted` at 7.27:1, which would read as a rule instead of a field. */
+  --color-field: oklch(0.6 0.02 288); /* boundary of an input on light */
 
   /* ── Type ──────────────────────────────────────────────────── */
   --font-display: var(--font-fraunces), "Fraunces", serif;
@@ -58,9 +65,87 @@ body {
   color: var(--color-midnight);
 }
 
+/* Two rings, one per ground. Brass was authored against midnight, where it
+   measures 10.37:1 — but roughly half this site is porcelain, and there brass
+   drops to 1.75:1, so on every light section the focus indicator was very
+   nearly not there (WCAG 1.4.11 asks 3:1). Rather than give both grounds one
+   compromise colour that is mediocre on each, each ground keeps its own: the
+   midnight ring carries porcelain at 18.14:1, the brass ring carries midnight
+   at 10.37:1.
+
+   The geometry is deliberate. `outline-offset: 3px` puts the brass ring 3–5px
+   out from the border box; the shadow's 3px spread fills 0–3px, so the two sit
+   flush and read as a single indicator rather than two. On midnight the inner
+   ring is the same colour as the ground and simply disappears, which leaves
+   exactly the offset brass ring this rule drew before — dark grounds are
+   visually unchanged. */
 :focus-visible {
   outline: 2px solid var(--color-brass);
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--color-midnight);
+}
+
+/* ── Controls that are reachable while invisible ──────────────────
+   Two controls on this site have to sit in the tab order while showing
+   nothing: the skip link (WCAG 2.4.1 — the nav is fixed and identical on every
+   route, so before this the first Tab on every page landed on the wordmark and
+   a keyboard user walked the same five stops again on every arrival), and the
+   mobile sheet's own close button (the sheet is aria-modal, so assistive
+   technology hides the hamburger that closes it — see Nav.tsx).
+
+   Both use the same technique for the same reason: `display: none` and
+   `visibility: hidden` take an element out of the tab order entirely, so a
+   control built with either can never be reached by the keyboard it exists
+   for. Clipping to a 1px box leaves it focusable, and taking it out of flow
+   means the hidden state contributes no box at all — nothing on the page
+   moves when it appears. */
+.skip-link,
+.sheet-close {
+  z-index: 60;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* `:focus`, not `:focus-visible`. Neither control can be reached by pointer,
+   so there is no mouse case to suppress — and a control that is still
+   invisible once focused is the exact failure being fixed here. The two-tone
+   ring above draws around the pill on top of this; brass ground carries
+   midnight text at 10.37:1, so the label reads over either section colour. */
+.skip-link:focus,
+.sheet-close:focus {
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip-path: none;
+  border-radius: 9999px;
+  background: var(--color-brass);
+  padding: 0.75rem 1.25rem;
+  color: var(--color-midnight);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Fixed, so it is anchored to the viewport rather than to whatever the page
+   has scrolled to, and above the header (z-40) it is there to skip past. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+}
+
+/* Absolute inside the sheet, which is `fixed inset-0` — same coordinates as
+   fixed would give, without depending on whether the sheet's entrance
+   transform is still applied (a transformed ancestor becomes the containing
+   block for fixed children, so `fixed` here would move mid-animation).
+   6.5rem clears the header's own hamburger; 1.5rem is the sheet's px-6 rail,
+   so the pill lines up with the links below it. */
+.sheet-close {
+  position: absolute;
+  top: 6.5rem;
+  left: 1.5rem;
 }
 
 h1,

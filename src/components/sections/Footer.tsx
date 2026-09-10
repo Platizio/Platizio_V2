@@ -1,25 +1,6 @@
 import Link from "next/link";
 import { RISK_DISCLAIMER } from "@/lib/products";
-
-// Named by channel rather than by handle alone, so the reader knows which
-// part of the line-up each one covers before clicking away.
-const YOUTUBE_CHANNELS = [
-  {
-    name: "SIF Insights",
-    handle: "@sifinsights",
-    href: "https://www.youtube.com/@sifinsights",
-  },
-  {
-    name: "Platizio Alternatives",
-    handle: "@PlatizioAlternatives",
-    href: "https://www.youtube.com/@PlatizioAlternatives",
-  },
-  {
-    name: "Platizio Global",
-    handle: "@PlatizioGlobal",
-    href: "https://www.youtube.com/@PlatizioGlobal",
-  },
-];
+import { LEGAL_NAME, YOUTUBE_CHANNELS } from "@/lib/site";
 
 // Labels match the nav for the three shared destinations — a link should not
 // change its name between the header and the footer.
@@ -46,6 +27,34 @@ const PRODUCT_LINKS = [
   { label: "Portfolio Management Services", href: "/products/pms" },
   { label: "Alternative Investment Funds", href: "/products/aif" },
 ];
+
+/**
+ * The year on the copyright line, resolved once when this module is first
+ * evaluated — which, for a site whose 22 pages are all prerendered, means at
+ * `next build`. It replaces a literal `2026` that was right the day it was
+ * typed and wrong from the following 1 January.
+ *
+ * Build year, deliberately, not the reader's year. A prerendered page has no
+ * request-time clock, so printing the *reader's* year would mean either opting
+ * this route out of static rendering or making the global footer a Client
+ * Component and correcting the date in an effect after hydration. The first
+ * trades the entire static build for a number; the second ships the footer to
+ * every visitor's bundle to fix a mismatch it created. Neither is worth it,
+ * and the build year is the more defensible claim anyway: a copyright notice
+ * marks when the work was published, and this HTML is published at build time.
+ * The consequence to know is that the year advances on the next deploy rather
+ * than at midnight on 1 January — if that ever looks stale, the fix is a
+ * rebuild, not an edit here.
+ *
+ * One Next.js 16 caveat, should this project ever enable Cache Components:
+ * under that flag synchronous IO during prerender — `new Date()`, `Date.now()`,
+ * `Math.random()` — is a hard build error rather than a baked-in value, and the
+ * migration guide is explicit that opting a segment out with `instant = false`
+ * does not clear it. `next.config.ts` does not set the flag today, so this is
+ * safe as written; if it is ever set, this line is one of the things that has
+ * to move behind `<Suspense>` + `connection()` or into a Client Component.
+ */
+const COPYRIGHT_YEAR = new Date().getFullYear();
 
 export default function Footer() {
   return (
@@ -80,6 +89,27 @@ export default function Footer() {
                 </svg>
                 YouTube
               </span>
+              {/* The handle used to be dimmed a second time — a span of
+                  `text-lavender-dim/70` inside a link already set to
+                  `text-lavender-dim` — to rank it below the channel name.
+                  Composited on midnight that lands at 4.17:1, under the 4.5:1
+                  WCAG 1.4.3 asks of text this size, and because the footer is
+                  global it failed on all 19 routes. The bare token measures
+                  7.51:1 on the same ground, so the span had nothing left to
+                  carry and the handle now simply inherits from the link —
+                  which also means the whole line lifts to porcelain on hover
+                  instead of the name lifting and the handle staying behind.
+
+                  These three are the only links in the footer that leave the
+                  site, and they open in a new tab. Unannounced, a screen
+                  reader user hears the channel name, follows it, and finds
+                  Back inert in a window with no history (WCAG 3.2.5, technique
+                  G201); the same surprise hits anyone magnified far enough not
+                  to see the new tab appear. The warning sits inside the anchor
+                  so it joins the accessible name rather than floating next to
+                  it, and `sr-only` keeps it out of the visual line. The
+                  existing rel="noopener noreferrer" is the other half of this
+                  and is already correct. */}
               {YOUTUBE_CHANNELS.map((c) => (
                 <a
                   key={c.handle}
@@ -88,8 +118,8 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="press -my-1.5 w-fit py-1.5 text-sm text-lavender-dim hover:text-porcelain"
                 >
-                  {c.name}{" "}
-                  <span className="text-lavender-dim/70">{c.handle}</span>
+                  {c.name} {c.handle}
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               ))}
             </div>
@@ -141,7 +171,9 @@ export default function Footer() {
             <span className="text-brass">
               AMFI-registered mutual fund distributor · ARN 341407
             </span>
-            <span>© 2026 Platizio Services LLP. All rights reserved.</span>
+            <span>
+              © {COPYRIGHT_YEAR} {LEGAL_NAME}. All rights reserved.
+            </span>
           </div>
         </div>
       </div>

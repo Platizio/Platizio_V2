@@ -84,8 +84,19 @@ export default function InsightsIndex() {
 
       <section className="bg-porcelain px-6 py-20 text-ink md:px-10 md:py-28 lg:px-16">
         <div className="mx-auto max-w-[1400px]">
+          {/* The cards below are h3s, so without a level in between the page
+              stepped h1 → h3 and every article title hung off nothing when
+              navigated by heading. Hidden rather than drawn: the hero one
+              screen up already says what this list is, and a visible
+              "Articles" would be a second label for the same thing. */}
+          <h2 className="sr-only">Articles</h2>
+
           {/* Category filter */}
-          <div className="flex flex-wrap gap-2 border-b border-mist pb-8 md:gap-3">
+          <div
+            role="group"
+            aria-label="Filter articles by category"
+            className="flex flex-wrap gap-2 border-b border-mist pb-8 md:gap-3"
+          >
             {CATEGORIES.map((cat) => {
               const on = cat === active;
               return (
@@ -149,6 +160,13 @@ export default function InsightsIndex() {
                 <path d="m10 9.5 5 2.5-5 2.5v-5Z" fill="currentColor" />
               </svg>
               Visit @sifinsights on YouTube
+              {/* WCAG 3.2.5 (G201). The only warning a sighted user gets that
+                  this link swaps their context is the tab opening, which is no
+                  warning at all for a screen reader. Inside the anchor so it
+                  joins the accessible name instead of sitting beside it, and
+                  with a leading space because sr-only takes the span out of
+                  flow — nothing else would separate it from "YouTube". */}
+              <span className="sr-only"> (opens in a new tab)</span>
             </a>
           </FadeUp>
         </div>

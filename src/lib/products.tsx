@@ -87,7 +87,7 @@ export const PRODUCTS: Product[] = [
     navName: "International Investing",
     metaTitle: "International Investing | Platizio",
     metaDescription:
-      "Diversify globally through international equities, funds and market-linked instruments across developed and emerging economies — with a clear view of currency risk.",
+      "Diversify globally through international equities, funds and market-linked instruments across developed and emerging economies, with currency risk made clear.",
     hero: {
       label: "International Investing",
       headline: "Diversify beyond one border.",
@@ -181,7 +181,7 @@ export const PRODUCTS: Product[] = [
     navName: "Specialised Investment Funds",
     metaTitle: "Specialised Investment Funds (SIF) | Platizio",
     metaDescription:
-      "SEBI-regulated Specialised Investment Funds offering advanced portfolio strategies — long-short, derivatives and dynamic allocation — for sophisticated, risk-aware investors.",
+      "SEBI-regulated Specialised Investment Funds using long-short, derivative and dynamic-allocation strategies, built for sophisticated, risk-aware investors.",
     hero: {
       label: "Specialised Investment Funds",
       headline: "Sophisticated strategy, regulated by design.",
@@ -269,7 +269,7 @@ export const PRODUCTS: Product[] = [
     navName: "Mutual Funds",
     metaTitle: "Mutual Funds | Platizio",
     metaDescription:
-      "Professionally managed, diversified mutual funds for disciplined wealth creation — equity, hybrid, debt, consumption, thematic and sectoral categories, with SIP options.",
+      "Professionally managed, diversified mutual funds for disciplined wealth creation: equity, hybrid, debt, thematic and sectoral categories, with SIP options.",
     hero: {
       label: "Mutual Funds",
       headline: "Diversified by design, managed with discipline.",
@@ -359,7 +359,7 @@ export const PRODUCTS: Product[] = [
     navName: "Portfolio Management Services",
     metaTitle: "Portfolio Management Services (PMS) | Platizio",
     metaDescription:
-      "Personalized, transparent portfolio management for High Net-Worth Individuals — direct ownership in your name, a customized strategy and a SEBI-prescribed ₹50 lakh minimum.",
+      "Transparent portfolio management for High Net-Worth Individuals: direct ownership in your name, a customised mandate, and a SEBI-prescribed ₹50 lakh minimum.",
     hero: {
       label: "Portfolio Management Services",
       headline: "A portfolio in your name, managed to your mandate.",
@@ -431,7 +431,7 @@ export const PRODUCTS: Product[] = [
     navName: "Alternative Investment Funds",
     metaTitle: "Alternative Investment Funds (AIF) | Platizio",
     metaDescription:
-      "SEBI-regulated Alternative Investment Funds — private equity, venture capital, structured credit and long-short strategies across Categories I, II and III, with a ₹1 crore minimum.",
+      "SEBI-regulated Alternative Investment Funds across Categories I, II and III — private equity, venture capital and structured credit, with a ₹1 crore minimum.",
     hero: {
       label: "Alternative Investment Funds",
       headline: "Beyond equity and debt.",

@@ -53,3 +53,9 @@ next-env.d.ts
 # descended into, and the un-ignore would be silently dead.
 .claude-flow/*
 !.claude-flow/harness-active-policy.json
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

@@ -39,13 +39,29 @@ export default function Nav() {
   useEffect(() => {
     document.documentElement.style.overflow = open ? "hidden" : "";
     const main = document.querySelector("main");
+    /**
+     * The skip link is inert'd alongside `main`, and needs its own line because
+     * it deliberately sits OUTSIDE `main` — it has to be the first focusable
+     * element in the document to do its job, which puts it beyond the reach of
+     * the one attribute that hides everything else behind the sheet.
+     *
+     * Left focusable it is worse than merely reachable: its target is `main`,
+     * which is inert while the sheet is open, so activating it moves focus to
+     * an element that cannot take it. Focus lands on <body>, the dialog stays
+     * open with nothing focused inside it, and the next Tab restarts at the top
+     * of the document — the exact trap the sheet's focus handling exists to
+     * prevent.
+     */
+    const skipLink = document.querySelector(".skip-link");
 
     if (!open) {
       main?.removeAttribute("inert");
+      skipLink?.removeAttribute("inert");
       return;
     }
 
     main?.setAttribute("inert", "");
+    skipLink?.setAttribute("inert", "");
     // Focus the first link in the sheet rather than the container.
     sheetRef.current?.querySelector<HTMLElement>("a")?.focus();
 
@@ -57,6 +73,7 @@ export default function Nav() {
       document.removeEventListener("keydown", onKeyDown);
       document.documentElement.style.overflow = "";
       main?.removeAttribute("inert");
+      skipLink?.removeAttribute("inert");
     };
   }, [open]);
 
@@ -164,6 +181,27 @@ export default function Nav() {
             // Bounce on an opacity cross-fade would overshoot past 1 and flicker.
             transition={reduce ? CROSSFADE : SPRING_SHEET}
           >
+            {/* aria-modal="true" tells assistive technology that everything
+                outside this element is unavailable — and the hamburger that
+                closes the sheet lives in the <header>, outside it. So a
+                screen-reader user could open the menu and then find nothing
+                in it that shut it again; Escape was the only way out, and
+                nothing announced that. This is the in-dialog equivalent of
+                the hamburger's X, driving the same state so the effects above
+                still restore scroll, clear inert and return focus to the
+                trigger. It is hidden until focused (see .sheet-close in
+                globals.css) because the hamburger above is already drawing a
+                visible X over this sheet, and two of them on screen at once
+                would read as two different controls. It sits first so
+                Shift+Tab from the links reaches it, while the open effect's
+                `querySelector("a")` still puts initial focus on About. */}
+            <button
+              type="button"
+              className="sheet-close"
+              onClick={() => setOpen(false)}
+            >
+              Close menu
+            </button>
             <ul className="flex flex-col gap-2">
               {LINKS.map((l, i) => (
                 <li key={l.label} className="overflow-hidden">
