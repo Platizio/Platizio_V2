@@ -1,4 +1,5 @@
 import type { RichBlock } from "@/lib/content-types";
+import { GRIEVANCE_OFFICER, SUPPORT_GLOBAL_EMAIL } from "@/lib/site";
 
 const body: RichBlock[] = [
   { kind: "h2", text: "1. Introduction and Scope" },
@@ -70,7 +71,7 @@ const body: RichBlock[] = [
 
   { kind: "h2", text: "13. Your Rights" },
   { kind: "p", text: "Subject to Applicable Law, you may have the right to access information about your personal data, request correction of inaccurate data, request completion or updating of incomplete data, request erasure of personal data where retention is no longer necessary, withdraw consent where processing is based on consent, nominate another individual to exercise rights in case of death or incapacity, and raise grievances regarding processing of your personal data." },
-  { kind: "p", text: "To exercise your rights, please contact the grievance officer at grievances@platizio.com. We may verify your identity before processing your request. We may reject or limit requests where disclosure or deletion is restricted by law, regulatory requirements, ViewTrade requirements, contract obligations, tax requirements, fraud prevention, audit obligations, legal claims or the rights of another person." },
+  { kind: "p", text: `To exercise your rights, please contact the grievance officer at ${GRIEVANCE_OFFICER.email}. We may verify your identity before processing your request. We may reject or limit requests where disclosure or deletion is restricted by law, regulatory requirements, ViewTrade requirements, contract obligations, tax requirements, fraud prevention, audit obligations, legal claims or the rights of another person.` },
 
   { kind: "h2", text: "14. Withdrawal of Consent" },
   { kind: "p", text: "You may withdraw consent by contacting us or using any mechanism provided on the platform. Withdrawal of consent may affect your ability to use the services, because certain processing is necessary for KYC, account maintenance, transaction processing, regulatory reporting and support." },
@@ -90,8 +91,13 @@ const body: RichBlock[] = [
   { kind: "p", text: "Where changes are material and not required immediately by law, regulator direction or security reasons, we will make reasonable efforts to notify you through the platform, email or other communication channel." },
 
   { kind: "h2", text: "19. Contact and Grievance Officer" },
-  { kind: "p", text: "For privacy-related queries, account support or data rights requests, please contact supportglobal@platizio.com." },
-  { kind: "note", text: "Grievance Officer\nAnuj Pal, Operations and Compliance Head, Platizio Services LLP, Unit No. DGL-229, Second Floor, DLF Galleria Mall, Mayur Vihar-1, Delhi, India - 110092.\nEmail: grievances@platizio.com\nCall: +91 9289837100\nBusiness hours: Monday to Friday, 9:00 AM to 5:00 PM India Standard Time." },
+  { kind: "p", text: `For privacy-related queries, account support or data rights requests, please contact ${SUPPORT_GLOBAL_EMAIL}.` },
+  // Name, designation, email, phone and hours all come from GRIEVANCE_OFFICER.
+  // They used to be typed out here and in three other documents, which is how
+  // two of them ended up calling the same statutory role "Operations and
+  // Compliance Head" while the other two called it "Officer", and how the
+  // domestic pair ended up with no contact number at all.
+  { kind: "note", text: `Grievance Officer\n${GRIEVANCE_OFFICER.name}, ${GRIEVANCE_OFFICER.designation}, Platizio Services LLP, Unit No. DGL-229, Second Floor, DLF Galleria Mall, Mayur Vihar-1, Delhi, India - 110092.\nEmail: ${GRIEVANCE_OFFICER.email}\nCall: ${GRIEVANCE_OFFICER.phoneDisplay}\nBusiness hours: ${GRIEVANCE_OFFICER.hours}.` },
   { kind: "p", text: "Grievances will be acknowledged within 24 hours and addressed within 15 working days, subject to Applicable Law and the nature of the issue. If you are not satisfied with the response, you may pursue remedies available under Applicable Law." },
 ];
 

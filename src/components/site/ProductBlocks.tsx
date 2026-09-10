@@ -216,14 +216,38 @@ function Block({ block, tone }: { block: ProductBlock; tone: Tone }) {
           <div className={WRAP}>
             <Header tone={tone} {...block} />
 
-            {/* md+ : real table */}
-            <div className="mt-12 hidden overflow-x-auto md:mt-16 md:block">
+            {/* md+ : real table.
+                block.heading is reused as the caption because <caption> is the
+                only element that names a table and this block type carries no
+                caption of its own; sr-only because the heading is already on
+                screen immediately above, and repeating it visibly would be a
+                design change made to fix a screen-reader-only defect.
+                scope="col" states the header-to-column relationship outright
+                instead of leaving the AT to infer it.
+
+                tabindex="0" is for WCAG 2.1.1: the wrapper scrolls once the
+                table is wider than the column, and a scroll container holding
+                nothing focusable cannot be panned by keyboard — the arrow keys
+                have nothing inside to focus. Overflow depends on the viewport,
+                so static markup cannot make this conditional; the cost is one
+                extra tab stop when the table does fit, and role="region" with a
+                name is what makes that stop announce itself instead of reading
+                as a dead halt. Below md this div is display:none and so is not
+                focusable at all — the stacked cards there are the fallback. */}
+            <div
+              role="region"
+              aria-label={block.heading}
+              tabIndex={0}
+              className="mt-12 hidden overflow-x-auto md:mt-16 md:block"
+            >
               <table className="w-full border-collapse text-left">
+                <caption className="sr-only">{block.heading}</caption>
                 <thead>
                   <tr className={`border-b ${t.rule}`}>
                     {block.columns.map((c) => (
                       <th
                         key={c}
+                        scope="col"
                         className={`px-4 pb-4 text-sm font-medium ${t.label} first:pl-0`}
                       >
                         {c}

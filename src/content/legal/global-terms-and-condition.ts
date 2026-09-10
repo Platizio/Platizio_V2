@@ -1,4 +1,5 @@
 import type { RichBlock } from "@/lib/content-types";
+import { GRIEVANCE_OFFICER, SUPPORT_GLOBAL_EMAIL } from "@/lib/site";
 
 const body: RichBlock[] = [
   { kind: "h2", text: "1. Introduction, Scope and Acceptance" },
@@ -128,8 +129,10 @@ const body: RichBlock[] = [
   { kind: "p", text: "Where changes are material and not required immediately by law, regulation, regulator direction or security reasons, Platizio will make reasonable efforts to provide prior notice through the platform, email or other communication channel." },
 
   { kind: "h2", text: "25. Contact and Grievance Redressal" },
-  { kind: "p", text: "For support regarding Platizio Global, please contact supportglobal@platizio.com. Business hours are Monday to Friday, 9:00 AM to 5:00 PM India Standard Time." },
-  { kind: "note", text: "Grievance Officer\nAnuj Pal, Operations and Compliance Head, Platizio Services LLP, Unit No. DGL-229, Second Floor, DLF Galleria Mall, Mayur Vihar-1, Delhi, India - 110092.\nEmail: grievances@platizio.com\nCall: +91 9289837100" },
+  { kind: "p", text: `For support regarding Platizio Global, please contact ${SUPPORT_GLOBAL_EMAIL}. Business hours are ${GRIEVANCE_OFFICER.hours}.` },
+  // See the note on the same block in global-privacy-policy.ts — one constant,
+  // so the four documents cannot disagree about one person's designation again.
+  { kind: "note", text: `Grievance Officer\n${GRIEVANCE_OFFICER.name}, ${GRIEVANCE_OFFICER.designation}, Platizio Services LLP, Unit No. DGL-229, Second Floor, DLF Galleria Mall, Mayur Vihar-1, Delhi, India - 110092.\nEmail: ${GRIEVANCE_OFFICER.email}\nCall: ${GRIEVANCE_OFFICER.phoneDisplay}` },
   { kind: "p", text: "Grievances will be acknowledged within 24 hours and addressed within 15 working days, subject to Applicable Law and the nature of the issue. Matters relating to execution, custody, settlement, account statements, ViewTrade charges or brokerage account operations may be escalated to ViewTrade or the relevant service provider." },
 
   { kind: "h2", text: "26. Miscellaneous" },

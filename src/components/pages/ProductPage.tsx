@@ -15,8 +15,21 @@ export default function ProductPage({ product }: { product: Product }) {
 
   return (
     <SiteShell>
+      {/* Screen-reader-only on purpose: the hero's label and the nav's active
+          state already place the page for a sighted visitor, so a drawn trail
+          would be a third copy of the same fact. It still has to be a real
+          ordered list, though — the bare "Products / name" this replaced was
+          announced as one run of text, so the trail had no depth, no step
+          count, and no way to tell the link from the page you are on.
+          aria-current="page" marks that last step, which is what stops screen
+          readers reading the leaf as somewhere else you could go. */}
       <nav aria-label="Breadcrumb" className="sr-only">
-        <Link href="/products">Products</Link> / {product.name}
+        <ol>
+          <li>
+            <Link href="/products">Products</Link>
+          </li>
+          <li aria-current="page">{product.name}</li>
+        </ol>
       </nav>
 
       <PageHero

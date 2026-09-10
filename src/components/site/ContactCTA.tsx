@@ -40,6 +40,13 @@ export default function ContactCTA({
 }) {
   const reduce = useReducedMotion();
 
+  // Named once because three attributes now depend on the same answer:
+  // target, rel, and the WCAG 3.2.5 (G201) warning in the link's accessible
+  // name. Repeating the test inline a third time is how they eventually
+  // disagree, and the failure mode that matters — a tab that opens with no
+  // announcement — is the one nobody sighted would ever notice.
+  const secondaryOpensNewTab = secondary?.href.startsWith("http") ?? false;
+
   return (
     <section
       id="contact"
@@ -94,11 +101,17 @@ export default function ContactCTA({
             {secondary && (
               <a
                 href={secondary.href}
-                target={secondary.href.startsWith("http") ? "_blank" : undefined}
-                rel={secondary.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                target={secondaryOpensNewTab ? "_blank" : undefined}
+                rel={secondaryOpensNewTab ? "noopener noreferrer" : undefined}
                 className="group inline-flex items-center gap-2 text-base text-porcelain/85 transition-colors duration-hover hover:text-porcelain"
               >
                 {secondary.label}
+                {/* Leading space because sr-only is position:absolute — out of
+                    flow, so nothing else separates this from the label in the
+                    accessible name. */}
+                {secondaryOpensNewTab && (
+                  <span className="sr-only"> (opens in a new tab)</span>
+                )}
                 <span className="transition-transform duration-hover group-hover:translate-x-1">→</span>
               </a>
             )}

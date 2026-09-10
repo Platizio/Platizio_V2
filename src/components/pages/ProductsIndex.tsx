@@ -145,7 +145,16 @@ export default function ProductsIndex() {
             <FadeUp delay={0.3} className="hidden lg:sticky lg:top-24 lg:block">
               {/* Solid, not glass: nothing behind it is worth showing through.
                   Depth comes from elevation, kept light for a plain ground. */}
-              <div className="relative aspect-[4/5] w-full overflow-hidden bg-midnight shadow-[0_18px_50px_-24px_oklch(0.22_0.045_288/0.45)]">
+              {/* Hidden from assistive tech: every word in here — the name,
+                  the position in the list — is already spoken by the row it
+                  is previewing, and it only ever shows the row under the
+                  pointer or focus. Read aloud it landed as a sixth product
+                  after the five, repeating whichever one you last touched.
+                  Nothing inside is focusable, so hiding it strands nothing. */}
+              <div
+                aria-hidden
+                className="relative aspect-[4/5] w-full overflow-hidden bg-midnight shadow-[0_18px_50px_-24px_oklch(0.22_0.045_288/0.45)]"
+              >
                 {/* Not mode="wait": queueing the incoming panel behind the
                     outgoing one adds latency to every hover. Both are
                     absolutely positioned, so they cross-fade concurrently. */}

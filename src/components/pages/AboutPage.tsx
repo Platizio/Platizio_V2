@@ -199,8 +199,18 @@ function AboutHero() {
 function AboutContent() {
   return (
     <>
+      {/* WCAG 2.4.1 Bypass Blocks. This is the one page that assembles its own
+          chrome without going through SiteShell, and so it was the one page
+          with no skip link and no named main landmark: a keyboard user landing
+          here tabbed the whole fixed nav on every visit, while every other
+          route let them past it. Same markup, same `#main-content` target and
+          same plain <a> as SiteShell.tsx and app/page.tsx — the reasoning for
+          all three is written out in SiteShell.tsx. */}
+      <a className="skip-link" href="#main-content">
+        Skip to main content
+      </a>
       <Nav />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <AboutHero />
 
         <section className="bg-porcelain px-6 py-28 text-ink md:px-10 md:py-40 lg:px-16">
@@ -237,9 +247,17 @@ function AboutContent() {
           <div className="mx-auto max-w-[1400px] border-t border-mist pt-8 md:pt-10">
             <div className="grid gap-10 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-20">
               <FadeUp>
-                <p className="max-w-[18ch] font-display text-[clamp(2rem,3.4vw,3rem)] leading-[1.06] tracking-tight">
+                {/* This is the section's title and has to be a heading: the
+                    three principles below it are h3s, so while it was a <p>
+                    they hung off "Institutional thinking, made personal." —
+                    the h2 of the section before this one. Navigating by
+                    heading gave you "Our mission / Our vision / Our values"
+                    with nothing saying whose. Only visible change is the
+                    text-wrap: balance globals.css puts on h1–h3, which every
+                    other section title on this page already gets. */}
+                <h2 className="max-w-[18ch] font-display text-[clamp(2rem,3.4vw,3rem)] leading-[1.06] tracking-tight">
                   The principles behind every decision.
-                </p>
+                </h2>
               </FadeUp>
               <div className="divide-y divide-mist border-b border-mist">
                 {PRINCIPLES.map((principle, i) => (
@@ -268,7 +286,10 @@ function AboutContent() {
               />
               <div className="absolute inset-0 bg-[linear-gradient(to_top,oklch(0.16_0.045_288/0.85),transparent_55%)]" />
               <span className="absolute bottom-6 left-6 font-display text-xl text-porcelain">Founder &amp; CEO</span>
-              <span className="absolute right-6 top-6 flex size-11 items-center justify-center rounded-full border border-brass/60 text-brass">P</span>
+              {/* The monogram is ornament, not content — a screen reader
+                  reading the portrait announced a stray letter "P" between
+                  the caption and the section heading. */}
+              <span className="absolute right-6 top-6 flex size-11 items-center justify-center rounded-full border border-brass/60 text-brass" aria-hidden>P</span>
             </FadeUp>
 
             <div>

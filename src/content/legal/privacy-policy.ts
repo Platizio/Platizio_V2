@@ -1,4 +1,5 @@
 import type { RichBlock } from "@/lib/content-types";
+import { GRIEVANCE_OFFICER, SUPPORT_EMAIL } from "@/lib/site";
 
 const body: RichBlock[] = [
   { kind: "h2", text: "Introduction and Scope" },
@@ -29,7 +30,30 @@ const body: RichBlock[] = [
   { kind: "p", text: "Platizio may store and process personal data within India or in other jurisdictions where Platizio or its service providers maintain facilities. When personal data is transferred outside India, we ensure that the recipient entity provides a comparable level of protection and implement appropriate contractual safeguards in accordance with the DPDP Act and other applicable laws. By using the Platform, you consent to the cross-border transfer of your personal data as described in this Policy." },
 
   { kind: "h2", text: "Cookies and Tracking Technologies" },
-  { kind: "p", text: "We use cookies and similar technologies such as pixels, tags, SDKs, device identifiers and local storage to recognise your browser or device, remember your preferences, analyse trends, administer the Platform, track users' movements, detect anomalies, provide targeted advertising and measure the effectiveness of communications. You can manage cookie preferences through your browser or device settings; however, disabling cookies may affect the functionality of the Platform." },
+  /**
+   * Rewritten to describe what this website actually does.
+   *
+   * The previous wording disclosed cookies, pixels, tags, SDKs, device
+   * identifiers, local storage, targeted advertising and analytics providers.
+   * This site does none of it: there is no analytics, no tag manager, no
+   * advertising pixel, and no cookie or local-storage write anywhere in the
+   * codebase — it is a statically prerendered brochure with no backend. The
+   * clause also told readers to "manage cookie preferences through your
+   * browser" for cookies that are never set.
+   *
+   * Over-disclosure is not a DPDP breach the way under-disclosure is, but it is
+   * inaccurate, and a notice that describes tracking a firm does not do is the
+   * kind of thing that reads badly in an audit. The forward-looking sentence is
+   * kept deliberately narrow: it reserves the position without pretending the
+   * practice exists today, and names the trigger for updating this clause.
+   *
+   * If analytics or any tracking is ever added, this clause must be restored to
+   * the fuller wording AND a consent mechanism added — under the DPDP Act,
+   * non-essential tracking needs consent that is free, specific and informed,
+   * which the deleted text asserted without any means of obtaining it.
+   */
+  { kind: "p", text: "This website does not use cookies, web beacons, pixels, advertising tags or similar tracking technologies, and does not run third-party analytics. Nothing is written to your browser's storage, and we do not build a profile of your visit. Our hosting provider may process standard server logs, such as IP address and browser type, for security and reliability." },
+  { kind: "p", text: "If we introduce cookies or analytics in future — for example when transactional features are added to the Platform — this Policy will be updated before they are enabled, and where the Digital Personal Data Protection Act, 2023 requires consent for non-essential tracking, that consent will be obtained separately." },
 
   { kind: "h2", text: "Communications and Marketing" },
   { kind: "p", text: "We may use your contact details to send transactional alerts, statements, confirmations, reminders, marketing communications, surveys and research invitations. You may opt-out of marketing communications at any time by following the unsubscribe instructions in such communications or contacting support@platizio.com. Even if you opt-out of marketing, we will continue to send essential service and legal notices." },
@@ -65,7 +89,7 @@ const body: RichBlock[] = [
   { kind: "p", text: "Platizio may update this Policy from time to time to reflect changes in our practices, legal requirements or business operations. We will post the updated Policy on our website with a new effective date. We encourage you to review this Policy periodically. Your continued use of the Platform after the effective date constitutes your acceptance of the updated Policy." },
 
   { kind: "h2", text: "Contact and Grievance Redressal" },
-  { kind: "p", text: "If you have any questions, requests or complaints regarding this Policy or our handling of your personal data, please contact our Grievance Officer: Anuj Pal, Operations and Compliance Officer, at grievances@platizio.com or write to our registered office at Unit No. DGL-229, Second Floor, DLF Galleria Mall, Mayur Vihar-1, Delhi, India – 110092. You may also email support@platizio.com for general queries. We will acknowledge grievances within 24 hours and aim to resolve them within 15 business days. In case you are not satisfied with our response, you may lodge a complaint with the Data Protection Board of India or other applicable regulatory authority." },
+  { kind: "p", text: `If you have any questions, requests or complaints regarding this Policy or our handling of your personal data, please contact our Grievance Officer: ${GRIEVANCE_OFFICER.name}, ${GRIEVANCE_OFFICER.designation}, at ${GRIEVANCE_OFFICER.email} or on ${GRIEVANCE_OFFICER.phoneDisplay} or write to our registered office at Unit No. DGL-229, Second Floor, DLF Galleria Mall, Mayur Vihar-1, Delhi, India – 110092. You may also email ${SUPPORT_EMAIL} for general queries. The grievance officer is available ${GRIEVANCE_OFFICER.hours}. We will acknowledge grievances within 24 hours and aim to resolve them within 15 business days. In case you are not satisfied with our response, you may lodge a complaint with the Data Protection Board of India or other applicable regulatory authority.` },
 ];
 
 export default body;

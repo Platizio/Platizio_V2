@@ -111,8 +111,18 @@ export default function ArticlePage({
           {hasToc && (
             <aside>
               <div className="lg:sticky lg:top-28">
-                <p className="text-sm text-brass-deep">On this page</p>
-                <nav className="mt-4 flex flex-col gap-2.5 border-l border-mist pl-4">
+                {/* The nav borrows the visible label rather than repeating it
+                    in an aria-label: with both, a screen reader announces "On
+                    this page" and then "On this page, navigation" a beat
+                    later. Without either it announces an unnamed landmark,
+                    which is worse — an article can have several navs. */}
+                <p id="article-toc-label" className="text-sm text-brass-deep">
+                  On this page
+                </p>
+                <nav
+                  aria-labelledby="article-toc-label"
+                  className="mt-4 flex flex-col gap-2.5 border-l border-mist pl-4"
+                >
                   {toc.map((item) => (
                     <a
                       key={item.id}
@@ -133,11 +143,16 @@ export default function ArticlePage({
       {related.length > 0 && (
         <section className="bg-midnight px-6 py-20 text-lavender md:px-10 md:py-28 lg:px-16">
           <div className="mx-auto max-w-[1100px]">
-            <p className="text-sm text-brass">
+            {/* A heading, not a paragraph. The cards under it are h3s, and
+                with this rendered as text they nested under whichever h2 the
+                article body happened to end on — so "More in Mutual Funds"
+                read as part of the last section of the article rather than as
+                a way out of it. Same classes, so nothing moves. */}
+            <h2 className="text-sm text-brass">
               {relatedAllSameCategory
                 ? `More in ${article.category}`
                 : "More insights"}
-            </p>
+            </h2>
             <div className="mt-8 grid gap-8 border-t border-lavender/15 pt-8 md:grid-cols-2">
               {related.map((a) => (
                 <Link

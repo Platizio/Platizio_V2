@@ -1,4 +1,5 @@
 import type { RichBlock } from "@/lib/content-types";
+import { GRIEVANCE_OFFICER, SUPPORT_EMAIL } from "@/lib/site";
 
 const body: RichBlock[] = [
   { kind: "h2", text: "Introduction and Acceptance" },
@@ -68,7 +69,7 @@ const body: RichBlock[] = [
   { kind: "p", text: "These Terms constitute the entire agreement between you and Platizio with respect to the subject matter herein and supersede all prior or contemporaneous understandings. If any provision is held to be invalid or unenforceable, the remaining provisions shall continue in full force. Platizio may assign or transfer its rights and obligations under these Terms to any person without your consent. You may not assign your rights under these Terms without Platizio's prior written consent. No delay or failure by Platizio to exercise any right shall be deemed a waiver. The headings are for convenience only and shall not affect interpretation. Any notices under these Terms shall be given via email to the addresses specified herein." },
 
   { kind: "h2", text: "Contact and Grievance Redressal" },
-  { kind: "p", text: "If you have any questions or grievances regarding the Platform or these Terms, please contact our Grievance Officer: Anuj Pal, Operations and Compliance Officer, at grievances@platizio.com or write to our registered office at Unit No. DGL-229, Second Floor, DLF Galleria Mall, Mayur Vihar-1, Delhi, India – 110092. We will acknowledge complaints within 24 hours and aim to resolve them within 15 business days. For general support, please write to support@platizio.com." },
+  { kind: "p", text: `If you have any questions or grievances regarding the Platform or these Terms, please contact our Grievance Officer: ${GRIEVANCE_OFFICER.name}, ${GRIEVANCE_OFFICER.designation}, at ${GRIEVANCE_OFFICER.email} or on ${GRIEVANCE_OFFICER.phoneDisplay} or write to our registered office at Unit No. DGL-229, Second Floor, DLF Galleria Mall, Mayur Vihar-1, Delhi, India – 110092. We will acknowledge complaints within 24 hours and aim to resolve them within 15 business days. For general support, please write to ${SUPPORT_EMAIL}.` },
 ];
 
 export default body;
