@@ -117,9 +117,17 @@ export default function Nav() {
           aria-label="Primary"
         >
           <div className="mx-auto flex max-w-[1400px] items-center justify-between">
+          {/* `-my-1.5 py-1.5`, the same idiom the footer's link columns use.
+              The wordmark is the only route home from every interior page on a
+              phone — the sheet lists About, Products and Insights, not Home —
+              and as a bare flex item it was exactly its 2rem line box: a 85x32
+              target. The padding takes it to 44px; the equal negative margin
+              gives every pixel of that back to the layout, so the brand does
+              not move and the header's py-6/py-3.5 scroll transition is
+              unaffected. */}
           <Link
             href="/"
-            className="font-display track-caption text-2xl text-porcelain"
+            className="-my-1.5 py-1.5 font-display track-caption text-2xl text-porcelain"
           >
             Platizio
           </Link>

@@ -102,6 +102,17 @@ export const SITE_URL = resolveSiteUrl();
  */
 export const IS_PRODUCTION_DEPLOYMENT = SITE_URL === PRODUCTION_ORIGIN;
 
+/**
+ * The page ground, as an sRGB literal.
+ *
+ * `--color-midnight` in `globals.css` is authored in oklch, which neither
+ * Satori (the share card, and the two generated icon routes) nor a
+ * `<meta name="theme-color">` can read — both need a literal. Declared once
+ * here rather than restated in each of them, which is the drift this file
+ * exists to prevent.
+ */
+export const BRAND_MIDNIGHT = "#0d091f";
+
 /** Short brand name, used as `og:site_name` and in page titles. */
 export const SITE_NAME = "Platizio";
 

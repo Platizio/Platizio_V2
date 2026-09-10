@@ -109,3 +109,50 @@ test("the site-wide description makes no performance claim", async ({ page }) =>
     "meta description implies a return outcome — AMFI code of conduct",
   ).not.toMatch(/superior returns|guaranteed|assured returns|best returns|high returns/i);
 });
+
+test("every route declares a tab icon, an iOS tile and a theme colour", async ({ page }) => {
+  // Pinned per route, not on one page, because file-convention icons reach a
+  // route only while no segment declares `metadata.icons` — Next applies the
+  // collected static icons under `if (!resolvedMetadata.icons)`. A route that
+  // later writes its own `icons` silently drops both links, the icon-shaped
+  // twin of the shallow `openGraph` merge OG_DEFAULTS exists for.
+  //
+  // Before these existed the site shipped the create-next-app scaffold
+  // favicon — a black disc with the Vercel triangle, untouched since the
+  // first commit — as an AMFI-registered brand's tab icon, no apple-touch-icon
+  // at all, and no theme-color, so Chrome on Android held a light toolbar
+  // above a midnight page.
+  const missing: string[] = [];
+  for (const route of ALL_ROUTES) {
+    await page.goto(route);
+    if ((await page.locator('link[rel="icon"]').count()) === 0) {
+      missing.push(`${route} → no rel=icon`);
+    }
+    if ((await page.locator('link[rel="apple-touch-icon"]').count()) === 0) {
+      missing.push(`${route} → no apple-touch-icon`);
+    }
+    if ((await page.locator('meta[name="theme-color"]').count()) === 0) {
+      missing.push(`${route} → no theme-color`);
+    }
+  }
+  expect(missing, "routes missing an app icon or theme colour").toEqual([]);
+});
+
+test("the icon routes serve real images and /favicon.ico still answers", async ({ request }) => {
+  for (const [path, bytes] of [
+    ["/icon", 100],
+    ["/apple-icon", 500],
+  ] as const) {
+    const res = await request.get(path);
+    expect(res.status(), `${path} should serve`).toBe(200);
+    expect(res.headers()["content-type"]).toMatch(/image\/png/);
+    expect((await res.body()).length, `${path} looks empty`).toBeGreaterThan(bytes);
+  }
+
+  // The scaffold .ico was deleted rather than left to win the tab — Next
+  // unshifts a favicon to the FRONT of the resolved icon list, so keeping it
+  // would have kept the Vercel triangle. Crawlers still probe the root path
+  // blindly, so next.config.ts redirects it rather than 404ing.
+  const ico = await request.get("/favicon.ico", { maxRedirects: 0 });
+  expect(ico.status(), "/favicon.ico should redirect, not 404").toBe(308);
+});

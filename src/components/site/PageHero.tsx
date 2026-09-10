@@ -144,7 +144,35 @@ export default function PageHero({
                 accent.includes(word) ? "italic text-brass" : ""
               }`}
             >
-              {word}
+              {/* The trailing space is INSIDE the span rather than between
+                  them, and what it fixes is narrower than it looks.
+
+                  Splitting the headline into inline-blocks spaced by margin
+                  left no whitespace anywhere in the markup, so `textContent`
+                  read "Readthemarket,notthenoise." on every interior page.
+                  That is what any consumer reading the SOURCE rather than the
+                  rendering gets — crawlers and preview bots that parse HTML
+                  without laying it out, and any tooling doing
+                  `h1.textContent`.
+
+                  It is NOT an accessibility fix, and an earlier version of
+                  this comment wrongly said it was. Measured with Chrome's
+                  accessible-name computation over the real page, before and
+                  after: both report "Read the market, not the noise." — the
+                  name is computed from rendered text, and inline-block
+                  boundaries already produce the word breaks. `innerText` is
+                  likewise unaffected, in both directions: the space collapses
+                  away, so it does not reach the rendered text either.
+
+                  `RevealWords` in `ui/Reveal.tsx` puts its space BETWEEN word
+                  spans, but it can — that space is what spaces them. These are
+                  spaced by `mr-[0.28em]`, so a space between the spans would
+                  render on top of the margin and widen every heading. A
+                  trailing space inside an inline-block is collapsed by normal
+                  white-space processing instead: it reaches `textContent` and
+                  paints nothing. Verified on the built page — the h1's box and
+                  every word's x-position are unchanged to the pixel. */}
+              {word}{" "}
             </motion.span>
           ))}
         </h1>

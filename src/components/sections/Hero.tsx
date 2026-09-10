@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { SPRING_ENTER } from "@/lib/motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useIntroDone } from "@/components/IntroProvider";
+import { AMFI_ARN } from "@/lib/site";
 
 function HeroLine({
   words,
@@ -66,9 +67,15 @@ export default function Hero() {
           64px right of every section below it above 1528px wide. */}
       <div className="relative z-10 flex w-full flex-1 flex-col px-6 pb-14 pt-32 md:px-10 md:pb-16 lg:px-16">
         <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col">
+          {/* "AMFI-registered", not "licensed". Trust.tsx, a few sections
+              down, already ruled that "licensed and certified distributor" is
+              not a credential anyone issues and replaced it with the
+              registration. This line kept the old wording, and because it is
+              sr-only it reached screen-reader users only — so no visual review
+              of the homepage would ever have caught it. */}
           <p className="sr-only">
-            Platizio — licensed distributor of Mutual Funds and Specialised
-            Investment Funds.
+            Platizio — AMFI-registered distributor of Mutual Funds and
+            Specialised Investment Funds, ARN {AMFI_ARN}.
           </p>
 
           {/* Centred in whatever height the rail leaves. Anchoring the block

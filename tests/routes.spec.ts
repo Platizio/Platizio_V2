@@ -45,6 +45,49 @@ test("unknown product and article slugs 404 rather than render", async ({ page }
   }
 });
 
+test("the 404 keeps the site's chrome and names itself", async ({ page }) => {
+  // What this pins is the framework default, which shipped here until
+  // `app/not-found.tsx` existed: it rendered zero anchors — a dead end on a
+  // site whose only conversion is booking a consultation — painted an inline
+  // `body{background:#fff}` that beat globals.css on document order, and
+  // carried the HOMEPAGE's title, because its own <title> landed after the
+  // root layout's and the browser takes the first.
+  const res = await page.goto("/this-route-does-not-exist");
+  expect(res?.status(), "an unknown route must answer 404").toBe(404);
+
+  await expect(page).toHaveTitle(/Page not found/);
+  // A second <title> means an in-tree one is fighting the metadata export and
+  // losing — the exact failure the default 404 had.
+  await expect(page.locator("title")).toHaveCount(1);
+
+  // Chrome present: nav, footer, and real ways out.
+  await expect(page.locator("header nav")).toHaveCount(1);
+  await expect(page.locator("footer")).toHaveCount(1);
+  expect(
+    await page.locator("a[href]").count(),
+    "a 404 with no onward links is a dead end",
+  ).toBeGreaterThan(5);
+
+  // Not the one white page on a midnight site.
+  const bg = await page.evaluate(
+    () => getComputedStyle(document.body).backgroundColor,
+  );
+  expect(bg, "the 404 must not paint the default white ground").not.toMatch(
+    /rgb\(255,\s*255,\s*255\)/,
+  );
+
+  // Next injects its own noindex for a 404 response; the layout's inherited
+  // `index, follow` used to be emitted right beside it. Every robots
+  // directive on this page must now agree that it is not indexable.
+  const robots = await page.$$eval('meta[name="robots"]', (ms) =>
+    ms.map((m) => m.getAttribute("content") ?? ""),
+  );
+  expect(robots.length, "the 404 should declare robots").toBeGreaterThan(0);
+  for (const r of robots) {
+    expect(r, "a 404 must not be advertised as indexable").toMatch(/noindex/);
+  }
+});
+
 test("no duplicate element ids on any page", async ({ page }) => {
   // Article and legal headings derive their anchor id from the heading text
   // via anchorId(), which truncates at 60 chars — two headings sharing a

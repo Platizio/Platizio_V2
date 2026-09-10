@@ -288,7 +288,12 @@ export default function ContactPage() {
                 <button
                   type="button"
                   onClick={emailInstead}
-                  className="cursor-pointer text-sm text-brass-deep underline-offset-4 hover:underline"
+                  /* `-my-3 py-3`: this is the form's only non-WhatsApp submit
+                     path, and it sat at 86x20 beside a 251x52 button in the
+                     same flex row — it reads as that button's peer but was a
+                     fifth of its height to hit. The negative margin cancels the
+                     padding, so the row's gap-y-4 spacing is unchanged. */
+                  className="-my-3 cursor-pointer py-3 text-sm text-brass-deep underline-offset-4 hover:underline"
                 >
                   Email instead
                 </button>
@@ -321,10 +326,27 @@ export default function ContactPage() {
                 aria-live="polite"
                 role="status"
               >
+                {/* Both branches hedge rather than assert, and that is not
+                    vagueness — the outcome is genuinely undetectable. Opening
+                    with `noopener` makes `window.open` return null on SUCCESS,
+                    so a return-value check would paint a failure on every
+                    working handoff, and a `mailto:` navigation reports nothing
+                    either way. With no signal to branch on, the honest thing is
+                    to name both outcomes and say what to do about the bad one.
+
+                    The recovery each one names is the form itself. `onSubmit`
+                    calls `preventDefault` and nothing resets the fields, so
+                    after a blocked popup the whole enquiry — including a
+                    message up to MESSAGE_MAX — is still sitting directly above
+                    this line, and pressing the button again re-fires the
+                    identical URL from a fresh user gesture, which is exactly
+                    what a popup blocker allows through. Pointing at the
+                    "Reach us directly" links alone, as this used to, sent a
+                    reader to a channel where they would retype it all. */}
                 {opened === "whatsapp"
-                  ? "Opening WhatsApp with your enquiry — send the message to reach our team. If nothing opened, your browser may have blocked the popup; use the WhatsApp link under “Reach us directly”."
+                  ? "Opening WhatsApp with your enquiry — send the message to reach our team. If nothing opened, your browser may have blocked the popup: your details are still in the form above, so press Submit again, or use the WhatsApp link under “Reach us directly”."
                   : opened === "email"
-                    ? "Opening your email app with your enquiry prefilled. If nothing opened, you may have no mail app set up; the address is under “Reach us directly”."
+                    ? "Opening your email app with your enquiry prefilled. If nothing opened, you may have no mail app set up: your details are still in the form above, and the address is under “Reach us directly”."
                     : ""}
               </p>
             </form>
