@@ -64,7 +64,7 @@ export default function ArticlePage({
         </div>
         <div className="relative z-10 mx-auto flex max-w-[900px] flex-col">
           <motion.div {...rise(0.05)} className="flex items-center gap-4 text-sm">
-            <Link href="/insights" className="text-brass transition-opacity hover:opacity-80">
+            <Link href="/insights" className="-my-3 py-3 text-brass transition-opacity hover:opacity-80">
               Media Insights
             </Link>
             <span className="text-lavender-dim">/</span>
@@ -119,15 +119,26 @@ export default function ArticlePage({
                 <p id="article-toc-label" className="text-sm text-brass-deep">
                   On this page
                 </p>
+                {/* Padding rather than gap carries the spacing, the same way
+                    the legal contents list does. At text-sm/snug each row was a
+                    19px target — conformant under WCAG 2.5.8's spacing
+                    exception, but a thumb-sized miss on a phone, and the
+                    identical list on the legal pages was already moved off it.
+                    Moving most of the 10px gap inside the links makes each row
+                    a 31px target for 4px more pitch. No scroll cap here, unlike
+                    LegalPage: the longest article contents list is 8 entries at
+                    433px against 688px of usable viewport at 1100x800, so it
+                    cannot pin its own bottom out of reach the way a 26-entry
+                    policy could. */}
                 <nav
                   aria-labelledby="article-toc-label"
-                  className="mt-4 flex flex-col gap-2.5 border-l border-mist pl-4"
+                  className="mt-4 flex flex-col gap-0.5 border-l border-mist pl-4"
                 >
                   {toc.map((item) => (
                     <a
                       key={item.id}
                       href={`#${item.id}`}
-                      className="text-sm leading-snug text-ink-muted transition-colors duration-hover hover:text-ink"
+                      className="py-1.5 text-sm leading-snug text-ink-muted transition-colors duration-hover hover:text-ink"
                     >
                       {item.text}
                     </a>

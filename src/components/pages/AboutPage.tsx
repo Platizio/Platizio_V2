@@ -9,6 +9,7 @@ import Footer from "@/components/sections/Footer";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { FadeUp, RevealWords } from "@/components/ui/Reveal";
 import { SPRING_ENTER } from "@/lib/motion";
+import { AMFI_ARN } from "@/lib/site";
 
 const STARS = [
   [7, 23, 2],
@@ -41,6 +42,29 @@ const PRINCIPLES = [
   },
 ] as const;
 
+/**
+ * The team, and a note on the portrait files.
+ *
+ * Six of these were checked in as full camera masters — up to 4.7 MB and
+ * 2164x3126 for a slot that never needs more than ~703 device pixels — which
+ * put 9.6 MB of source images in the repository, close to half the git pack.
+ * They are now 768x1024 WebP at quality 80, 195 KB for all six, which still
+ * exceeds the largest candidate the srcset can request so the optimizer never
+ * upscales.
+ *
+ * Being accurate about what that bought: almost all of it is repository and
+ * build cost, NOT bytes on a reader's phone. next/image was already resizing
+ * these on the way out, so /about delivered ~150 KB of portraits before this
+ * and delivers modestly less now — the win a reader sees comes from the srcset
+ * fix in next.config.ts and the corrected `sizes` below, not from re-encoding.
+ *
+ * `deepika-agarwal.png` and `founder.jpg` are deliberately NOT in that set and
+ * must not be "compressed": both are 400x400 SOURCES, already smaller than the
+ * boxes they fill, so the browser upscales them today — 1.5x on a phone for
+ * Deepika, 3.2x for the founder portrait at 1440/DPR2. They need larger
+ * originals, not smaller files. Until those arrive, re-encoding them would
+ * only throw away what detail is left.
+ */
 const TEAM = [
   {
     name: "Deepika Agarwal",
@@ -50,32 +74,32 @@ const TEAM = [
   {
     name: "Anuj Pal",
     role: "Senior Financial Market Analyst",
-    image: "/about/anuj-pal.jpeg",
+    image: "/about/anuj-pal.webp",
   },
   {
     name: "Aanyaa Bhardwaj",
     role: "Social Media Executive",
-    image: "/about/aanyaa-bhardwaj.jpg",
+    image: "/about/aanyaa-bhardwaj.webp",
   },
   {
     name: "Kartik Vishnani",
     role: "Financial Market Analyst",
-    image: "/about/kartik-vishnani.jpg",
+    image: "/about/kartik-vishnani.webp",
   },
   {
     name: "Kavya Khatri",
     role: "Social Media Executive",
-    image: "/about/kavya-khatri.png",
+    image: "/about/kavya-khatri.webp",
   },
   {
     name: "Sumit Katyal",
     role: "Product Software Developer",
-    image: "/about/sumit-katyal.jpg",
+    image: "/about/sumit-katyal.webp",
   },
   {
     name: "Vinayak Tyagi",
     role: "Product Software Developer",
-    image: "/about/vinayak-tyagi.jpeg",
+    image: "/about/vinayak-tyagi.webp",
   },
 ] as const;
 
@@ -165,12 +189,21 @@ function AboutHero() {
         <motion.p {...rise(0.18)} className="text-sm text-brass">
           About Platizio
         </motion.p>
+        {/* The trailing spaces on the first two lines are load-bearing. The
+            headline is broken into three `block` spans to control where the
+            lines fall, which left no whitespace between them in the markup:
+            `textContent` read "Your trustedpartner in buildingresilient
+            portfolios." — and that is what a screen reader builds this h1's
+            accessible name from and what a search engine extracts as the
+            page's heading. A trailing space in a block box is trimmed at the
+            line end, so it reaches `textContent` and paints nothing. Same fix,
+            same reason, as the one in `site/PageHero.tsx`. */}
         <h1 className="mt-8 max-w-[11ch] font-display text-[clamp(3.4rem,8vw,6.75rem)] font-medium leading-[0.98] tracking-tight text-porcelain">
           <motion.span {...rise(0.3)} className="block">
-            Your trusted
+            Your trusted{" "}
           </motion.span>
           <motion.span {...rise(0.42)} className="block">
-            partner in building
+            partner in building{" "}
           </motion.span>
           <motion.span {...rise(0.54)} className="block italic text-brass">
             resilient portfolios.
@@ -225,10 +258,27 @@ function AboutContent() {
               />
             </div>
             <FadeUp delay={0.16}>
+              {/* "AMFI-registered", not "licensed and certified". Trust.tsx
+                  already ruled on this exact phrase — "'Licensed and certified
+                  distributor' is not a credential anyone issues. The
+                  registration number is, and it is public." — and replaced it
+                  with the registration and the ARN. This sentence and the
+                  homepage's sr-only intro were the two places that ruling was
+                  never carried to, so the site described its own regulatory
+                  standing two different ways, one of them naming a credential
+                  no Indian regulator issues.
+
+                  This is NOT the L-16 deferral noted on SITE_DESCRIPTION in
+                  lib/site.ts. That one covers the "SEBI Compliant" chips and
+                  the compliance card below — a debatable description of a real
+                  registration, left for whoever signs off on the ARN. This is
+                  a different failure: an invented credential, corrected to the
+                  wording the codebase had already settled on. */}
               <p className="border-t border-mist pt-6 text-base leading-relaxed text-ink-muted md:text-lg">
-                Platizio is a licensed and certified distributor of Mutual Funds
-                and Specialised Investment Funds (SIFs), helping investors
-                access advanced strategies through a transparent, regulated
+                Platizio is an AMFI-registered distributor of Mutual Funds and
+                Specialised Investment Funds (SIFs), ARN {AMFI_ARN}, helping
+                investors access advanced strategies through a transparent,
+                regulated
                 framework. We combine research-backed insights with personalized
                 guidance to make institutional-grade investing accessible to
                 every investor.
@@ -281,7 +331,13 @@ function AboutContent() {
                 src="/about/founder.jpg"
                 alt="Platizio Founder and CEO"
                 fill
-                sizes="(min-width: 1024px) 38vw, 100vw"
+                /* `calc(100vw - 3rem)`, not `100vw`: the section is `px-6`, so the
+                    portrait is 364 CSS px on a 412px phone, not 412. This costs
+                    nothing today — founder.jpg is a 400x400 source and every
+                    request is capped there — but it is a live ~15% overfetch the
+                    moment a properly sized master replaces it, which is the open
+                    item noted below. */
+                sizes="(min-width: 1024px) 38vw, calc(100vw - 3rem)"
                 className="object-cover opacity-85"
               />
               <div className="absolute inset-0 bg-[linear-gradient(to_top,oklch(0.16_0.045_288/0.85),transparent_55%)]" />
@@ -338,7 +394,16 @@ function AboutContent() {
                         src={member.image}
                         alt={member.name}
                         fill
-                        sizes="(min-width: 1024px) 22vw, (min-width: 640px) 30vw, 48vw"
+                        /* The last leg is the real cell, not a round number. The section is
+                           `px-6` (48px) and the grid is `grid-cols-2 gap-x-4` (16px), so
+                           below 640px each portrait box is `(100vw - 4rem) / 2` — 174 CSS
+                           px on a 412px phone. The old `48vw` claimed 198, and the browser
+                           resolves `sizes` rather than the layout box, so it bought a
+                           candidate a step too large on every phone. Paired with the 512
+                           entry added to `images.imageSizes` in next.config.ts; neither
+                           change moves a byte without the other. The 22vw/30vw legs are
+                           correct already and are left alone. */
+                        sizes="(min-width: 1024px) 22vw, (min-width: 640px) 30vw, calc((100vw - 4rem) / 2)"
                         className="object-cover transition duration-drift [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.04]"
                       />
                       <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/30 to-transparent opacity-0 transition-opacity duration-ui group-hover:opacity-100" />

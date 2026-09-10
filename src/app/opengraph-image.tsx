@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { AMFI_ARN, SITE_NAME } from "@/lib/site";
+import { AMFI_ARN, BRAND_MIDNIGHT, SITE_NAME } from "@/lib/site";
 
 /**
  * The share card, generated rather than designed (audit finding M-03).
@@ -43,7 +43,10 @@ export const contentType = "image/png";
 // oklch custom properties in globals.css are not available here. These are the
 // sRGB equivalents of --color-midnight, --color-porcelain, --color-brass and
 // --color-lavender-dim.
-const MIDNIGHT = "#0d091f";
+// MIDNIGHT is imported rather than restated: `theme-color` in the root layout
+// and the two icon routes need the same literal, and four copies of one hex
+// is how a palette change leaves three of them behind.
+const MIDNIGHT = BRAND_MIDNIGHT;
 const PORCELAIN = "#f6f6fb";
 const BRASS = "#e4b750";
 const LAVENDER_DIM = "#9e9ebd";

@@ -144,7 +144,27 @@ export default function PageHero({
                 accent.includes(word) ? "italic text-brass" : ""
               }`}
             >
-              {word}
+              {/* The trailing space is load-bearing, and it is INSIDE the span
+                  rather than between them.
+
+                  Splitting the headline into inline-blocks separated by margin
+                  left no whitespace anywhere in the markup, so `textContent`
+                  read "Readthemarket,notthenoise." — and `textContent` is what
+                  a screen reader computes this h1's accessible name from and
+                  what a search engine extracts as the page's heading. Every
+                  interior page's h1 was affected; axe does not check for it.
+
+                  `RevealWords` in `ui/Reveal.tsx` already solves this, but it
+                  can put the space BETWEEN its word spans because it spaces
+                  them with that space. This one spaces them with `mr-[0.28em]`,
+                  so a space between the spans would render on top of the
+                  margin and widen every heading. A trailing space inside an
+                  inline-block is collapsed away by normal white-space
+                  processing instead — it reaches `textContent` and paints
+                  nothing. Verified against the built page: with the space
+                  added, the h1's box and every word's x-position are
+                  unchanged to the pixel. */}
+              {word}{" "}
             </motion.span>
           ))}
         </h1>

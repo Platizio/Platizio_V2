@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, DM_Sans } from "next/font/google";
 import "./globals.css";
 import {
   AMFI_ARN,
+  BRAND_MIDNIGHT,
   EMAIL,
   IS_PRODUCTION_DEPLOYMENT,
   LEGAL_NAME,
@@ -110,6 +111,38 @@ export const metadata: Metadata = {
         nocache: true,
         googleBot: { index: false, follow: false, noimageindex: true },
       },
+};
+
+/**
+ * `theme-color`, and why it is a `viewport` export rather than a metadata key.
+ *
+ * Chrome on Android tints its browser toolbar strictly from this meta and does
+ * not sample the page. With none declared it held the default light grey band
+ * directly above a `#0d091f` hero on all 19 routes — for the whole session, on
+ * the browser most of this site's audience uses. iOS Safari 15+ samples the
+ * page and escapes this; Chrome does not.
+ *
+ * It has to live here rather than in `metadata` above: `generate-viewport.md`
+ * lists `themeColor` as a Viewport field, and `metadata` accepts it only as a
+ * deprecated alias. The static object rather than `generateViewport()`,
+ * because the value depends on nothing about the request — per that doc, "If
+ * the viewport doesn't depend on request information, it should be defined
+ * using the static viewport object". All 25 routes stay prerendered.
+ *
+ * One unconditional value is right site-wide. Every route opens on the
+ * midnight hero and the porcelain sections all start below it, so no route's
+ * top-of-page ground is light and no `media` variant is needed.
+ *
+ * `colorScheme` is deliberately NOT set. Roughly half the site renders on
+ * porcelain — `LIGHT_GROUND_ROUTES` in `tests/routes.ts` lists /contact,
+ * /products, /insights and all five articles — so committing the document to
+ * `dark` would restyle the contact form's native controls against a light
+ * ground. The `width=device-width, initial-scale=1` meta is not written here
+ * either: Next emits it already, and the doc calls manual configuration
+ * "usually unnecessary".
+ */
+export const viewport: Viewport = {
+  themeColor: BRAND_MIDNIGHT,
 };
 
 /**
