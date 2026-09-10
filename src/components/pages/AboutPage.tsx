@@ -189,15 +189,16 @@ function AboutHero() {
         <motion.p {...rise(0.18)} className="text-sm text-brass">
           About Platizio
         </motion.p>
-        {/* The trailing spaces on the first two lines are load-bearing. The
-            headline is broken into three `block` spans to control where the
-            lines fall, which left no whitespace between them in the markup:
-            `textContent` read "Your trustedpartner in buildingresilient
-            portfolios." — and that is what a screen reader builds this h1's
-            accessible name from and what a search engine extracts as the
-            page's heading. A trailing space in a block box is trimmed at the
-            line end, so it reaches `textContent` and paints nothing. Same fix,
-            same reason, as the one in `site/PageHero.tsx`. */}
+        {/* The trailing spaces on the first two lines fix `textContent`, and
+            only `textContent`. The headline is broken into three `block` spans
+            to control where the lines fall, which left no whitespace between
+            them in the markup, so the raw text read "Your trustedpartner in
+            buildingresilient portfolios." for anything parsing the source
+            rather than rendering it. Chrome's accessible name was already
+            correct without them — measured both ways — so this is a source-
+            fidelity fix, not an accessibility one. A trailing space in a block
+            box is trimmed at the line end, so it paints nothing. Same change,
+            and the same measured caveat, as `site/PageHero.tsx`. */}
         <h1 className="mt-8 max-w-[11ch] font-display text-[clamp(3.4rem,8vw,6.75rem)] font-medium leading-[0.98] tracking-tight text-porcelain">
           <motion.span {...rise(0.3)} className="block">
             Your trusted{" "}
