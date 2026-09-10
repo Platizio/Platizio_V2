@@ -80,10 +80,15 @@ Two things worth knowing before you change it:
 
 ## Before deploying
 
-- **Set the real origin.** `SITE_URL` in `src/lib/site.ts` is an unverified guess.
-  Every canonical, the sitemap, `robots.txt` and every `og:url` resolve through it,
-  so if the live host differs — or drops the `www.` — all of them point at the wrong
-  place. Ideally this becomes `NEXT_PUBLIC_SITE_URL` read at deploy time.
+- **Attach the domain, then set `NEXT_PUBLIC_SITE_URL`.** The production origin is
+  `https://www.platizio.com` — confirmed: the apex 301s to `www`, and `www` serves
+  200 with no further redirect. But the site currently deploys to
+  `platizio-v2.vercel.app` while `www.platizio.com` still serves the legacy site,
+  so `SITE_URL` resolves per deployment (see `src/lib/site.ts`) and any build that
+  is not on the brand domain marks itself `noindex` and self-canonicalises rather
+  than claiming to be production. Set `NEXT_PUBLIC_SITE_URL=https://www.platizio.com`
+  in Vercel's production environment when the cutover happens; nothing else needs
+  changing, because the `noindex` is derived from the resolved origin.
 - **Confirm security headers survive your host.** They are set in `next.config.ts`
   and verified by a request against `next start`; a CDN or proxy in front can strip
   or override them.

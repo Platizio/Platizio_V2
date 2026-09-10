@@ -16,23 +16,91 @@ import type { Metadata } from "next";
  */
 
 /**
+ * The production origin, CONFIRMED 2026-09-10 against the live DNS:
+ * `platizio.com` answers 301 to `https://www.platizio.com/`, and `www` serves
+ * 200 with no further redirect. `www` is canonical, so the `www.` prefix here
+ * is correct and dropping it would canonicalise every page to a host that only
+ * redirects.
+ *
+ * Also confirmed that this repository is a rebuild of what already lives there
+ * rather than a new site at a new address: /about, /insights, /products/sif,
+ * /privacy-policy and /global-investing/privacy-policy all answer 200 on the
+ * existing site at the same paths this one generates.
+ */
+const PRODUCTION_ORIGIN = "https://www.platizio.com";
+
+/**
+ * The origin THIS build should call its own.
+ *
+ * Not simply `PRODUCTION_ORIGIN`, because for now those are different things.
+ * The V2 site currently deploys to `platizio-v2.vercel.app` while
+ * `www.platizio.com` still serves the legacy site — and a build that hardcodes
+ * the production origin tells Google that every page of a publicly crawlable
+ * deployment is canonically a page on a host serving different markup, and
+ * publishes a sitemap of 19 URLs it does not itself own. `/products` 404s on
+ * the legacy site today, so that sitemap advertises at least one URL that is
+ * broken at the address it names.
+ *
+ * The resolution order below makes the build describe wherever it actually is:
+ *
+ *   1. `NEXT_PUBLIC_SITE_URL` — the explicit answer. Set this in Vercel's
+ *      production environment when the custom domain is attached, and it wins
+ *      over everything else.
+ *   2. `VERCEL_PROJECT_PRODUCTION_URL` on a production deployment — the
+ *      project's own production domain, whatever it currently is. This flips
+ *      to `www.platizio.com` on its own once that domain is attached.
+ *   3. `VERCEL_URL` — any other deployment describes itself, so a preview
+ *      self-canonicalises instead of pointing at production.
+ *   4. The production origin, for local builds and `npm run build` off-platform.
+ *
+ * These are read at build time, which is the only time that matters here: all
+ * 25 routes are prerendered, so no request-time API is involved and the site
+ * stays fully static.
+ */
+function resolveSiteUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
+  if (explicit) return explicit.replace(/\/+$/, "");
+
+  // Vercel supplies these hostnames without a protocol.
+  const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (process.env.VERCEL_ENV === "production" && productionHost) {
+    return `https://${productionHost}`;
+  }
+
+  const deploymentHost = process.env.VERCEL_URL;
+  if (deploymentHost) return `https://${deploymentHost}`;
+
+  return PRODUCTION_ORIGIN;
+}
+
+/**
  * The canonical origin. Everything that must be an absolute URL — the
  * `metadataBase` in `app/layout.tsx`, the sitemap entries, the `url` and
  * `logo` in the Organization JSON-LD — is built from this one value.
- *
- * NOT YET CONFIRMED. There is no deployed URL anywhere in this repository, so
- * this is the best guess at the production origin and it must be checked
- * against the real deployment before launch — including whether the canonical
- * host carries the `www.` prefix, since serving both and canonicalising to the
- * wrong one splits the site's indexing across two hosts.
- *
- * Ideally this becomes an environment variable read at deploy time
- * (`process.env.NEXT_PUBLIC_SITE_URL`, falling back to this literal), so a
- * preview deployment does not advertise the production origin as its own
- * canonical. That is a deployment-time decision and there is no env plumbing
- * in the repo yet, so it is left as a literal rather than half-built.
  */
-export const SITE_URL = "https://www.platizio.com";
+export const SITE_URL = resolveSiteUrl();
+
+/**
+ * Whether this build is the real, public site — and so whether it should be in
+ * the search index at all.
+ *
+ * Deliberately NOT `VERCEL_ENV === "production"`. That is true of the current
+ * deployment, which lives on `platizio-v2.vercel.app`: it is the production
+ * deployment *of the project*, while the production *site* is still the legacy
+ * one on `www.platizio.com`. Testing the environment would have called the
+ * duplicate the real thing and left it advertising itself to crawlers, which is
+ * the exact situation this is meant to end.
+ *
+ * Comparing the resolved origin to the brand domain asks the question that
+ * actually matters — "is this build the site people are meant to find?" — and
+ * answers itself the moment the domain is attached or `NEXT_PUBLIC_SITE_URL`
+ * is set, with no second switch to remember to flip.
+ *
+ * A local build resolves to `PRODUCTION_ORIGIN` and so counts as production,
+ * which is right: nothing on a developer's machine is publicly crawlable, and
+ * the alternative would be a build whose robots output nobody can test.
+ */
+export const IS_PRODUCTION_DEPLOYMENT = SITE_URL === PRODUCTION_ORIGIN;
 
 /** Short brand name, used as `og:site_name` and in page titles. */
 export const SITE_NAME = "Platizio";
